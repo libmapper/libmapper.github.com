@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>libmapper: a library for connecting things</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header"><a href="index.html">libmapper</a></h1>
+
+        <ul>
+          <li class="selected"><a class="button" href="about.html">About</a></li>
+          <li><a class="button" href="downloads.html">Downloads</a></li>
+          <li><a class="button" href="api/index.html">Documentation</a></li>
+          <li><a class="button" href="tutorials/introduction.html">Tutorials</a></li>
+          <li><a class="button" href="ecosystem/introduction.html">Software Projects</a></li>
+          <li><a class="button" href="artistic_projects.html">Artistic Projects</a></li>
+          <li><a class="button" href="https://github.com/libmapper/libmapper">Repository</a></li>
+          <li><a class="button" href="https://groups.google.com/group/dot_mapper">Mailing List</a></li>
+          <li><a class="button" href="support.html">Support</a></li>
+        </ul>
+
+	    <img src="images/libmapper_300dpi.png" width="150" border="0" alt="libmapper logo" />
+
+      </header>
+      <section>
+
+		<h2>Motivation</h2>
+        <p>A bit about interactive media systems, digital musical instruments, etc.</p>
+		<p>A bit about MIDI.</p>
+		<p>Open Sound Control (OSC) has been adopted by the academic and experimental-music communities for interactive media programming due to its flexibility in representing control data, strong semantics/human-readability, precise time-tagging, etc. Unfortunately, different projects utilizing OSC are rarely protocol-compatible. Many proposals have been made for creating standardized address-spaces/schemas to enable intercommunication, but we believe this is the wrong approach since it destroys the most powerful and useful aspect of OSC – the flexibility it allows for each user/designer/programmer to represent control signals and structures according to their specific needs or desires.</p>
+		<p>libmapper takes a different approach: instead of enforcing preset schemas we provide simple, distributed discovery and description; instead of address standardization we provide automatic translation; instead of normalization we provide automatic scaling... but that’s not all!</p>
+		<p>In addition to the flexibility of data-representation provided by Open Sound Control, libmapper provides:</p>
+
+        <ul>
+          <li>automatic negotiation for resources (e.g. ports, unique names)</li>
+          <li>automatic peer discovery</li>
+          <li>a semantic abstraction of the networking layer (make connections between devices and signals by name rather than having to manually set namespaces/IP addresses/ports</li>
+          <li>description, including extensible properties as key-value pairs</li>
+          <li>automatic translation of OSC addresses between peers</li>
+          <li>automatic type coercion &amp; linear scaling between peers</li>
+          <li>arbitrary signal processing within connections, including FIR and IIR filtering</li>
+          <li>remote connection management for persistence, automatic recovery, session management, saving and loading mapping configurations</li>
+          <li>the ability to query or stream the current value of remote destinations, enabling the use of supervised machine learning techniques for mapping</li>
+          <li>a powerful abstraction of signal “instances”, supporting arbitrary interconnection of polyphonic media synthesizers, multitouch interfaces, tangible interfaces, computer-vision blob-tracking algorithms, etc</li>
+        </ul>
+
+        <p>libmapper creates a distributed mapping system/network, with no central points of failure, the potential for tight collaboration and easy parallelization of media synthesis.</p>
+
+      </section>
+    </div>
+  </body>
+</html>
