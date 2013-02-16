@@ -394,13 +394,6 @@ synth = Server().boot().start()
 sine = Sine( freq=200, mul=0.5 )
 out = sine.out()
 
-def freq_handler (sig, id, f, timetag):
-    try:
-        sine.setFreq( f )
-    except:
-        print 'exception'
-        print sig, f
-
 dev = mapper.device( "pyo_example" )
 dev.add_input( "freq", 1, 'f', "Hz", 20, 2000, lambda s, i, f, t: sine.setFreq(f) )
 
