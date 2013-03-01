@@ -95,7 +95,7 @@ parameters to <code>mdev_new</code>:</p>
 
 <pre><code>mapper_device mdev_new( const char *name_prefix,
                         int initial_port,
-                        mapper_admin admin )
+                        mapper_admin admin );
 </code></pre>
 
 <p>Every device on the network needs a name and port.  In fact the
@@ -120,7 +120,7 @@ interface to use.</p>
 
 <p>An example of creating a device:</p>
 
-<pre><code>mapper_device my_device = mdev_new("test", 9000, 0);
+<pre><code>mapper_device my_device = mdev_new( "test", 9000, 0 );
 </code></pre>
 
 <h4>Polling the device</h4>
@@ -151,7 +151,7 @@ milliseconds during which it should do some work, or 0 if it should
 check for any immediate actions and then return without waiting:</p>
 
 <pre><code>int mdev_poll( mapper_device md,
-               int block_ms )
+               int block_ms );
 </code></pre>
 
 <p>An example of calling it with non-blocking behaviour:</p>
@@ -209,21 +209,23 @@ to update output signals.</p>
 <p>A signal requires a bit more information than a device, much of which
 is optional:</p>
 
-<pre><code>mapper_signal mdev_add_input( const char *name,
+<pre><code>mapper_signal mdev_add_input( mapper_device dev,
+                              const char *name,
                               int length,
                               char type,
                               const char *unit,
                               void *minimum,
                               void *maximum,
                               mapper_signal_handler *handler,
-                              void *user_data )
+                              void *user_data );
 
-mapper_signal mdev_add_output( const char *name,
+mapper_signal mdev_add_output( mapper_device dev,
+                               const char *name,
                                int length,
                                char type,
                                const char *unit,
                                void *minimum,
-                               void *maximum )
+                               void *maximum );
 </code></pre>
 
 <p>The only <em>required</em> parameters here are the signal "length", its name,
@@ -240,11 +242,11 @@ information you provide, the more the mapper can do some things
 automatically.  For example, if <code>minimum</code> and <code>maximum</code> are provided,
 it will be possible to create linear-scaled connections very quickly.
 If <code>unit</code> is provided, the mapper will be able to similarly figure out
-a linear scaling based on unit conversion. (Centimeters to inches for
-example.)^[Currently automatic unit-based scaling is not a supported
+a linear scaling based on unit conversion (from centimeters to inches for example).
+Currently automatic unit-based scaling is not a supported
 feature, but will be added in the future.  You can take advantage of
 this future development by simply providing unit information whenever
-it is available.  It is also helpful documentation for users.]</p>
+it is available.  It is also helpful documentation for users.</p>
 
 <p>Notice that optional values are provided as <code>void*</code> pointers.  This is
 because a signal can either be <code>float</code> or <code>int</code>, and your maximum and
@@ -274,24 +276,24 @@ mapper_signal sensor1_voltage = mdev_add_output( dev, "/sensor1", 1, 'f',
 <p>So far we know how to create a device and to specify an output signal
 for it.  To recap, let's review the code so far:</p>
 
-<pre><code>mapper_device my_sender = mdev_new("test_sender", 9000, 0);
+<pre><code>mapper_device my_sender = mdev_new( "test_sender", 9000, 0 );
 mapper_signal sensor1_voltage = mdev_add_output( my_sender, "/sensor1",
                                                  1, 'f', "V",
-                                                 &amp;minimum, &amp;maximum )
+                                                 &amp;minimum, &amp;maximum );
 
-while (!done) {
-    mdev_poll(my_sender, 50);
+while ( !done ) {
+    mdev_poll( my_sender, 50 );
     ... do stuff ...
     ... update signals ...
 }
 
-mdev_free(my_sender);
+mdev_free( my_sender );
 </code></pre>
 
 <p>Note that although you have a pointer to the mapper_signal structure,
-which was retuned by <code>mdev_add_output</code>, its memory "owned" by the
+which was retuned by <code>mdev_add_output</code>, its memory is "owned" by the
 device.  In other words, you should not worry about freeing its
-memory--this will happen automatically when the device is destroyed.
+memory - this will happen automatically when the device is destroyed.
 It is possible to retrieve a device's inputs or outputs by name or by
 index at a later time using the functions
 <code>mdev_get_&lt;input/output&gt;_by_&lt;name/index&gt;</code>.</p>
@@ -308,7 +310,10 @@ devices if that signal is mapped.</p>
 
 <p>This is accomplished by the <code>msig_update</code> function:</p>
 
-<pre><code>void msig_update( mapper_signal sig, void *value )
+<pre><code>void msig_update( mapper_signal sig,
+                  void *value,
+                  int count,
+                  mapper_timetag_t timetag );
 </code></pre>
 
 <p>As you can see, a <code>void*</code> pointer must be provided.  This must point
@@ -316,21 +321,28 @@ to a data structure identified by the signal's <code>length</code> and <code>typ
 In other words, if the signal is a 10-vector of <code>int</code>, then <code>value</code>
 should point to the first item in a C array of 10 <code>int</code>s.  If it is a
 scalar <code>float</code>, it should be provided with the address of a <code>float</code>
-variable.</p>
+variable.  The <code>count</code> argument allows you to specify the number of
+value samples that are being updated - for now we will set this to 1.
+Lastly the <code>timetag</code> argument allows you to specify a time associated with
+the signal update. If your value update was generated locally, or if your
+program does not have access to upstream timing information (e.g., from a
+microcontroller sampling sensor values), you can use the macro <code>MAPPER_NOW</code>
+and libmapper will tag the update with the current time.</p>
 
-<p>A short-hand is provided for scalar signals of particular types:</p>
+<p>To simplify things even further, a short-hand is provided for scalar signals
+of particular types:</p>
 
-<pre><code>void msig_update_int( mapper_signal sig, int value )
+<pre><code>void msig_update_int( mapper_signal sig, int value );
 
-void msig_update_float( mapper_signal sig, float value )
+void msig_update_float( mapper_signal sig, float value );
 </code></pre>
 
 <p>So in the "sensor 1 voltage" example, assuming in "do stuff" we have
 some code which reads sensor 1's value into a float variable called
 <code>v1</code>, the loop becomes:</p>
 
-<pre><code>while (!done) {
-    mdev_poll(my_device, 50);
+<pre><code>while ( !done ) {
+    mdev_poll( my_device, 50 );
     float v1 = read_sensor_1();
     msig_update_float( sensor1_voltage, v1 );
 }
@@ -428,7 +440,7 @@ according to the value pointed to by <code>v</code>.</p>
     while ( !done )
         mdev_poll( my_receiver, 50 );
 
-    mdev_free(my_receiver);
+    mdev_free( my_receiver );
 }
 </code></pre>
 
@@ -476,13 +488,13 @@ you can call it like this:</p>
 
 <pre><code>lo_arg x;
 x.f = 12.5;
-mdev_set_property( my_device, "x", 'f', &amp;x);
+mdev_set_property( my_device, "x", 'f', &amp;x );
 </code></pre>
 
 <p>In practice it is safe to cast to <code>lo_arg*</code>:</p>
 
 <pre><code>float x = 12.5;
-mdev_set_property( my_device, "x", 'f', (lo_arg*)&amp;x);
+mdev_set_property( my_device, "x", 'f', (lo_arg*)&amp;x );
 </code></pre>
 
 <p>To specify strings, it is necessary to perform such a cast, since the
@@ -491,7 +503,7 @@ string:</p>
 
 <pre><code>char *sensingMethod = "resistive";
 msig_set_property( sensor1, "sensingMethod",
-                   's', (lo_arg*)sensingMethod);
+                   's', (lo_arg*)sensingMethod );
 </code></pre>
 
 <p>In general you can use any property name not already in use by the
