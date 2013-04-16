@@ -48,12 +48,17 @@
 
 <h3>Getting started</h3>
 
-<p>To start using the <em>libmapper</em> with MaxMSP you will need to download the
-<code>[mapper]</code> external object from our <a href="../downloads.html">downloads page</a>.
+<p>To start using the <em>libmapper</em> with MaxMSP you will need to:</p>
+
+<ul>
+<li>Install <em>libmapper</em> for your platform (Linux, OSX, Windows)</li>
+<li>Download the <code>[mapper]</code> external object from our <a href="../downloads.html">downloads page</a>.
 Alternatively, you can build the object from
-<a href="http://github.com/malloch/mapper-max-pd">source</a> instead. You will also
-want to download a <a href="../downloads.html#GUIs">graphical user interface</a>
-for creating and editing mapping connections.</p>
+<a href="http://github.com/malloch/mapper-max-pd">source</a> instead.</li>
+<li>Download a <a href="../downloads.html#GUIs">graphical user interface</a> for
+creating and editing mapping connections.</li>
+</ul>
+
 
 <h3>Devices</h3>
 
@@ -81,8 +86,7 @@ particular interface by using the <code>@interface</code> property.</p>
 
 <p>An example of creating a device:</p>
 
-<pre><code>[mapper @alias my_device]
-</code></pre>
+<p><img src="./images/maxmsp1.png" alt="Creating a device." /></p>
 
 <p>Once the object has initialized, it will output its metadata from the right
 outlet:</p>
@@ -127,14 +131,7 @@ for <code>float</code></li>
 
 <p>examples:</p>
 
-<pre><code>(add input /my_input @type f)
- |
-[mapper @alias my_device]
-
-(add output my_output @type i @length 3 @min 0 @max 1)
- |
-[mapper @alias my_device]
-</code></pre>
+<p><img src="./images/maxmsp2.png" alt="Adding signals to a device" /></p>
 
 <p>The only <em>required</em> parameters here are the signal name,
 and data type.  If no <code>length</code> property is provided, the signal is
@@ -150,31 +147,22 @@ automatically.  For example, if <code>minimum</code> and <code>maximum</code> ar
 it will be possible to create linear-scaled connections very quickly.
 If <code>unit</code> is provided, the mapper will be able to similarly figure out
 a linear scaling based on unit conversion. (Centimeters to inches for
-example.)^[Currently automatic unit-based scaling is not a supported
+example.) Currently automatic unit-based scaling is not a supported
 feature, but will be added in the future.  You can take advantage of
 this future development by simply providing unit information whenever
-it is available.  It is also helpful documentation for users.]</p>
+it is available.  It is also helpful documentation for users.</p>
 
 <p>An example of creating a "barebones" <code>int</code> scalar output signal with
 no unit, minimum, or maximum information:</p>
 
-<pre><code>(add output /outA @type i)
- |
-</code></pre>
+<p><img src="./images/maxmsp3.png" alt="Adding a simple integer output signal" /></p>
 
 <p>An example of a <code>float</code> signal where some more information is provided:</p>
 
-<pre><code>(add output /sensor1 @type f @units V @min 0.0 @max 5.0)
- |
-</code></pre>
+<p><img src="./images/maxmsp4.png" alt="Adding a floating-point output signal with some optional properties" /></p>
 
 <p>So far we know how to create a device and to specify an output signal
-for it.  To recap, let's review the patch so far:</p>
-
-<pre><code>(add output /sensor1 @type f @units V @min 0.0 @max 5.0)
- |
-[mapper @alias test_sender]
-</code></pre>
+for it.</p>
 
 <h4>Updating signals</h4>
 
@@ -192,15 +180,11 @@ starting with the signal name:</p>
  |
 </code></pre>
 
-<p>So in the "sensor 1 voltage" example, assuming in "do stuff" we have
-some code which reads sensor 1's value into a float variable, the patch
-becomes:</p>
+<p>So in the "sensor 1 voltage" example, assuming that we have some code
+which reads sensor 1's value into a float variable in <code>[p read_sensor]</code>,
+the patch becomes:</p>
 
-<pre><code> |
-[prepend /sensor1]
- |
-[mapper]
-</code></pre>
+<p><img src="./images/maxmsp5.png" alt="Updating a signal" /></p>
 
 <p>This is about all that is needed to expose sensor 1's voltage to the
 network as a mappable parameter.  The <em>libmapper</em> GUI can now be used
@@ -248,12 +232,7 @@ message, updates for this signal will be routed to the left output
 of the <code>[mapper]</code> object. Let's try making two devices in the same patch
 for testing.</p>
 
-<pre><code>[float]                      [mapper @alias receiver]    
- |                            |
-(/sendsig $1)                [route /recvsig]
- |                            |
-[mapper @alias sender]       [float]
-</code></pre>
+<p><img src="./images/maxmsp6.png" alt="Sending and receiving signal updates" /></p>
 
 <p>If you use your mapping GUI to create a link between the two devices
 <em>sender</em> and <em>receiver</em> and a connection between your two signals
@@ -284,8 +263,7 @@ automatically using <code>learn</code> mode. You can either send the message
 instantiate your <code>[mapper]</code> object with the learn property set as an
 argument:</p>
 
-<pre><code>[mapper @alias my_device @learn 1]
-</code></pre>
+<p><img src="./images/maxmsp7.png" alt="Enabling learn mode on a device" /></p>
 
 <p>the object will watch its inlet for messages formatted as <code>/&lt;name&gt; value(s)</code>
 and add any unknown signals automatically. Signals added this way will not
@@ -324,8 +302,7 @@ correctly-formatted JSON with the following structure:</p>
 <p>To load your device definition, simply instantiate your <code>[mapper]</code> object with
 the file name as a property:</p>
 
-<pre><code>[mapper @definition my_definition.json]
-</code></pre>
+<p><img src="./images/maxmsp8.png" alt="Loading a device definition file" /></p>
 
 <h3>Publishing metadata</h3>
 
@@ -354,25 +331,18 @@ arguments</p>
 <p>For example, to store a <code>float</code> indicating the X position of a device
 <code>dev</code>, you could instantiate your object like this:</p>
 
-<pre><code>[mapper @alias my_device @x 12.5]
-</code></pre>
+<p><img src="./images/maxmsp9.png" alt="Adding extra properties to a device" /></p>
 
 <p>To specify a string property of a signal:</p>
 
-<pre><code>(add output /pressure @type f @sensingMethod resistive)
- |
-</code></pre>
+<p><img src="./images/maxmsp10.png" alt="Adding extra properties to a signal" /></p>
 
 <p>In general you can use any property name not already in use by the
-device or signal data structure.  Reserved words for signals are:</p>
+device or signal data structure.  Reserved words for signals are:
+<code>device_name</code> <code>direction</code> <code>length</code> <code>max</code>
+<code>min</code> <code>name</code> <code>type</code> <code>unit</code></p>
 
-<pre><code>device_name, direction, length, max, min, name, type, unit
-</code></pre>
-
-<p>for devices, they are:</p>
-
-<pre><code>host, port, name
-</code></pre>
+<p>for devices, they are: <code>host</code> <code>port</code> <code>name</code></p>
 
       </section>
     </div>    
