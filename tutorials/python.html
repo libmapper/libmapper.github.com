@@ -107,7 +107,7 @@ interface to use.</p>
 
 <p>An example of creating a device:</p>
 
-<pre><code>dev = mapper.device( "mydevice" )
+<pre><code>dev = mapper.device( "my_device" )
 </code></pre>
 
 <h4>Polling the device</h4>
@@ -141,7 +141,7 @@ check for any immediate actions and then return without waiting:</p>
 
 <p>An example of calling it with non-blocking behaviour:</p>
 
-<pre><code>dev.poll( 0 );
+<pre><code>dev.poll( 0 )
 </code></pre>
 
 <p>If your polling is in the middle of a processing function or in
@@ -202,9 +202,10 @@ is optional:</p>
 
 <p>examples:</p>
 
-<pre><code>sig_in = dev.add_input( "/my_input", 1, 'f', "m/s", -10, 10, h )</code></pre>
+<pre><code>sig_in = dev.add_input( "/my_input", 1, 'f', "m/s", -10, 10, h )
 
-<pre><code>sig_out = dev.add_output( "/my_output", 4, 'i', None, 0, 1000 )</code></pre>
+sig_out = dev.add_output( "/my_output", 4, 'i', None, 0, 1000 )
+</code></pre>
 
 <p>The only <em>required</em> parameters here are the signal "length", its name,
 and data type.  Signals are assumed to be vectors of values, so for
@@ -233,12 +234,12 @@ in the <code>handler</code> parameter.</p>
 <p>An example of creating a "barebones" <code>int</code> scalar output signal with
 no unit, minimum, or maximum information:</p>
 
-<pre><code>outA = dev.add_output( "/outA", 1, 'i', None, None, None );
+<pre><code>outA = dev.add_output( "/outA", 1, 'i', None, None, None )
 </code></pre>
 
 <p>or omitting some arguments:</p>
 
-<pre><code>outA = dev.add_output( "/outA", 1, 'i' );
+<pre><code>outA = dev.add_output( "/outA", 1, 'i' )
 </code></pre>
 
 <p>An example of a <code>float</code> signal where some more information is provided:</p>
@@ -351,12 +352,12 @@ about controlling one parameter: the frequency of the sine.</p>
 
 <p>We need to create a handler function for libmapper to update the pyo synth:</p>
 
-<pre><code>def frequency_handler(sig, id, f, timetag):
+<pre><code>def frequency_handler(sig, id, val, timetag):
     try:
-        a.setFreq( f )
+        sine.setFreq( val )
     except:
         print 'exception'
-        print sig, f
+        print sig, val
 </code></pre>
 
 <p>Then our program will look like this:</p>
@@ -366,21 +367,22 @@ import mapper
 
 # Some pyo stuff
 synth = Server().boot().start()
-a = Sine( freq=200, mul=0.5 )
-out = a()
+sine = Sine( freq=200, mul=0.5 ).out()
 
-def freq_handler (sig, id, f, timetag):
+def freq_handler( sig, id, val, timetag ):
     try:
-        a.setFreq( f )
+        sine.setFreq( val )
     except:
         print 'exception'
-        print sig, f
+        print sig, val
 
-dev = mapper.device( "pyo_example" )
-dev.add_input( "freq", 1, 'f', "Hz", 20, 2000, freq_handler )
+dev = mapper.device( 'pyo_example' )
+dev.add_input( '/freq', 1, 'f', 'Hz', 20, 2000, freq_handler )
 
-while 1:
+while True:
     dev.poll( 100 )
+
+synth.stop()
 </code></pre>
 
 <p>Alternately, we can simplify our code by using a <code>lambda function</code>
@@ -391,14 +393,149 @@ import mapper
 
 # Some pyo stuff
 synth = Server().boot().start()
-sine = Sine( freq=200, mul=0.5 )
-out = sine.out()
+sine = Sine( freq=200, mul=0.5 ).out()
 
-dev = mapper.device( "pyo_example" )
-dev.add_input( "freq", 1, 'f', "Hz", 20, 2000, lambda s, i, f, t: sine.setFreq(f) )
+dev = mapper.device( 'pyo_example' )
+dev.add_input( '/freq', 1, 'f', "Hz", 20, 2000, lambda s, i, f, t: sine.setFreq(f) )
 
-while 1:
+while True:
     dev.poll( 100 )
+
+synth.stop()
+</code></pre>
+
+<h3>Working with timetags</h3>
+
+<p><em>libmapper</em> uses the <code>mapper_timetag_t</code> data structure internally to store
+<a href="http://en.wikipedia.org/wiki/Network_Time_Protocol#NTP_timestamps">NTP timestamps</a>,
+but this value is represented using the <code>double</code> type in the python bindings.
+For example, the handler function called when a signal update is received
+contains a <code>timetag</code> argument.  This argument indicates the time at
+which the source signal was <em>sampled</em> (in the case of sensor signals)
+or <em>generated</em> (in the case of sequenced or algorithimically-generated
+signals).</p>
+
+<p>The <code>update</code> function for output signals is overloaded; calling the function
+without a timetag argument will automatically label the outgoing signal
+update with the current time. In cases where the update should more
+properly be labeled with another time, this can be accomplished by simply
+adding the timetag as a second argument.  This timestamp should only be
+overridden if your program has access to a more accurate measurement
+of the real time associated with the signal update, for example if
+you are writing a driver for an outboard sensor system that provides
+the sampling time.</p>
+
+<p><em>libmapper</em> also provides helper functions for getting the current
+device-time:</p>
+
+<pre><code>now = &lt;device&gt;.now()
+</code></pre>
+
+<h3>Working with signal instances</h3>
+
+<p><em>libmapper</em> also provides support for signals with multiple <em>instances</em>,
+for example:</p>
+
+<ul>
+<li>control parameters for polyphonic synthesizers;</li>
+<li>touches tracked by a multitouch surface;</li>
+<li>"blobs" identified by computer vision systems;</li>
+<li>objects on a tabletop tangible user interface;</li>
+<li><em>temporal</em> objects such as gestures or trajectories.</li>
+</ul>
+
+
+<p>The important qualities of signal instances in <em>libmapper</em> are:</p>
+
+<ul>
+<li><strong>instances are interchangeable</strong>: if there are semantics attached
+to a specific instance it should be represented with separate signals
+instead.</li>
+<li><strong>instances can be ephemeral</strong>: signal instances can be dynamically
+created and destroyed. <em>libmapper</em> will ensure that linked devices
+share a common understanding of the relatonships between instances
+when they are mapped.</li>
+<li><strong>map once for all instances</strong>: one mapping connection serves to
+map all of its instances.</li>
+</ul>
+
+
+<p>All signals possess one instance by default. If you would like to reserve
+more instances you can use:</p>
+
+<pre><code>&lt;sig&gt;.reserve_instances( int num )
+</code></pre>
+
+<p>After reserving instances you can update a specific instance:</p>
+
+<pre><code>&lt;sig&gt;.update_instance( int instance_id,
+                       &lt;value&gt; )
+</code></pre>
+
+<p>or</p>
+
+<pre><code>&lt;sig&gt;.update_instance( int instance_id,
+                       &lt;value&gt;,
+                       double timetag )
+</code></pre>
+
+<p>All of the arguments except one should be familiar from the
+documentation of <code>msig_update()</code> presented earlier.
+The <code>instance_id</code> argument does not have to be considered as an array
+index - it can be any integer that is convenient for labelling your
+instance. <em>libmapper</em> will internally create a map from your id label
+to one of the preallocated instance structures.</p>
+
+<h4>Receiving instances</h4>
+
+<p>You might have noticed earlier that the handler function called when
+a signal update is received has a argument called <code>id</code>. Here
+is the function prototype again:</p>
+
+<pre><code>def frequency_handler( signal, id, value, timetag ):
+</code></pre>
+
+<p>Under normal usage, the <code>id</code> argument will have a value (0 &lt;= n &lt;= num_instances)
+and can be used as an array index. Remember that you will need to reserve
+instances for your input signal using <code>&lt;sig&gt;.reserve_instances()</code> if you
+want to receive instance updates.</p>
+
+<h4>Instance Stealing</h4>
+
+<p>For handling cases in which the sender signal has more instances than
+the receiver signal, the <em>instance allocation mode</em> can be set for an
+input signal to set an action to take in case all allocated instances are in
+use and a previously unseen instance id is received. Use the function:</p>
+
+<pre><code>&lt;sig&gt;.set_instance_allocation_mode( mapper_instance_allocation_type mode );
+</code></pre>
+
+<p>The argument <code>mode</code> can have one of the following values:</p>
+
+<ul>
+<li><code>mapper.IN_UNDEFINED</code> Default value, in which no stealing of instances will occur;</li>
+<li><code>mapper.IN_STEAL_OLDEST</code> Release the oldest active instance and reallocate its
+resources to the new instance;</li>
+<li><code>mapper.IN_STEAL_NEWEST</code> Release the newest active instance and reallocate its
+resources to the new instance;</li>
+</ul>
+
+
+<p>If you want to use another method for determining which active instance
+to release (e.g. the sound with the lowest volume), you can create an <code>instance_event_handler</code> for the signal and write the method yourself:</p>
+
+<pre><code>def my_handler( sig, id, event, timetag ):
+    # user code chooses which instance to release
+    id = choose_instance_to_release( msig )
+
+    sig.release_instance( id, timetag )
+</code></pre>
+
+<p>For this function to be called when instance stealing is necessary, we
+need to register it for <code>mapper.IN_OVERFLOW</code> events:</p>
+
+<pre><code>&lt;sig&gt;.set_instance_event_callback( my_handler,
+                                   mapper.IN_OVERFLOW )
 </code></pre>
 
 <h3>Publishing metadata</h3>
@@ -457,7 +594,7 @@ Therefore this can provide a unified string-based method for accessing
 any signal property:</p>
 
 <pre><code>props = sig.get_properties()
-sensingMethod = props['sensingMethod']
+sensingMethod = props[ 'sensingMethod' ]
 </code></pre>
 
 <p>Primarily this is an interface meant for network monitors, but may
