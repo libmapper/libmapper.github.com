@@ -1,0 +1,302 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>libmapper: a library for connecting things</title>
+
+    <link rel="stylesheet" href="../stylesheets/styles.css">
+    <script src="../javascripts/jquery.tools.min.js"></script>
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header"><a href="../index.html">libmapper</a></h1>
+
+        <ul>
+          <li><a class="button" href="../about.html">About</a></li>
+          <li><a class="button" href="../downloads.html">Downloads</a></li>
+          <li><a class="button" href="../api/index.html" target="_blank">Documentation</a></li>
+          <li class="selected"><a class="button" href="introduction.html">Tutorials</a></li>
+          <li><a class="button" href="../ecosystem/introduction.html">Ecosystem</a></li>
+          <li><a class="button" href="../projects.html">Projects</a></li>
+          <li><a class="button" href="https://github.com/libmapper/libmapper" target="_blank">Repository</a></li>
+          <li><a class="button" href="https://groups.google.com/group/dot_mapper" target="_blank">Mailing List</a></li>
+          <li><a class="button" href="../support.html">Support</a></li>
+        </ul>
+
+        <img src="../images/libmapper.png" width="150" border="0" alt="libmapper logo" />
+
+      </header>
+      <section>
+
+        <h2>Tutorials</h2>
+        <!-- the tabs -->
+        <ul class="tabs">
+          <li><a href="introduction.html">Introduction</a></li>
+          <li><a href="c.html">C</a></li>
+          <li><a href="cpp.html">C++</a></li>
+          <li><a href="python.html">Python</a></li>
+          <li><a href="java.html">Java</a></li>
+          <li class="selected"><a>Max</a></li>
+          <li><a href="puredata.html">Pd</a></li>
+        </ul>
+
+<h3>Getting started</h3>
+
+<p>Note: this tutorial will introduce the revised bindings for MaxMSP (July 2013). You can access the tutorial for the original bindings using the <code>[mapper]</code> object <a href="./maxmsp_central.html">here</a>.</p>
+
+<p>To start using the <em>libmapper</em> with MaxMSP you will need to:</p>
+
+<ul>
+<li>Install <em>libmapper</em> for your platform (Linux, OSX, Windows)</li>
+<li>Download the external objects from our <a href="../downloads.html">downloads page</a>.
+Alternatively, you can build the object from
+<a href="http://github.com/malloch/mapper-max-pd">source</a> instead.</li>
+<li>Download a <a href="../downloads.html#GUIs">graphical user interface</a> for
+creating and editing mapping connections.</li>
+</ul>
+
+
+<h3>Devices</h3>
+
+<h4>Creating a device</h4>
+
+<p>To create a <em>libmapper</em> device, create an object called <code>[map.device]</code>
+with an optional argument specifying the device's name.
+There is an initialization period after a device is created where
+a unique ordinal is chosen to append to the device name.
+This allows multiple devices with the same name to
+exist on the network. If no name is given libmapper will choose a
+name for your device starting with the string "maxmsp".</p>
+
+<p>Your device will start with no inputs or outputs, so it will not yet show
+up in most GUIs.</p>
+
+<p>You can also provide arbitrary properties to your device using jitter-style
+properties.  By default, libmapper will try to guess which network
+interface to use for mapping, defaulting to the local loopback interface
+ethernet or wifi is not available.  You can force the object to use a
+particular interface by using the <code>@interface</code> property.</p>
+
+<p>An example of creating a device:</p>
+
+<p><img src="./images/maxmsp_multiobj1.png" alt="Creating a device." /></p>
+
+<p>Once the object has initialized, it will output its metadata from its outlet:</p>
+
+<ul>
+<li>The complete device name, including an appended ordinal for distinguishing
+between multiple active devices with the same name.</li>
+<li>The IP address and port in use by the object.</li>
+<li>The number of input and output signals associated with the object
+(none to start).</li>
+<li>The network interface in use by the object.</li>
+</ul>
+
+
+<p>If and when this information changes, the object will output the updated
+property.</p>
+
+<h4>Multiple devices</h4>
+
+<p>Once you have created a <code>[map.device]</code> object in a patcher, it considers
+itself to be the "parent" device for that patcher and all of its subpatchers.
+This means that it you try to create a second copy of the device in the same
+patcher, or in one of its child subpatchers, the object instantiation will fail.
+When the object is created, it checks whether there is a pre-existing device
+that would cause a conflict.</p>
+
+<p>You can, however, create multiple <code>[map.device]</code> objects in the same patch as
+long as they are both contained in different subpatchers.</p>
+
+<h3>Signals</h3>
+
+<p>Now that we have created a device, we only need to know how to
+add signals in order to give our program some input/output functionality.</p>
+
+<p>We'll start with creating a "sender", so we will first talk about how
+to create and update output signals.</p>
+
+<h4>Creating a signal</h4>
+
+<p>Creating input and output signals is accomplished with the <code>[map.in]</code> and
+<code>[map.out]</code> objects, which requires two pieces of information:</p>
+
+<ul>
+<li>a name for the signal</li>
+<li>the signal's data type expressed as a character 'i' for <code>integer</code>, 'f'
+for <code>float</code></li>
+</ul>
+
+
+<p>A third optional integer argument sets the signal's vector length,
+if it is omitted the signal is assumed to have length 1.
+Additional signal properties can also (optionally) be added:</p>
+
+<ul>
+<li>the signal's unit, e.g. <code>@unit Hz</code></li>
+<li>the signal's minimum value, e.g. <code>@min 0</code></li>
+<li>the signal's maximum value, e.g. <code>@max 100</code></li>
+</ul>
+
+
+<p>examples:</p>
+
+<p><img src="./images/maxmsp_multiobj2.png" alt="Adding signals to a device" /></p>
+
+<p>The only <em>required</em> parameters here are the signal name and data type,
+but the more information you provide, the more the mapper can do some
+things automatically.  For example, if <code>minimum</code> and <code>maximum</code> are
+provided, it will be possible to create linear-scaled connections very
+quickly.  If <code>unit</code> is provided, the mapper will be able to similarly
+figure out a linear scaling based on unit conversion. (Centimeters to
+inches for example.) Currently automatic unit-based scaling is not a
+supported feature, but will be added in the future.  You can take
+advantage of this future development by simply providing unit
+information whenever it is available.  It is also helpful documentation
+for users.</p>
+
+<p>An example of a <code>float</code> signal where some more information is provided:</p>
+
+<p><img src="./images/maxmsp_multiobj3.png" alt="Adding a floating-point output signal with some optional properties" /></p>
+
+<p>So far we know how to create a device and to specify an output signal
+for it.</p>
+
+<h4>Updating signals</h4>
+
+<p>We can imagine the above program getting sensor information in a loop.
+It could be running on a computer and reading data from an Arduino
+over a USB serial port, or it could just be a mouse-controlled GUI
+slider.  However it's getting the data, it must provide it to
+<em>libmapper</em> so that it will be sent to other devices if that signal
+is mapped.</p>
+
+<p>This is accomplished by passing ints or floats to the <code>[map.out]</code> object.
+In the case of vector signals, a list with the same number of elements
+should be used.</p>
+
+<p>So in the "sensor 1 voltage" example, assuming that we have some code
+which reads sensor 1's value into a float variable in <code>[p read_sensor]</code>,
+the patch becomes:</p>
+
+<p><img src="./images/maxmsp_multiobj4.png" alt="Updating a signal" /></p>
+
+<p>This is about all that is needed to expose sensor 1's voltage to the
+network as a mappable parameter.  The <em>libmapper</em> GUI can now be used
+to create a mapping between this value and a receiver, where it could
+control a synthesizer parameter or change the brightness of an LED,
+or whatever else you want to do.</p>
+
+<h4>Signal conditioning</h4>
+
+<p>Most synthesizers of course will not know what to do with
+"voltage"--it is an electrical property that has nothing to do with
+sound or music.  This is where <em>libmapper</em> really becomes useful.</p>
+
+<p>Scaling or other signal conditioning can be taken care of <em>before</em>
+exposing the signal, or it can be performed as part of the mapping.
+Since the end user can demand any mathematical operation be performed
+on the signal, he can perform whatever mappings between signals as he
+wishes.</p>
+
+<p>As a developer, it is therefore your job to provide information that
+will be useful to the end user.</p>
+
+<p>For example, if sensor 1 is a position sensor, instead of publishing
+"voltage", you could convert it to centimeters or meters based on the
+known dimensions of the sensor, and publish a "/sensor1/position"
+signal instead, providing the unit information as well.</p>
+
+<p>We call such signals "semantic", because they provide information with
+more meaning than a relatively uninformative value based on the
+electrical properties of the sensing technique.  Some sensors can
+benefit from low-pass filtering or other measures to reduce noise.
+Some sensor data may need to be combined in order to derive physical
+meaning.  What you choose to expose as outputs of your device is
+entirely application-dependent.</p>
+
+<p>You can even publish both "/sensor1/position" and "/sensor1/voltage"
+if desired, in order to expose both processed and raw data.  Keep in
+mind that these will not take up significant processing time, and
+<em>zero</em> network bandwidth, if they are not mapped.</p>
+
+<h4>Receiving signals</h4>
+
+<p>Receiving signals is even easier: create a <code>[map.in]</code> object with a
+name and type, and updates for this signal will be routed to its outlet.
+The arguments for the <code>[map.in]</code> object are identical to <code>[map.out]</code>.</p>
+
+<p>Let's try making two devices in the same patch for testing.</p>
+
+<p><img src="./images/maxmsp_multiobj5.png" alt="Sending and receiving signal updates" /></p>
+
+<p>If you use your mapping GUI to create a link between the two devices
+<em>sender</em> and <em>receiver</em> and a connection between your two signals
+<em>/sendsig</em> and <em>/recvsig</em>, any change made to the float value on the left
+will cause a corresponding output on the right.</p>
+
+<p>Congratulations - you have created your first mapping connection! This
+probably seems quite simplistic, since you could have made a patch-cord
+between the two float objects and accomplished the same thing, but your
+"mapping" represents something more:</p>
+
+<ul>
+<li>It can be edited remotely from another machine on the network.</li>
+<li>It can connect signals on different computers.</li>
+<li>It can connect different signals implemented in different programming
+languages such as C, C++, Python, Java, and SuperCollider.</li>
+<li>It can be edited to provide signal processing, including automatic
+linear scaling, calibration, muting, clipping, or an arbitrary
+expression - even FIR and IIR filters.</li>
+</ul>
+
+
+<h3>Publishing metadata</h3>
+
+<p>Things like device names, signal units, and ranges, are examples of
+metadata — information about the data you are exposing on the network.</p>
+
+<p><em>libmapper</em> also provides the ability to specify arbitrary extra
+metadata in the form of name-value pairs.  These are not interpreted
+by <em>libmapper</em> in any way, but can be retrieved over the network.
+This can be used for instance to label a device with its location, or
+to perhaps give a signal some property like "reliability", or some
+category like "light", "motor", "shaker", etc.</p>
+
+<p>Some GUI implementing a Monitor could then use this information to
+display information about the network in an intelligent manner.</p>
+
+<p>Any time there may be extra knowledge about a signal or device, it is
+a good idea to represent it by adding such properties, which can be of
+any OSC-compatible type.  (So, numbers and strings, etc.)</p>
+
+<p>The MaxMSP bindings for libmapper do not currently allow dynamically
+changing the properties of a device or signal, however they can be
+declared when the entity is created by using jitter-style property
+arguments</p>
+
+<p>For example, to store a <code>float</code> indicating the X position of a device
+<code>dev</code>, you could instantiate your object like this:</p>
+
+<p><img src="./images/maxmsp_multiobj6.png" alt="Adding extra properties to a device" /></p>
+
+<p>To specify a string property of a signal:</p>
+
+<p><img src="./images/maxmsp_multiobj7.png" alt="Adding extra properties to a signal" /></p>
+
+<p>In general you can use any property name not already in use by the
+device or signal data structure.  Reserved words for signals are:
+<code>device_name</code> <code>direction</code> <code>length</code> <code>name</code> <code>type</code></p>
+
+<p>for devices, they are: <code>host</code> <code>port</code> <code>name</code></p>
+
+      </section>
+    </div>    
+  </body>
+</html>
