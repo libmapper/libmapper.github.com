@@ -154,6 +154,12 @@ section img {
   -webkit-box-shadow: 4px 6px 20px #444444;
 }
 
+img.logo {
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
 
 /* Code blocks */
 
