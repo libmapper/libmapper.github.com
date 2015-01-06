@@ -148,6 +148,12 @@ img {
   border: 0px solid #ccc;
 }
 
+section img {
+  box-shadow: 2px 2px 10px #444444;
+  -moz-box-shadow: 2px 2px 10px #444444;
+  -webkit-box-shadow: 4px 6px 20px #444444;
+}
+
 
 /* Code blocks */
 
@@ -227,8 +233,8 @@ sub code {
 /* Header */
 
 header {
-	background-color: #000000;
-	color: #FDFDFB;
+	background-color: #777;
+	color: #232323;
   width:130px;
   height:100%;
   float:left;
@@ -267,7 +273,7 @@ a.name {
 header ul {
   list-style:none;
   padding:0;
-  font-weight: bold;
+/*   font-weight: bold; */
 }
 
 header li {
@@ -278,21 +284,21 @@ header li {
   line-height: 1em;
   padding: 6px 6px 6px 7px;
   text-shadow: rgba(0, 0, 0, 0.4) 0 -1px 0;
-  font-weight: bold;
+/*   font-weight: bold; */
 
-  background: #AF0011;
-  background: -moz-linear-gradient(top, #AF0011 0%, #820011 100%);
+  background: #828282;
+  background: -moz-linear-gradient(top, #828282 0%, #232323 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#dddddd));
-  background: -webkit-linear-gradient(top, #AF0011 0%,#820011 100%);
-  background: -o-linear-gradient(top, #AF0011 0%,#820011 100%);
-  background: -ms-linear-gradient(top, #AF0011 0%,#820011 100%);
-  background: linear-gradient(top, #AF0011 0%,#820011 100%);
+  background: -webkit-linear-gradient(top, #828282 0%,#232323 100%);
+  background: -o-linear-gradient(top, #828282 0%,#232323 100%);
+  background: -ms-linear-gradient(top, #828282 0%,#232323 100%);
+  background: linear-gradient(top, #828282 0%,#232323 100%);
 
   border-radius:4px;
   border:1px solid #0D0D0D;
 
   -webkit-box-shadow: inset 0px 1px 1px 0 rgba(233,2,38, 1);
-  box-shadow: inset 0px 1px 1px 0 rgba(233,2,38, 1);
+  box-shadow: inset 0px 1px 1px 0 rgba(38,38,38, 1);
 
 }
 
@@ -310,12 +316,13 @@ li.selected {
   margin-left: 20px;
   padding: 6px 7px 6px 7px;
   text-align: left;
+  background: #C3001D;
 }
 
 a.button {
 	-webkit-font-smoothing: antialiased;
 	text-shadow: rgba(0, 0, 0, 0.4) 0 -1px 0;
-	font-weight: bold;
+/* 	font-weight: bold; */
 	padding: 2px 2px 2px 2px;
 	height: 30px;
 }
