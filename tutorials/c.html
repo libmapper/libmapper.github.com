@@ -72,7 +72,6 @@ XCode should be a matter of including it in your project.</p>
   <li><a href="../api/group__monitor.html" target="_blank">Monitors</a></li>
 </ul>
 
-
 <p>For this tutorial, the only sections to pay attention to are Devices
 and Signals.  Admins is reserved for providing custom networking
 configurations, but in general you don't need to worry about it.</p>
@@ -84,7 +83,7 @@ interfaces for mapping design and will also not be covered here.</p>
 
 <p>Functions and types from each module are prefixed with
 <code>mapper_&lt;module&gt;_</code>, in order to avoid namespace clashing.  However,
-since this is a bit verbose, it is shortened to <code>mdev_</code> and <code>msig</code> for
+since this is a bit verbose, it is shortened to <code>mdev_</code> and <code>msig_</code> for
 device and signal functions respectively.</p>
 
 <h3>Devices</h3>
@@ -112,7 +111,7 @@ it if someone else on the network is already using it.  We usually use
 a port number of 9000, and let the system decide if this is
 appropriate.^[Strictly this is only necessary for devices on the same
 computer, but port numbers are in abundance so we just allocate one
-per device to keep things consistant.]</p>
+per device to keep things consistent.]</p>
 
 <p>The third parameter of mdev_new is an optional admin instance.  It is
 not necessary to provide this, but can be used to specify different
@@ -243,8 +242,8 @@ information you provide, the more the mapper can do some things
 automatically.  For example, if <code>minimum</code> and <code>maximum</code> are provided,
 it will be possible to create linear-scaled connections very quickly.
 If <code>unit</code> is provided, the mapper will be able to similarly figure out
-a linear scaling based on unit conversion (from centimeters to inches for example).
-Currently automatic unit-based scaling is not a supported
+a linear scaling based on unit conversion (from centimeters to inches for
+example). Currently automatic unit-based scaling is not a supported
 feature, but will be added in the future.  You can take advantage of
 this future development by simply providing unit information whenever
 it is available.  It is also helpful documentation for users.</p>
@@ -322,7 +321,7 @@ to a data structure identified by the signal's <code>length</code> and <code>typ
 In other words, if the signal is a 10-vector of <code>int</code>, then <code>value</code>
 should point to the first item in a C array of 10 <code>int</code>s.  If it is a
 scalar <code>float</code>, it should be provided with the address of a <code>float</code>
-variable.  The <code>count</code> argument allows you to specify the number of
+variable. The <code>count</code> argument allows you to specify the number of
 value samples that are being updated - for now we will set this to 1.
 Lastly the <code>timetag</code> argument allows you to specify a time associated with
 the signal update. If your value update was generated locally, or if your
@@ -330,8 +329,7 @@ program does not have access to upstream timing information (e.g., from a
 microcontroller sampling sensor values), you can use the macro <code>MAPPER_NOW</code>
 and libmapper will tag the update with the current time.</p>
 
-<p>To simplify things even further, a short-hand is provided for scalar signals
-of particular types:</p>
+<p>To simplify things even further, a short-hand is provided for scalar signals of particular types:</p>
 
 <pre><code>void msig_update_int( mapper_signal sig, int value );
 
@@ -443,6 +441,148 @@ according to the value pointed to by <code>v</code>.</p>
 
     mdev_free( my_receiver );
 }
+</code></pre>
+
+<h3>Working with timetags</h3>
+
+<p><em>libmapper</em> uses the <code>mapper_timetag_t</code> data structure to store
+<a href="http://en.wikipedia.org/wiki/Network_Time_Protocol#NTP_timestamps">NTP timestamps</a>.
+For example, the handler function called when a signal update is received
+contains a <code>timetag</code> argument.  This argument indicates the time at
+which the source signal was <em>sampled</em> (in the case of sensor signals)
+or <em>generated</em> (in the case of sequenced or algorithimically-generated
+signals).</p>
+
+<p>When updating output signals, using the functions <code>msig_update_int()</code>
+or <code>msig_update_float()</code> will automatically label the outgoing signal
+update with the current time. In cases where the update should more
+properly be labeled with another time, this can be accomplished with
+the function <code>msig_update()</code>.  This timestamp should only be
+overridden if your program has access to a more accurate measurement
+of the real time associated with the signal update, for example if
+you are writing a driver for an outboard sensor system that provides
+the sampling time.  Otherwise the constant <code>MAPPER_NOW</code> can be used
+as the timetag argument to cause libmapper to provide the current time.</p>
+
+<p><em>libmapper</em> also provides helper functions for getting the current
+device-time, setting the value of a <code>mapper_timetag_t</code> from other
+representations, and comparing or copying timetags.  Check the API
+documentation for more information.</p>
+
+<h3>Working with signal instances</h3>
+
+<p><em>libmapper</em> also provides support for signals with multiple <em>instances</em>,
+for example:</p>
+
+<ul>
+<li>control parameters for polyphonic synthesizers;</li>
+<li>touches tracked by a multitouch surface;</li>
+<li>"blobs" identified by computer vision systems;</li>
+<li>objects on a tabletop tangible user interface;</li>
+<li><em>temporal</em> objects such as gestures or trajectories.</li>
+</ul>
+
+
+<p>The important qualities of signal instances in <em>libmapper</em> are:</p>
+
+<ul>
+<li><strong>instances are interchangeable</strong>: if there are semantics attached
+to a specific instance it should be represented with separate signals
+instead.</li>
+<li><strong>instances can be ephemeral</strong>: signal instances can be dynamically
+created and destroyed. <em>libmapper</em> will ensure that linked devices
+share a common understanding of the relatonships between instances
+when they are mapped.</li>
+<li><strong>one mapping connection serves to map all of its instances.</strong></li>
+</ul>
+
+
+<p>All signals possess one instance by default. If you would like to reserve
+more instances you can use:</p>
+
+<pre><code>msig_reserve_instances(mapper_signal sig, int num)
+</code></pre>
+
+<p>After reserving instances you can update a specific instance:</p>
+
+<pre><code>msig_update_instance(mapper_signal sig,
+                     int instance_id,
+                     void *value,
+                     int count,
+                     mapper_timetag_t timetag)
+</code></pre>
+
+<p>All of the arguments except one should be familiar from the
+documentation of <code>msig_update()</code> presented earlier.
+The <code>instance_id</code> argument does not have to be considered as an array
+index - it can be any integer that is convenient for labelling your
+instance. <em>libmapper</em> will internally create a map from your id label
+to one of the preallocated instance structures.</p>
+
+<h4>Receiving instances</h4>
+
+<p>You might have noticed earlier that the handler function called when
+a signal update is received has a argument called <code>instance_id</code>. Here
+is the function prototype again:</p>
+
+<pre><code>void mapper_signal_update_handler(mapper_signal msig,
+                                  mapper_db_signal props,
+                                  int instance_id,
+                                  void *value,
+                                  int count,
+                                  mapper_timetag_t *tt);
+</code></pre>
+
+<p>Under normal usage, this argument will have a value (0 &lt;= n &lt;= num_instances)
+and can be used as an array index. Remember that you will need to reserve
+instances for your input signal using <code>msig_reserve_instance()</code> if you
+want to receive instance updates.</p>
+
+<h4>Instance Stealing</h4>
+
+<p>For handling cases in which the sender signal has more instances than
+the receiver signal, the <em>instance allocation mode</em> can be set for an
+input signal to set an action to take in case all allocated instances are in
+use and a previously unseen instance id is received. Use the function:</p>
+
+<pre><code>void msig_set_instance_allocation_mode(mapper_signal sig,
+                                       mapper_instance_allocation_type mode);
+</code></pre>
+
+<p>The argument <code>mode</code> can have one of the following values:</p>
+
+<ul>
+<li><code>IN_UNDEFINED</code> Default value, in which no stealing of instances will occur;</li>
+<li><code>IN_STEAL_OLDEST</code> Release the oldest active instance and reallocate its
+resources to the new instance;</li>
+<li><code>IN_STEAL_NEWEST</code> Release the newest active instance and reallocate its
+resources to the new instance;</li>
+</ul>
+
+
+<p>If you want to use another method for determining which active instance
+to release (e.g. the sound with the lowest volume), you can create an <code>instance_event_handler</code> for the signal and write the method yourself:</p>
+
+<pre><code>void my_handler(mapper_signal msig,
+                mapper_db_signal props,
+                int instance_id,
+                msig_instance_event_t event,
+                mapper_timetag_t *tt)
+{
+    // user code chooses which instance to release
+    int id = choose_instance_to_release(msig);
+
+    msig_release_instance(msig, id, *tt);
+}
+</code></pre>
+
+<p>For this function to be called when instance stealing is necessary, we
+need to register it for <code>IN_OVERFLOW</code> events:</p>
+
+<pre><code>msig_set_instance_event_callback(msig,
+                                 my_handler,
+                                 IN_OVERFLOW,
+                                 *user_context);
 </code></pre>
 
 <h3>Publishing metadata</h3>
