@@ -19,7 +19,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">libmapper
-   &#160;<span id="projectnumber">1.0-40-gfeaddaa6</span>
+   &#160;<span id="projectnumber">1.0-78-g6e2fb66d</span>
    </div>
   </td>
  </tr>
@@ -44,38 +44,26 @@ $(function() {
 <div class="title">Timetags</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>libmapper primarily uses NTP timetags for communication and synchronization.  
-<a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:gae6d60cc4151ecc36291bae30f337288c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__timetags.html#gae6d60cc4151ecc36291bae30f337288c">mapper_timetag_now</a> (<a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> *tt)</td></tr>
-<tr class="memdesc:gae6d60cc4151ecc36291bae30f337288c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize a timetag to the current mapping network time.  <a href="#gae6d60cc4151ecc36291bae30f337288c">More...</a><br /></td></tr>
+<tr class="memitem:gae6d60cc4151ecc36291bae30f337288c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__timetags.html#gae6d60cc4151ecc36291bae30f337288c">mapper_timetag_now</a> (mapper_timetag_t *tt)</td></tr>
 <tr class="separator:gae6d60cc4151ecc36291bae30f337288c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1f7c4b1f622756251cc39b8ae5dbed5a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__timetags.html#ga1f7c4b1f622756251cc39b8ae5dbed5a">mapper_timetag_difference</a> (<a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> minuend, <a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> subtrahend)</td></tr>
-<tr class="memdesc:ga1f7c4b1f622756251cc39b8ae5dbed5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the difference in seconds between two mapper_timetags.  <a href="#ga1f7c4b1f622756251cc39b8ae5dbed5a">More...</a><br /></td></tr>
+<tr class="memitem:ga1f7c4b1f622756251cc39b8ae5dbed5a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__timetags.html#ga1f7c4b1f622756251cc39b8ae5dbed5a">mapper_timetag_difference</a> (mapper_timetag_t minuend, mapper_timetag_t subtrahend)</td></tr>
 <tr class="separator:ga1f7c4b1f622756251cc39b8ae5dbed5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga559ba46fbfec0c82fb7fa5dc2cd01f9f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__timetags.html#ga559ba46fbfec0c82fb7fa5dc2cd01f9f">mapper_timetag_add</a> (<a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> *augend, <a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> addend)</td></tr>
-<tr class="memdesc:ga559ba46fbfec0c82fb7fa5dc2cd01f9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a timetag to another given timetag.  <a href="#ga559ba46fbfec0c82fb7fa5dc2cd01f9f">More...</a><br /></td></tr>
+<tr class="memitem:ga559ba46fbfec0c82fb7fa5dc2cd01f9f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__timetags.html#ga559ba46fbfec0c82fb7fa5dc2cd01f9f">mapper_timetag_add</a> (mapper_timetag_t *augend, mapper_timetag_t addend)</td></tr>
 <tr class="separator:ga559ba46fbfec0c82fb7fa5dc2cd01f9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac1568499d11fcbef826b3a5086dd79a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__timetags.html#gac1568499d11fcbef826b3a5086dd79a0">mapper_timetag_add_double</a> (<a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> *augend, double addend)</td></tr>
-<tr class="memdesc:gac1568499d11fcbef826b3a5086dd79a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a double-precision floating point value to another given timetag.  <a href="#gac1568499d11fcbef826b3a5086dd79a0">More...</a><br /></td></tr>
+<tr class="memitem:gac1568499d11fcbef826b3a5086dd79a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__timetags.html#gac1568499d11fcbef826b3a5086dd79a0">mapper_timetag_add_double</a> (mapper_timetag_t *augend, double addend)</td></tr>
 <tr class="separator:gac1568499d11fcbef826b3a5086dd79a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gacf38125f51e91f8305cb3a764c69ebd3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__timetags.html#gacf38125f51e91f8305cb3a764c69ebd3">mapper_timetag_subtract</a> (<a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> *minuend, <a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> subtrahend)</td></tr>
-<tr class="memdesc:gacf38125f51e91f8305cb3a764c69ebd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subtract a timetag from another given timetag.  <a href="#gacf38125f51e91f8305cb3a764c69ebd3">More...</a><br /></td></tr>
+<tr class="memitem:gacf38125f51e91f8305cb3a764c69ebd3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__timetags.html#gacf38125f51e91f8305cb3a764c69ebd3">mapper_timetag_subtract</a> (mapper_timetag_t *minuend, mapper_timetag_t subtrahend)</td></tr>
 <tr class="separator:gacf38125f51e91f8305cb3a764c69ebd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gad3fb9f36775aefe7fa9ef41c3076bdcd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__timetags.html#gad3fb9f36775aefe7fa9ef41c3076bdcd">mapper_timetag_multiply</a> (<a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> *tt, double multiplicand)</td></tr>
-<tr class="memdesc:gad3fb9f36775aefe7fa9ef41c3076bdcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a double-precision floating point value to another given timetag.  <a href="#gad3fb9f36775aefe7fa9ef41c3076bdcd">More...</a><br /></td></tr>
+<tr class="memitem:gad3fb9f36775aefe7fa9ef41c3076bdcd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__timetags.html#gad3fb9f36775aefe7fa9ef41c3076bdcd">mapper_timetag_multiply</a> (mapper_timetag_t *tt, double multiplicand)</td></tr>
 <tr class="separator:gad3fb9f36775aefe7fa9ef41c3076bdcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga9d791a2dc33a3b918451d9b05d3f030a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__timetags.html#ga9d791a2dc33a3b918451d9b05d3f030a">mapper_timetag_double</a> (<a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> tt)</td></tr>
-<tr class="memdesc:ga9d791a2dc33a3b918451d9b05d3f030a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return value of mapper_timetag as a double-precision floating point value.  <a href="#ga9d791a2dc33a3b918451d9b05d3f030a">More...</a><br /></td></tr>
+<tr class="memitem:ga9d791a2dc33a3b918451d9b05d3f030a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__timetags.html#ga9d791a2dc33a3b918451d9b05d3f030a">mapper_timetag_double</a> (mapper_timetag_t tt)</td></tr>
 <tr class="separator:ga9d791a2dc33a3b918451d9b05d3f030a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga09ed1975e5c95498987e786bc4b0bbf8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__timetags.html#ga09ed1975e5c95498987e786bc4b0bbf8">mapper_timetag_set_double</a> (<a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> *tt, double value)</td></tr>
-<tr class="memdesc:ga09ed1975e5c95498987e786bc4b0bbf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set value of a mapper_timetag from a double-precision floating point value.  <a href="#ga09ed1975e5c95498987e786bc4b0bbf8">More...</a><br /></td></tr>
+<tr class="memitem:ga09ed1975e5c95498987e786bc4b0bbf8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__timetags.html#ga09ed1975e5c95498987e786bc4b0bbf8">mapper_timetag_set_double</a> (mapper_timetag_t *tt, double value)</td></tr>
 <tr class="separator:ga09ed1975e5c95498987e786bc4b0bbf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga6b835ed1d746565c6608444490736b94"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__timetags.html#ga6b835ed1d746565c6608444490736b94">mapper_timetag_copy</a> (<a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> *ttl, <a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> ttr)</td></tr>
-<tr class="memdesc:ga6b835ed1d746565c6608444490736b94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy value of a mapper_timetag.  <a href="#ga6b835ed1d746565c6608444490736b94">More...</a><br /></td></tr>
+<tr class="memitem:ga6b835ed1d746565c6608444490736b94"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__timetags.html#ga6b835ed1d746565c6608444490736b94">mapper_timetag_copy</a> (mapper_timetag_t *ttl, mapper_timetag_t ttr)</td></tr>
 <tr class="separator:ga6b835ed1d746565c6608444490736b94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -90,13 +78,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_timetag_add </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> *&#160;</td>
+          <td class="paramtype">mapper_timetag_t *&#160;</td>
           <td class="paramname"><em>augend</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a>&#160;</td>
+          <td class="paramtype">mapper_timetag_t&#160;</td>
           <td class="paramname"><em>addend</em>&#160;</td>
         </tr>
         <tr>
@@ -106,9 +94,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Add a timetag to another given timetag. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Add a timetag to another given timetag. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">augend</td><td>A previously allocated timetag to augment. </td></tr>
     <tr><td class="paramname">addend</td><td>A timetag to add. </td></tr>
@@ -127,7 +113,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_timetag_add_double </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> *&#160;</td>
+          <td class="paramtype">mapper_timetag_t *&#160;</td>
           <td class="paramname"><em>augend</em>, </td>
         </tr>
         <tr>
@@ -143,9 +129,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Add a double-precision floating point value to another given timetag. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Add a double-precision floating point value to another given timetag. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">augend</td><td>A previously allocated timetag to augment. </td></tr>
     <tr><td class="paramname">addend</td><td>A value in seconds to add. </td></tr>
@@ -164,13 +148,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_timetag_copy </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> *&#160;</td>
+          <td class="paramtype">mapper_timetag_t *&#160;</td>
           <td class="paramname"><em>ttl</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a>&#160;</td>
+          <td class="paramtype">mapper_timetag_t&#160;</td>
           <td class="paramname"><em>ttr</em>&#160;</td>
         </tr>
         <tr>
@@ -180,9 +164,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Copy value of a mapper_timetag. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Copy value of a mapper_timetag. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">ttl</td><td>The target timetag for copying. </td></tr>
     <tr><td class="paramname">ttr</td><td>The source timetag. </td></tr>
@@ -201,13 +183,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">double mapper_timetag_difference </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a>&#160;</td>
+          <td class="paramtype">mapper_timetag_t&#160;</td>
           <td class="paramname"><em>minuend</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a>&#160;</td>
+          <td class="paramtype">mapper_timetag_t&#160;</td>
           <td class="paramname"><em>subtrahend</em>&#160;</td>
         </tr>
         <tr>
@@ -217,9 +199,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Return the difference in seconds between two mapper_timetags. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Return the difference in seconds between two mapper_timetags. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">minuend</td><td>The minuend. </td></tr>
     <tr><td class="paramname">subtrahend</td><td>The subtrahend. </td></tr>
@@ -239,15 +219,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">double mapper_timetag_double </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a>&#160;</td>
+          <td class="paramtype">mapper_timetag_t&#160;</td>
           <td class="paramname"><em>tt</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Return value of mapper_timetag as a double-precision floating point value. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Return value of mapper_timetag as a double-precision floating point value. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">tt</td><td>The timetag to read. </td></tr>
   </table>
@@ -266,7 +244,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_timetag_multiply </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> *&#160;</td>
+          <td class="paramtype">mapper_timetag_t *&#160;</td>
           <td class="paramname"><em>tt</em>, </td>
         </tr>
         <tr>
@@ -282,9 +260,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Add a double-precision floating point value to another given timetag. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Add a double-precision floating point value to another given timetag. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">tt</td><td>A previously allocated timetag to multiply. </td></tr>
     <tr><td class="paramname">multiplicand</td><td>A value in seconds. </td></tr>
@@ -303,15 +279,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_timetag_now </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> *&#160;</td>
+          <td class="paramtype">mapper_timetag_t *&#160;</td>
           <td class="paramname"><em>tt</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Initialize a timetag to the current mapping network time. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Initialize a timetag to the current mapping network time. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">tt</td><td>A previously allocated timetag to initialize. </td></tr>
   </table>
@@ -329,7 +303,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_timetag_set_double </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> *&#160;</td>
+          <td class="paramtype">mapper_timetag_t *&#160;</td>
           <td class="paramname"><em>tt</em>, </td>
         </tr>
         <tr>
@@ -345,9 +319,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Set value of a mapper_timetag from a double-precision floating point value. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Set value of a mapper_timetag from a double-precision floating point value. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">tt</td><td>A previously-allocated timetag to set. </td></tr>
     <tr><td class="paramname">value</td><td>The value in seconds to set. </td></tr>
@@ -366,13 +338,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_timetag_subtract </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> *&#160;</td>
+          <td class="paramtype">mapper_timetag_t *&#160;</td>
           <td class="paramname"><em>minuend</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a>&#160;</td>
+          <td class="paramtype">mapper_timetag_t&#160;</td>
           <td class="paramname"><em>subtrahend</em>&#160;</td>
         </tr>
         <tr>
@@ -382,9 +354,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Subtract a timetag from another given timetag. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Subtract a timetag from another given timetag. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">minuend</td><td>A previously allocated timetag to augment. </td></tr>
     <tr><td class="paramname">subtrahend</td><td>A timetag to add to subtract. </td></tr>
@@ -397,7 +367,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Aug 19 2017 19:22:31 for libmapper by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

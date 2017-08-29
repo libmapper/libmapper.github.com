@@ -19,7 +19,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">libmapper
-   &#160;<span id="projectnumber">1.0-40-gfeaddaa6</span>
+   &#160;<span id="projectnumber">1.0-78-g6e2fb66d</span>
    </div>
   </td>
  </tr>
@@ -45,195 +45,131 @@ $(function() {
 <div class="title">Devices</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>A device is an entity on the network which has input and/or output signals.  
-<a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:ga4e48cdfeee7d57d7eaf5e51b16b46c52"><td class="memItemLeft" align="right" valign="top">typedef void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga4e48cdfeee7d57d7eaf5e51b16b46c52">mapper_device_link_handler</a>(<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, <a class="el" href="mapper__types_8h.html#ad48424f51f1e2f8c56de0a857119c43d">mapper_link</a> link, <a class="el" href="group__database.html#gad57bec19920b44f831344b6348dad5a5">mapper_record_event</a> event)</td></tr>
-<tr class="memdesc:ga4e48cdfeee7d57d7eaf5e51b16b46c52"><td class="mdescLeft">&#160;</td><td class="mdescRight">A callback function prototype for when a link is added, updated, or removed from a given device.  <a href="#ga4e48cdfeee7d57d7eaf5e51b16b46c52">More...</a><br /></td></tr>
+<tr class="memitem:ga4e48cdfeee7d57d7eaf5e51b16b46c52"><td class="memItemLeft" align="right" valign="top">typedef void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga4e48cdfeee7d57d7eaf5e51b16b46c52">mapper_device_link_handler</a>(mapper_device dev, mapper_link link, <a class="el" href="group__database.html#gad57bec19920b44f831344b6348dad5a5">mapper_record_event</a> event)</td></tr>
 <tr class="separator:ga4e48cdfeee7d57d7eaf5e51b16b46c52"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0a8a17ccdb4cd66e85ba9d6428f93c4a"><td class="memItemLeft" align="right" valign="top">typedef void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga0a8a17ccdb4cd66e85ba9d6428f93c4a">mapper_device_map_handler</a>(<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, <a class="el" href="mapper__types_8h.html#ad20d39a4748cd88abcd7ed16fc3fcfdf">mapper_map</a> map, <a class="el" href="group__database.html#gad57bec19920b44f831344b6348dad5a5">mapper_record_event</a> event)</td></tr>
-<tr class="memdesc:ga0a8a17ccdb4cd66e85ba9d6428f93c4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">A callback function prototype for when a map is added, updated, or removed from a given device.  <a href="#ga0a8a17ccdb4cd66e85ba9d6428f93c4a">More...</a><br /></td></tr>
+<tr class="memitem:ga0a8a17ccdb4cd66e85ba9d6428f93c4a"><td class="memItemLeft" align="right" valign="top">typedef void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga0a8a17ccdb4cd66e85ba9d6428f93c4a">mapper_device_map_handler</a>(mapper_device dev, mapper_map map, <a class="el" href="group__database.html#gad57bec19920b44f831344b6348dad5a5">mapper_record_event</a> event)</td></tr>
 <tr class="separator:ga0a8a17ccdb4cd66e85ba9d6428f93c4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga9aecdddacf2348d6ce16b26c9ad2a81b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga9aecdddacf2348d6ce16b26c9ad2a81b">mapper_device_set_link_callback</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, <a class="el" href="group__devices.html#ga4e48cdfeee7d57d7eaf5e51b16b46c52">mapper_device_link_handler</a> *handler)</td></tr>
-<tr class="memdesc:ga9aecdddacf2348d6ce16b26c9ad2a81b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a function to be called when a link involving a device's local signals is established, modified or destroyed, indicated by the event parameter to the provided function.  <a href="#ga9aecdddacf2348d6ce16b26c9ad2a81b">More...</a><br /></td></tr>
+<tr class="memitem:ga9aecdddacf2348d6ce16b26c9ad2a81b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga9aecdddacf2348d6ce16b26c9ad2a81b">mapper_device_set_link_callback</a> (mapper_device dev, <a class="el" href="group__devices.html#ga4e48cdfeee7d57d7eaf5e51b16b46c52">mapper_device_link_handler</a> *handler)</td></tr>
 <tr class="separator:ga9aecdddacf2348d6ce16b26c9ad2a81b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga616beb2b20e4dfe243a85fb7c7ae97fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga616beb2b20e4dfe243a85fb7c7ae97fe">mapper_device_set_map_callback</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, <a class="el" href="group__devices.html#ga0a8a17ccdb4cd66e85ba9d6428f93c4a">mapper_device_map_handler</a> *handler)</td></tr>
-<tr class="memdesc:ga616beb2b20e4dfe243a85fb7c7ae97fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a function to be called when a map involving a device's local signals is established, modified or destroyed, indicated by the event parameter to the provided function.  <a href="#ga616beb2b20e4dfe243a85fb7c7ae97fe">More...</a><br /></td></tr>
+<tr class="memitem:ga616beb2b20e4dfe243a85fb7c7ae97fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga616beb2b20e4dfe243a85fb7c7ae97fe">mapper_device_set_map_callback</a> (mapper_device dev, <a class="el" href="group__devices.html#ga0a8a17ccdb4cd66e85ba9d6428f93c4a">mapper_device_map_handler</a> *handler)</td></tr>
 <tr class="separator:ga616beb2b20e4dfe243a85fb7c7ae97fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gab5c5ac8797b639965e611760203148b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gab5c5ac8797b639965e611760203148b1">mapper_device_new</a> (const char *name_prefix, int port, <a class="el" href="mapper__types_8h.html#abc035891860283c29f6536c3cbc91e7a">mapper_network</a> net)</td></tr>
-<tr class="memdesc:gab5c5ac8797b639965e611760203148b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate and initialize a mapper device.  <a href="#gab5c5ac8797b639965e611760203148b1">More...</a><br /></td></tr>
+<tr class="memitem:gab5c5ac8797b639965e611760203148b1"><td class="memItemLeft" align="right" valign="top">mapper_device&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gab5c5ac8797b639965e611760203148b1">mapper_device_new</a> (const char *name_prefix, int port, mapper_network net)</td></tr>
 <tr class="separator:gab5c5ac8797b639965e611760203148b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga86dc92c6700c71cad58bddb478bd1145"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga86dc92c6700c71cad58bddb478bd1145">mapper_device_free</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:ga86dc92c6700c71cad58bddb478bd1145"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free resources used by a mapper device.  <a href="#ga86dc92c6700c71cad58bddb478bd1145">More...</a><br /></td></tr>
+<tr class="memitem:ga86dc92c6700c71cad58bddb478bd1145"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga86dc92c6700c71cad58bddb478bd1145">mapper_device_free</a> (mapper_device dev)</td></tr>
 <tr class="separator:ga86dc92c6700c71cad58bddb478bd1145"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga43c069f45ef8160fc0b856010ef8dcc0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__constants_8h.html#acc361739803384575b21a5a363f34b47">mapper_id</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga43c069f45ef8160fc0b856010ef8dcc0">mapper_device_generate_unique_id</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:ga43c069f45ef8160fc0b856010ef8dcc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a unique id associated with a given device.  <a href="#ga43c069f45ef8160fc0b856010ef8dcc0">More...</a><br /></td></tr>
+<tr class="memitem:ga43c069f45ef8160fc0b856010ef8dcc0"><td class="memItemLeft" align="right" valign="top">mapper_id&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga43c069f45ef8160fc0b856010ef8dcc0">mapper_device_generate_unique_id</a> (mapper_device dev)</td></tr>
 <tr class="separator:ga43c069f45ef8160fc0b856010ef8dcc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga5aebfc80550b212302c766c216f00fcf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__types_8h.html#abc035891860283c29f6536c3cbc91e7a">mapper_network</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga5aebfc80550b212302c766c216f00fcf">mapper_device_network</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:ga5aebfc80550b212302c766c216f00fcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the networking structure from a device.  <a href="#ga5aebfc80550b212302c766c216f00fcf">More...</a><br /></td></tr>
+<tr class="memitem:ga5aebfc80550b212302c766c216f00fcf"><td class="memItemLeft" align="right" valign="top">mapper_network&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga5aebfc80550b212302c766c216f00fcf">mapper_device_network</a> (mapper_device dev)</td></tr>
 <tr class="separator:ga5aebfc80550b212302c766c216f00fcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga95ad03000f39319939e7b4efa201ec84"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga95ad03000f39319939e7b4efa201ec84">mapper_device_set_user_data</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, const void *user_data)</td></tr>
-<tr class="memdesc:ga95ad03000f39319939e7b4efa201ec84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Associate a device with an arbitrary pointer.  <a href="#ga95ad03000f39319939e7b4efa201ec84">More...</a><br /></td></tr>
+<tr class="memitem:ga95ad03000f39319939e7b4efa201ec84"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga95ad03000f39319939e7b4efa201ec84">mapper_device_set_user_data</a> (mapper_device dev, const void *user_data)</td></tr>
 <tr class="separator:ga95ad03000f39319939e7b4efa201ec84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1f0ef47b8f4765f2986631c705bb9e07"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga1f0ef47b8f4765f2986631c705bb9e07">mapper_device_user_data</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:ga1f0ef47b8f4765f2986631c705bb9e07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the arbitrary pointer associated with a device.  <a href="#ga1f0ef47b8f4765f2986631c705bb9e07">More...</a><br /></td></tr>
+<tr class="memitem:ga1f0ef47b8f4765f2986631c705bb9e07"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga1f0ef47b8f4765f2986631c705bb9e07">mapper_device_user_data</a> (mapper_device dev)</td></tr>
 <tr class="separator:ga1f0ef47b8f4765f2986631c705bb9e07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga33b3ed014b5f80e0844a63d2b2ca84de"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__types_8h.html#ac1bc9cfd46da51b8e49148b18c4eea6f">mapper_signal</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga33b3ed014b5f80e0844a63d2b2ca84de">mapper_device_add_signal</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, <a class="el" href="mapper__constants_8h.html#a7cb7e3e241fa7885c8241ad080ca6c9a">mapper_direction</a> dir, int num_instances, const char *<a class="el" href="expression_8c.html#a8f8f80d37794cde9472343e4487ba3eb">name</a>, int length, char type, const char *unit, const void *minimum, const void *maximum, <a class="el" href="group__signals.html#ga9f80184b71c17be14e2b1185b8dde4d0">mapper_signal_update_handler</a> *handler, const void *user_data)</td></tr>
-<tr class="memdesc:ga33b3ed014b5f80e0844a63d2b2ca84de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a signal to a mapper device.  <a href="#ga33b3ed014b5f80e0844a63d2b2ca84de">More...</a><br /></td></tr>
+<tr class="memitem:ga33b3ed014b5f80e0844a63d2b2ca84de"><td class="memItemLeft" align="right" valign="top">mapper_signal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga33b3ed014b5f80e0844a63d2b2ca84de">mapper_device_add_signal</a> (mapper_device dev, mapper_direction dir, int num_instances, const char *name, int length, char type, const char *unit, const void *minimum, const void *maximum, <a class="el" href="group__signals.html#ga9f80184b71c17be14e2b1185b8dde4d0">mapper_signal_update_handler</a> *handler, const void *user_data)</td></tr>
 <tr class="separator:ga33b3ed014b5f80e0844a63d2b2ca84de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaf6207f0516f689d14e2bc409d85a4cf0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__types_8h.html#ac1bc9cfd46da51b8e49148b18c4eea6f">mapper_signal</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gaf6207f0516f689d14e2bc409d85a4cf0">mapper_device_add_input_signal</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, const char *<a class="el" href="expression_8c.html#a8f8f80d37794cde9472343e4487ba3eb">name</a>, int length, char type, const char *unit, const void *minimum, const void *maximum, <a class="el" href="group__signals.html#ga9f80184b71c17be14e2b1185b8dde4d0">mapper_signal_update_handler</a> *handler, const void *user_data)</td></tr>
-<tr class="memdesc:gaf6207f0516f689d14e2bc409d85a4cf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an input signal to a mapper device.  <a href="#gaf6207f0516f689d14e2bc409d85a4cf0">More...</a><br /></td></tr>
+<tr class="memitem:gaf6207f0516f689d14e2bc409d85a4cf0"><td class="memItemLeft" align="right" valign="top">mapper_signal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gaf6207f0516f689d14e2bc409d85a4cf0">mapper_device_add_input_signal</a> (mapper_device dev, const char *name, int length, char type, const char *unit, const void *minimum, const void *maximum, <a class="el" href="group__signals.html#ga9f80184b71c17be14e2b1185b8dde4d0">mapper_signal_update_handler</a> *handler, const void *user_data)</td></tr>
 <tr class="separator:gaf6207f0516f689d14e2bc409d85a4cf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga2297aaac51042490f737482eb2e52fb7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__types_8h.html#ac1bc9cfd46da51b8e49148b18c4eea6f">mapper_signal</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga2297aaac51042490f737482eb2e52fb7">mapper_device_add_output_signal</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, const char *<a class="el" href="expression_8c.html#a8f8f80d37794cde9472343e4487ba3eb">name</a>, int length, char type, const char *unit, const void *minimum, const void *maximum)</td></tr>
-<tr class="memdesc:ga2297aaac51042490f737482eb2e52fb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an output signal to a mapper device.  <a href="#ga2297aaac51042490f737482eb2e52fb7">More...</a><br /></td></tr>
+<tr class="memitem:ga2297aaac51042490f737482eb2e52fb7"><td class="memItemLeft" align="right" valign="top">mapper_signal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga2297aaac51042490f737482eb2e52fb7">mapper_device_add_output_signal</a> (mapper_device dev, const char *name, int length, char type, const char *unit, const void *minimum, const void *maximum)</td></tr>
 <tr class="separator:ga2297aaac51042490f737482eb2e52fb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga753c2ab21fa53c14c6e9763d2dad5d33"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga753c2ab21fa53c14c6e9763d2dad5d33">mapper_device_remove_signal</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, <a class="el" href="mapper__types_8h.html#ac1bc9cfd46da51b8e49148b18c4eea6f">mapper_signal</a> sig)</td></tr>
-<tr class="separator:ga753c2ab21fa53c14c6e9763d2dad5d33"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaee6bec0e6e7fb7810036e64f7ca69575"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gaee6bec0e6e7fb7810036e64f7ca69575">mapper_device_num_signals</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, <a class="el" href="mapper__constants_8h.html#a7cb7e3e241fa7885c8241ad080ca6c9a">mapper_direction</a> dir)</td></tr>
-<tr class="memdesc:gaee6bec0e6e7fb7810036e64f7ca69575"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the number of signals.  <a href="#gaee6bec0e6e7fb7810036e64f7ca69575">More...</a><br /></td></tr>
+<tr class="memitem:gaee6bec0e6e7fb7810036e64f7ca69575"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gaee6bec0e6e7fb7810036e64f7ca69575">mapper_device_num_signals</a> (mapper_device dev, mapper_direction dir)</td></tr>
 <tr class="separator:gaee6bec0e6e7fb7810036e64f7ca69575"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga29df56373cee13fbff2d636aefe49010"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__types_8h.html#ac1bc9cfd46da51b8e49148b18c4eea6f">mapper_signal</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga29df56373cee13fbff2d636aefe49010">mapper_device_signals</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, <a class="el" href="mapper__constants_8h.html#a7cb7e3e241fa7885c8241ad080ca6c9a">mapper_direction</a> dir)</td></tr>
-<tr class="memdesc:ga29df56373cee13fbff2d636aefe49010"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the list of signals for a given device.  <a href="#ga29df56373cee13fbff2d636aefe49010">More...</a><br /></td></tr>
+<tr class="memitem:ga29df56373cee13fbff2d636aefe49010"><td class="memItemLeft" align="right" valign="top">mapper_signal *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga29df56373cee13fbff2d636aefe49010">mapper_device_signals</a> (mapper_device dev, mapper_direction dir)</td></tr>
 <tr class="separator:ga29df56373cee13fbff2d636aefe49010"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga12acc58e88332b4dc6932b810e559a9b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__types_8h.html#ac1bc9cfd46da51b8e49148b18c4eea6f">mapper_signal</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga12acc58e88332b4dc6932b810e559a9b">mapper_device_signal_by_id</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, <a class="el" href="mapper__constants_8h.html#acc361739803384575b21a5a363f34b47">mapper_id</a> id)</td></tr>
-<tr class="memdesc:ga12acc58e88332b4dc6932b810e559a9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find information for a registered signal.  <a href="#ga12acc58e88332b4dc6932b810e559a9b">More...</a><br /></td></tr>
+<tr class="memitem:ga12acc58e88332b4dc6932b810e559a9b"><td class="memItemLeft" align="right" valign="top">mapper_signal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga12acc58e88332b4dc6932b810e559a9b">mapper_device_signal_by_id</a> (mapper_device dev, mapper_id id)</td></tr>
 <tr class="separator:ga12acc58e88332b4dc6932b810e559a9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga162be0a4230210b53923dd499535f0d5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__types_8h.html#ac1bc9cfd46da51b8e49148b18c4eea6f">mapper_signal</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga162be0a4230210b53923dd499535f0d5">mapper_device_signal_by_name</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, const char *sig_name)</td></tr>
-<tr class="memdesc:ga162be0a4230210b53923dd499535f0d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find information for a registered signal.  <a href="#ga162be0a4230210b53923dd499535f0d5">More...</a><br /></td></tr>
+<tr class="memitem:ga162be0a4230210b53923dd499535f0d5"><td class="memItemLeft" align="right" valign="top">mapper_signal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga162be0a4230210b53923dd499535f0d5">mapper_device_signal_by_name</a> (mapper_device dev, const char *sig_name)</td></tr>
 <tr class="separator:ga162be0a4230210b53923dd499535f0d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga9af8ed06131697c3883e7d72160607a2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__types_8h.html#a9bb676d7ce1dc92d6f316ae79f4abe3f">mapper_signal_group</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga9af8ed06131697c3883e7d72160607a2">mapper_device_add_signal_group</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:ga9af8ed06131697c3883e7d72160607a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define a signal group.  <a href="#ga9af8ed06131697c3883e7d72160607a2">More...</a><br /></td></tr>
+<tr class="memitem:ga9af8ed06131697c3883e7d72160607a2"><td class="memItemLeft" align="right" valign="top">mapper_signal_group&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga9af8ed06131697c3883e7d72160607a2">mapper_device_add_signal_group</a> (mapper_device dev)</td></tr>
 <tr class="separator:ga9af8ed06131697c3883e7d72160607a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaa0fdbe912138b20bdfaa760b654482fa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gaa0fdbe912138b20bdfaa760b654482fa">mapper_device_remove_signal_group</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, <a class="el" href="mapper__types_8h.html#a9bb676d7ce1dc92d6f316ae79f4abe3f">mapper_signal_group</a> group)</td></tr>
-<tr class="memdesc:gaa0fdbe912138b20bdfaa760b654482fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove a previously-defined multi-signal group.  <a href="#gaa0fdbe912138b20bdfaa760b654482fa">More...</a><br /></td></tr>
+<tr class="memitem:gaa0fdbe912138b20bdfaa760b654482fa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gaa0fdbe912138b20bdfaa760b654482fa">mapper_device_remove_signal_group</a> (mapper_device dev, mapper_signal_group group)</td></tr>
 <tr class="separator:gaa0fdbe912138b20bdfaa760b654482fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gabd52129d881486ef7d26a99187ce122b"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gabd52129d881486ef7d26a99187ce122b">mapper_device_description</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:gabd52129d881486ef7d26a99187ce122b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the description for a specific device.  <a href="#gabd52129d881486ef7d26a99187ce122b">More...</a><br /></td></tr>
+<tr class="memitem:gabd52129d881486ef7d26a99187ce122b"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gabd52129d881486ef7d26a99187ce122b">mapper_device_description</a> (mapper_device dev)</td></tr>
 <tr class="separator:gabd52129d881486ef7d26a99187ce122b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga81ec18320a891c2ed7ff1eb1c4afbd2a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga81ec18320a891c2ed7ff1eb1c4afbd2a">mapper_device_num_links</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, <a class="el" href="mapper__constants_8h.html#a7cb7e3e241fa7885c8241ad080ca6c9a">mapper_direction</a> dir)</td></tr>
-<tr class="memdesc:ga81ec18320a891c2ed7ff1eb1c4afbd2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the number of network links associated with a specific device.  <a href="#ga81ec18320a891c2ed7ff1eb1c4afbd2a">More...</a><br /></td></tr>
+<tr class="memitem:ga81ec18320a891c2ed7ff1eb1c4afbd2a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga81ec18320a891c2ed7ff1eb1c4afbd2a">mapper_device_num_links</a> (mapper_device dev, mapper_direction dir)</td></tr>
 <tr class="separator:ga81ec18320a891c2ed7ff1eb1c4afbd2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gabbad76d68c14eb6f5efdc0968051e5b2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__types_8h.html#ad48424f51f1e2f8c56de0a857119c43d">mapper_link</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gabbad76d68c14eb6f5efdc0968051e5b2">mapper_device_links</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, <a class="el" href="mapper__constants_8h.html#a7cb7e3e241fa7885c8241ad080ca6c9a">mapper_direction</a> dir)</td></tr>
-<tr class="memdesc:gabbad76d68c14eb6f5efdc0968051e5b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the list of network links associated with a given device.  <a href="#gabbad76d68c14eb6f5efdc0968051e5b2">More...</a><br /></td></tr>
+<tr class="memitem:gabbad76d68c14eb6f5efdc0968051e5b2"><td class="memItemLeft" align="right" valign="top">mapper_link *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gabbad76d68c14eb6f5efdc0968051e5b2">mapper_device_links</a> (mapper_device dev, mapper_direction dir)</td></tr>
 <tr class="separator:gabbad76d68c14eb6f5efdc0968051e5b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gad872b336d5308282eaacd60ca288f51b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__types_8h.html#ad48424f51f1e2f8c56de0a857119c43d">mapper_link</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gad872b336d5308282eaacd60ca288f51b">mapper_device_link_by_remote_device</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, <a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> remote_dev)</td></tr>
-<tr class="memdesc:gad872b336d5308282eaacd60ca288f51b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find information for a registered link.  <a href="#gad872b336d5308282eaacd60ca288f51b">More...</a><br /></td></tr>
+<tr class="memitem:gad872b336d5308282eaacd60ca288f51b"><td class="memItemLeft" align="right" valign="top">mapper_link&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gad872b336d5308282eaacd60ca288f51b">mapper_device_link_by_remote_device</a> (mapper_device dev, mapper_device remote_dev)</td></tr>
 <tr class="separator:gad872b336d5308282eaacd60ca288f51b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1fc993f804d03527a6a70e37a5bb3784"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga1fc993f804d03527a6a70e37a5bb3784">mapper_device_num_maps</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, <a class="el" href="mapper__constants_8h.html#a7cb7e3e241fa7885c8241ad080ca6c9a">mapper_direction</a> dir)</td></tr>
-<tr class="memdesc:ga1fc993f804d03527a6a70e37a5bb3784"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the number of maps associated with a specific device.  <a href="#ga1fc993f804d03527a6a70e37a5bb3784">More...</a><br /></td></tr>
+<tr class="memitem:ga1fc993f804d03527a6a70e37a5bb3784"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga1fc993f804d03527a6a70e37a5bb3784">mapper_device_num_maps</a> (mapper_device dev, mapper_direction dir)</td></tr>
 <tr class="separator:ga1fc993f804d03527a6a70e37a5bb3784"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gafc5e65aebefacd2e53c96154116a58cf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__types_8h.html#ad20d39a4748cd88abcd7ed16fc3fcfdf">mapper_map</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gafc5e65aebefacd2e53c96154116a58cf">mapper_device_maps</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, <a class="el" href="mapper__constants_8h.html#a7cb7e3e241fa7885c8241ad080ca6c9a">mapper_direction</a> dir)</td></tr>
-<tr class="memdesc:gafc5e65aebefacd2e53c96154116a58cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the list of maps associated with a given device.  <a href="#gafc5e65aebefacd2e53c96154116a58cf">More...</a><br /></td></tr>
+<tr class="memitem:gafc5e65aebefacd2e53c96154116a58cf"><td class="memItemLeft" align="right" valign="top">mapper_map *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gafc5e65aebefacd2e53c96154116a58cf">mapper_device_maps</a> (mapper_device dev, mapper_direction dir)</td></tr>
 <tr class="separator:gafc5e65aebefacd2e53c96154116a58cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gad9d186ef255e86ee4ec83504d6456c4c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gad9d186ef255e86ee4ec83504d6456c4c">mapper_device_num_properties</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:gad9d186ef255e86ee4ec83504d6456c4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the total number of properties for a specific device.  <a href="#gad9d186ef255e86ee4ec83504d6456c4c">More...</a><br /></td></tr>
+<tr class="memitem:gad9d186ef255e86ee4ec83504d6456c4c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gad9d186ef255e86ee4ec83504d6456c4c">mapper_device_num_properties</a> (mapper_device dev)</td></tr>
 <tr class="separator:gad9d186ef255e86ee4ec83504d6456c4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga8dcafb5aa9880df4e27ffc7349eb94e4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga8dcafb5aa9880df4e27ffc7349eb94e4">mapper_device_property</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, const char *<a class="el" href="expression_8c.html#a8f8f80d37794cde9472343e4487ba3eb">name</a>, int *length, char *type, const void **value)</td></tr>
-<tr class="memdesc:ga8dcafb5aa9880df4e27ffc7349eb94e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Look up a device property by name.  <a href="#ga8dcafb5aa9880df4e27ffc7349eb94e4">More...</a><br /></td></tr>
+<tr class="memitem:ga8dcafb5aa9880df4e27ffc7349eb94e4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga8dcafb5aa9880df4e27ffc7349eb94e4">mapper_device_property</a> (mapper_device dev, const char *name, int *length, char *type, const void **value)</td></tr>
 <tr class="separator:ga8dcafb5aa9880df4e27ffc7349eb94e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gafff76a960ef4c1f8aace9582eb008b58"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gafff76a960ef4c1f8aace9582eb008b58">mapper_device_property_index</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, unsigned int index, const char **<a class="el" href="expression_8c.html#a8f8f80d37794cde9472343e4487ba3eb">name</a>, int *length, char *type, const void **value)</td></tr>
-<tr class="memdesc:gafff76a960ef4c1f8aace9582eb008b58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Look up a device property by index.  <a href="#gafff76a960ef4c1f8aace9582eb008b58">More...</a><br /></td></tr>
+<tr class="memitem:gafff76a960ef4c1f8aace9582eb008b58"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gafff76a960ef4c1f8aace9582eb008b58">mapper_device_property_index</a> (mapper_device dev, unsigned int index, const char **name, int *length, char *type, const void **value)</td></tr>
 <tr class="separator:gafff76a960ef4c1f8aace9582eb008b58"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga63a09eadd8e43d4bad7842f2d17dc902"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga63a09eadd8e43d4bad7842f2d17dc902">mapper_device_set_description</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, const char *description)</td></tr>
-<tr class="memdesc:ga63a09eadd8e43d4bad7842f2d17dc902"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the description property for a specific local device.  <a href="#ga63a09eadd8e43d4bad7842f2d17dc902">More...</a><br /></td></tr>
+<tr class="memitem:ga63a09eadd8e43d4bad7842f2d17dc902"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga63a09eadd8e43d4bad7842f2d17dc902">mapper_device_set_description</a> (mapper_device dev, const char *description)</td></tr>
 <tr class="separator:ga63a09eadd8e43d4bad7842f2d17dc902"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaa86d4032e217c8c395cac6069459cd54"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gaa86d4032e217c8c395cac6069459cd54">mapper_device_set_property</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, const char *<a class="el" href="expression_8c.html#a8f8f80d37794cde9472343e4487ba3eb">name</a>, int length, char type, const void *value, int publish)</td></tr>
-<tr class="memdesc:gaa86d4032e217c8c395cac6069459cd54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a property of a device.  <a href="#gaa86d4032e217c8c395cac6069459cd54">More...</a><br /></td></tr>
+<tr class="memitem:gaa86d4032e217c8c395cac6069459cd54"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gaa86d4032e217c8c395cac6069459cd54">mapper_device_set_property</a> (mapper_device dev, const char *name, int length, char type, const void *value, int publish)</td></tr>
 <tr class="separator:gaa86d4032e217c8c395cac6069459cd54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0e7f865fe68b2cd648412d3c6bf3bc53"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga0e7f865fe68b2cd648412d3c6bf3bc53">mapper_device_clear_staged_properties</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:ga0e7f865fe68b2cd648412d3c6bf3bc53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear any staged property changes.  <a href="#ga0e7f865fe68b2cd648412d3c6bf3bc53">More...</a><br /></td></tr>
+<tr class="memitem:ga0e7f865fe68b2cd648412d3c6bf3bc53"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga0e7f865fe68b2cd648412d3c6bf3bc53">mapper_device_clear_staged_properties</a> (mapper_device dev)</td></tr>
 <tr class="separator:ga0e7f865fe68b2cd648412d3c6bf3bc53"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaa3d9d306ace6d313e7e4e8df7af80548"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gaa3d9d306ace6d313e7e4e8df7af80548">mapper_device_push</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:gaa3d9d306ace6d313e7e4e8df7af80548"><td class="mdescLeft">&#160;</td><td class="mdescRight">Push any property changes out to the network.  <a href="#gaa3d9d306ace6d313e7e4e8df7af80548">More...</a><br /></td></tr>
+<tr class="memitem:gaa3d9d306ace6d313e7e4e8df7af80548"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gaa3d9d306ace6d313e7e4e8df7af80548">mapper_device_push</a> (mapper_device dev)</td></tr>
 <tr class="separator:gaa3d9d306ace6d313e7e4e8df7af80548"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gabc78c88aeea6d2c78f76c5c95f83bd44"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gabc78c88aeea6d2c78f76c5c95f83bd44">mapper_device_remove_property</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, const char *<a class="el" href="expression_8c.html#a8f8f80d37794cde9472343e4487ba3eb">name</a>)</td></tr>
-<tr class="memdesc:gabc78c88aeea6d2c78f76c5c95f83bd44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove a property of a device.  <a href="#gabc78c88aeea6d2c78f76c5c95f83bd44">More...</a><br /></td></tr>
+<tr class="memitem:gabc78c88aeea6d2c78f76c5c95f83bd44"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gabc78c88aeea6d2c78f76c5c95f83bd44">mapper_device_remove_property</a> (mapper_device dev, const char *name)</td></tr>
 <tr class="separator:gabc78c88aeea6d2c78f76c5c95f83bd44"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga4fb7653d20898da50b9d6a5aac275fdf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga4fb7653d20898da50b9d6a5aac275fdf">mapper_device_poll</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, int block_ms)</td></tr>
-<tr class="memdesc:ga4fb7653d20898da50b9d6a5aac275fdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Poll this device for new messages.  <a href="#ga4fb7653d20898da50b9d6a5aac275fdf">More...</a><br /></td></tr>
+<tr class="memitem:ga4fb7653d20898da50b9d6a5aac275fdf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga4fb7653d20898da50b9d6a5aac275fdf">mapper_device_poll</a> (mapper_device dev, int block_ms)</td></tr>
 <tr class="separator:ga4fb7653d20898da50b9d6a5aac275fdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga2ab73acba7a07520cb90384f0871c19c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga2ab73acba7a07520cb90384f0871c19c">mapper_device_num_fds</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:ga2ab73acba7a07520cb90384f0871c19c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the number of file descriptors needed for this device.  <a href="#ga2ab73acba7a07520cb90384f0871c19c">More...</a><br /></td></tr>
+<tr class="memitem:ga2ab73acba7a07520cb90384f0871c19c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga2ab73acba7a07520cb90384f0871c19c">mapper_device_num_fds</a> (mapper_device dev)</td></tr>
 <tr class="separator:ga2ab73acba7a07520cb90384f0871c19c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga2f9d37dcbfb273fe4f91c5d4f914f09d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga2f9d37dcbfb273fe4f91c5d4f914f09d">mapper_device_fds</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, int *fds, int num)</td></tr>
-<tr class="memdesc:ga2f9d37dcbfb273fe4f91c5d4f914f09d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the list of file descriptors for this device to the provided array.  <a href="#ga2f9d37dcbfb273fe4f91c5d4f914f09d">More...</a><br /></td></tr>
+<tr class="memitem:ga2f9d37dcbfb273fe4f91c5d4f914f09d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga2f9d37dcbfb273fe4f91c5d4f914f09d">mapper_device_fds</a> (mapper_device dev, int *fds, int num)</td></tr>
 <tr class="separator:ga2f9d37dcbfb273fe4f91c5d4f914f09d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaae65daf518f05abeaa603790f62db808"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gaae65daf518f05abeaa603790f62db808">mapper_device_service_fd</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, int fd)</td></tr>
-<tr class="memdesc:gaae65daf518f05abeaa603790f62db808"><td class="mdescLeft">&#160;</td><td class="mdescRight">If an external event indicates that a file descriptor for this device needs servicing, this function should be called.  <a href="#gaae65daf518f05abeaa603790f62db808">More...</a><br /></td></tr>
+<tr class="memitem:gaae65daf518f05abeaa603790f62db808"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gaae65daf518f05abeaa603790f62db808">mapper_device_service_fd</a> (mapper_device dev, int fd)</td></tr>
 <tr class="separator:gaae65daf518f05abeaa603790f62db808"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gacfdc93971c9bb222bc8ca5cf1e8949a1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gacfdc93971c9bb222bc8ca5cf1e8949a1">mapper_device_ready</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:gacfdc93971c9bb222bc8ca5cf1e8949a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detect whether a device is completely initialized.  <a href="#gacfdc93971c9bb222bc8ca5cf1e8949a1">More...</a><br /></td></tr>
+<tr class="memitem:gacfdc93971c9bb222bc8ca5cf1e8949a1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gacfdc93971c9bb222bc8ca5cf1e8949a1">mapper_device_ready</a> (mapper_device dev)</td></tr>
 <tr class="separator:gacfdc93971c9bb222bc8ca5cf1e8949a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga6fd071f17d002638cd27418e06ef44e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga6fd071f17d002638cd27418e06ef44e2">mapper_device_synced</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, <a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> *tt)</td></tr>
-<tr class="memdesc:ga6fd071f17d002638cd27418e06ef44e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recover a timetag specifying the last time a device made contact.  <a href="#ga6fd071f17d002638cd27418e06ef44e2">More...</a><br /></td></tr>
+<tr class="memitem:ga6fd071f17d002638cd27418e06ef44e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga6fd071f17d002638cd27418e06ef44e2">mapper_device_synced</a> (mapper_device dev, mapper_timetag_t *tt)</td></tr>
 <tr class="separator:ga6fd071f17d002638cd27418e06ef44e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gab8bd27c2680cb126a565ad1979cd627e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gab8bd27c2680cb126a565ad1979cd627e">mapper_device_version</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:gab8bd27c2680cb126a565ad1979cd627e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the current version number for a device.  <a href="#gab8bd27c2680cb126a565ad1979cd627e">More...</a><br /></td></tr>
+<tr class="memitem:gab8bd27c2680cb126a565ad1979cd627e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gab8bd27c2680cb126a565ad1979cd627e">mapper_device_version</a> (mapper_device dev)</td></tr>
 <tr class="separator:gab8bd27c2680cb126a565ad1979cd627e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gacd605d3a2b1545b8eff79003bfb24c07"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gacd605d3a2b1545b8eff79003bfb24c07">mapper_device_name</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:gacd605d3a2b1545b8eff79003bfb24c07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a string indicating the device's full name, if it is registered.  <a href="#gacd605d3a2b1545b8eff79003bfb24c07">More...</a><br /></td></tr>
+<tr class="memitem:gacd605d3a2b1545b8eff79003bfb24c07"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gacd605d3a2b1545b8eff79003bfb24c07">mapper_device_name</a> (mapper_device dev)</td></tr>
 <tr class="separator:gacd605d3a2b1545b8eff79003bfb24c07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaae5bf6c8292195eabb97a70b7510ee55"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gaae5bf6c8292195eabb97a70b7510ee55">mapper_device_host</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:gaae5bf6c8292195eabb97a70b7510ee55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a string indicating the device's host, if it is registered.  <a href="#gaae5bf6c8292195eabb97a70b7510ee55">More...</a><br /></td></tr>
+<tr class="memitem:gaae5bf6c8292195eabb97a70b7510ee55"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gaae5bf6c8292195eabb97a70b7510ee55">mapper_device_host</a> (mapper_device dev)</td></tr>
 <tr class="separator:gaae5bf6c8292195eabb97a70b7510ee55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gacbb0013adcaf1868e3814c258394a748"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__constants_8h.html#acc361739803384575b21a5a363f34b47">mapper_id</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gacbb0013adcaf1868e3814c258394a748">mapper_device_id</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:gacbb0013adcaf1868e3814c258394a748"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the unique id allocated to this device by the mapper network.  <a href="#gacbb0013adcaf1868e3814c258394a748">More...</a><br /></td></tr>
+<tr class="memitem:gacbb0013adcaf1868e3814c258394a748"><td class="memItemLeft" align="right" valign="top">mapper_id&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gacbb0013adcaf1868e3814c258394a748">mapper_device_id</a> (mapper_device dev)</td></tr>
 <tr class="separator:gacbb0013adcaf1868e3814c258394a748"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga25558675b2cccbb3625bf0b0d4be0ca9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga25558675b2cccbb3625bf0b0d4be0ca9">mapper_device_is_local</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:ga25558675b2cccbb3625bf0b0d4be0ca9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicate whether this device is local.  <a href="#ga25558675b2cccbb3625bf0b0d4be0ca9">More...</a><br /></td></tr>
+<tr class="memitem:ga25558675b2cccbb3625bf0b0d4be0ca9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga25558675b2cccbb3625bf0b0d4be0ca9">mapper_device_is_local</a> (mapper_device dev)</td></tr>
 <tr class="separator:ga25558675b2cccbb3625bf0b0d4be0ca9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0b29c06baba9688a3c3c8b5cbf485ae0"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga0b29c06baba9688a3c3c8b5cbf485ae0">mapper_device_port</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:ga0b29c06baba9688a3c3c8b5cbf485ae0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the port used by a device to receive signals, if available.  <a href="#ga0b29c06baba9688a3c3c8b5cbf485ae0">More...</a><br /></td></tr>
+<tr class="memitem:ga0b29c06baba9688a3c3c8b5cbf485ae0"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga0b29c06baba9688a3c3c8b5cbf485ae0">mapper_device_port</a> (mapper_device dev)</td></tr>
 <tr class="separator:ga0b29c06baba9688a3c3c8b5cbf485ae0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gad5d811b694989577527af72d25a85552"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gad5d811b694989577527af72d25a85552">mapper_device_ordinal</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:gad5d811b694989577527af72d25a85552"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return an allocated ordinal which is appended to this device's network name.  <a href="#gad5d811b694989577527af72d25a85552">More...</a><br /></td></tr>
+<tr class="memitem:gad5d811b694989577527af72d25a85552"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gad5d811b694989577527af72d25a85552">mapper_device_ordinal</a> (mapper_device dev)</td></tr>
 <tr class="separator:gad5d811b694989577527af72d25a85552"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0cebfc82c17345af1760cc417d630223"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga0cebfc82c17345af1760cc417d630223">mapper_device_start_queue</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, <a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> tt)</td></tr>
-<tr class="memdesc:ga0cebfc82c17345af1760cc417d630223"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start a time-tagged mapper queue.  <a href="#ga0cebfc82c17345af1760cc417d630223">More...</a><br /></td></tr>
+<tr class="memitem:ga0cebfc82c17345af1760cc417d630223"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga0cebfc82c17345af1760cc417d630223">mapper_device_start_queue</a> (mapper_device dev, mapper_timetag_t tt)</td></tr>
 <tr class="separator:ga0cebfc82c17345af1760cc417d630223"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga4f3301ddbe4ab9aca95cda8d6f9bbba7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga4f3301ddbe4ab9aca95cda8d6f9bbba7">mapper_device_send_queue</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, <a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> tt)</td></tr>
-<tr class="memdesc:ga4f3301ddbe4ab9aca95cda8d6f9bbba7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dispatch a time-tagged mapper queue.  <a href="#ga4f3301ddbe4ab9aca95cda8d6f9bbba7">More...</a><br /></td></tr>
+<tr class="memitem:ga4f3301ddbe4ab9aca95cda8d6f9bbba7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga4f3301ddbe4ab9aca95cda8d6f9bbba7">mapper_device_send_queue</a> (mapper_device dev, mapper_timetag_t tt)</td></tr>
 <tr class="separator:ga4f3301ddbe4ab9aca95cda8d6f9bbba7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1ac329bcc294134d5eb470591e8ad250"><td class="memItemLeft" align="right" valign="top">lo_server&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga1ac329bcc294134d5eb470591e8ad250">mapper_device_lo_server</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:ga1ac329bcc294134d5eb470591e8ad250"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get access to the device's underlying lo_server.  <a href="#ga1ac329bcc294134d5eb470591e8ad250">More...</a><br /></td></tr>
+<tr class="memitem:ga1ac329bcc294134d5eb470591e8ad250"><td class="memItemLeft" align="right" valign="top">lo_server&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga1ac329bcc294134d5eb470591e8ad250">mapper_device_lo_server</a> (mapper_device dev)</td></tr>
 <tr class="separator:ga1ac329bcc294134d5eb470591e8ad250"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1533d8ae09126d7fa7658638959a9e25"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__types_8h.html#ad105c408c28c7e8523d3c5286eb1e364">mapper_database</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga1533d8ae09126d7fa7658638959a9e25">mapper_device_database</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:ga1533d8ae09126d7fa7658638959a9e25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the internal mapper_database structure used by a device.  <a href="#ga1533d8ae09126d7fa7658638959a9e25">More...</a><br /></td></tr>
+<tr class="memitem:ga1533d8ae09126d7fa7658638959a9e25"><td class="memItemLeft" align="right" valign="top">mapper_database&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga1533d8ae09126d7fa7658638959a9e25">mapper_device_database</a> (mapper_device dev)</td></tr>
 <tr class="separator:ga1533d8ae09126d7fa7658638959a9e25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gabdab317d17f1980e4434075dc3cf7693"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gabdab317d17f1980e4434075dc3cf7693">mapper_device_query_union</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *query1, <a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *query2)</td></tr>
-<tr class="memdesc:gabdab317d17f1980e4434075dc3cf7693"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the union of two device queries (devices matching query1 OR query2).  <a href="#gabdab317d17f1980e4434075dc3cf7693">More...</a><br /></td></tr>
+<tr class="memitem:gabdab317d17f1980e4434075dc3cf7693"><td class="memItemLeft" align="right" valign="top">mapper_device *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gabdab317d17f1980e4434075dc3cf7693">mapper_device_query_union</a> (mapper_device *query1, mapper_device *query2)</td></tr>
 <tr class="separator:gabdab317d17f1980e4434075dc3cf7693"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga58a413745a78c98354878150a537555a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga58a413745a78c98354878150a537555a">mapper_device_query_intersection</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *query1, <a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *query2)</td></tr>
-<tr class="memdesc:ga58a413745a78c98354878150a537555a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the intersection of two device queries (devices matching query1 AND query2).  <a href="#ga58a413745a78c98354878150a537555a">More...</a><br /></td></tr>
+<tr class="memitem:ga58a413745a78c98354878150a537555a"><td class="memItemLeft" align="right" valign="top">mapper_device *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga58a413745a78c98354878150a537555a">mapper_device_query_intersection</a> (mapper_device *query1, mapper_device *query2)</td></tr>
 <tr class="separator:ga58a413745a78c98354878150a537555a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaabc39018caf460dc52ced22d2520063b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gaabc39018caf460dc52ced22d2520063b">mapper_device_query_difference</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *query1, <a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *query2)</td></tr>
-<tr class="memdesc:gaabc39018caf460dc52ced22d2520063b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the difference between two device queries (devices matching query1 but NOT query2).  <a href="#gaabc39018caf460dc52ced22d2520063b">More...</a><br /></td></tr>
+<tr class="memitem:gaabc39018caf460dc52ced22d2520063b"><td class="memItemLeft" align="right" valign="top">mapper_device *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gaabc39018caf460dc52ced22d2520063b">mapper_device_query_difference</a> (mapper_device *query1, mapper_device *query2)</td></tr>
 <tr class="separator:gaabc39018caf460dc52ced22d2520063b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaf10a8fded756536f536634c1f338f566"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gaf10a8fded756536f536634c1f338f566">mapper_device_query_index</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *query, int index)</td></tr>
-<tr class="memdesc:gaf10a8fded756536f536634c1f338f566"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a device record pointer returned from a previous device query, get an indexed item in the list.  <a href="#gaf10a8fded756536f536634c1f338f566">More...</a><br /></td></tr>
+<tr class="memitem:gaf10a8fded756536f536634c1f338f566"><td class="memItemLeft" align="right" valign="top">mapper_device&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gaf10a8fded756536f536634c1f338f566">mapper_device_query_index</a> (mapper_device *query, int index)</td></tr>
 <tr class="separator:gaf10a8fded756536f536634c1f338f566"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga5f5f2a4a3bec44e338c0bb50f79260cc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga5f5f2a4a3bec44e338c0bb50f79260cc">mapper_device_query_next</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *query)</td></tr>
-<tr class="memdesc:ga5f5f2a4a3bec44e338c0bb50f79260cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a device record pointer returned from a previous device query, get the next item in the list.  <a href="#ga5f5f2a4a3bec44e338c0bb50f79260cc">More...</a><br /></td></tr>
+<tr class="memitem:ga5f5f2a4a3bec44e338c0bb50f79260cc"><td class="memItemLeft" align="right" valign="top">mapper_device *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga5f5f2a4a3bec44e338c0bb50f79260cc">mapper_device_query_next</a> (mapper_device *query)</td></tr>
 <tr class="separator:ga5f5f2a4a3bec44e338c0bb50f79260cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae52aff22af0f35e41f08df1eb21b4594"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gae52aff22af0f35e41f08df1eb21b4594">mapper_device_query_copy</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *query)</td></tr>
-<tr class="memdesc:gae52aff22af0f35e41f08df1eb21b4594"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy a previously-constructed device query.  <a href="#gae52aff22af0f35e41f08df1eb21b4594">More...</a><br /></td></tr>
+<tr class="memitem:gae52aff22af0f35e41f08df1eb21b4594"><td class="memItemLeft" align="right" valign="top">mapper_device *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gae52aff22af0f35e41f08df1eb21b4594">mapper_device_query_copy</a> (mapper_device *query)</td></tr>
 <tr class="separator:gae52aff22af0f35e41f08df1eb21b4594"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga832efa996de45ee1cd0d725017ad5992"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga832efa996de45ee1cd0d725017ad5992">mapper_device_query_done</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *query)</td></tr>
-<tr class="memdesc:ga832efa996de45ee1cd0d725017ad5992"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a device record pointer returned from a previous device query, indicate that we are done iterating.  <a href="#ga832efa996de45ee1cd0d725017ad5992">More...</a><br /></td></tr>
+<tr class="memitem:ga832efa996de45ee1cd0d725017ad5992"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#ga832efa996de45ee1cd0d725017ad5992">mapper_device_query_done</a> (mapper_device *query)</td></tr>
 <tr class="separator:ga832efa996de45ee1cd0d725017ad5992"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae0c841751b8988f75fed66efab15703a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gae0c841751b8988f75fed66efab15703a">mapper_device_print</a> (<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev)</td></tr>
-<tr class="memdesc:gae0c841751b8988f75fed66efab15703a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper to print the properties of a specific device.  <a href="#gae0c841751b8988f75fed66efab15703a">More...</a><br /></td></tr>
+<tr class="memitem:gae0c841751b8988f75fed66efab15703a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__devices.html#gae0c841751b8988f75fed66efab15703a">mapper_device_print</a> (mapper_device dev)</td></tr>
 <tr class="separator:gae0c841751b8988f75fed66efab15703a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p>A device is an entity on the network which has input and/or output signals. </p>
-<p>The mapper_device is the primary interface through which a program uses libmapper. A device must have a name, to which a unique ordinal is subsequently appended. It can also be given other user-specified metadata. Devices signals can be connected, which is accomplished by requests from an external GUI. </p>
+<p>A device is an entity on the network which has input and/or output signals. The mapper_device is the primary interface through which a program uses libmapper. A device must have a name, to which a unique ordinal is subsequently appended. It can also be given other user-specified metadata. Devices signals can be connected, which is accomplished by requests from an external GUI. </p>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a id="ga4e48cdfeee7d57d7eaf5e51b16b46c52"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga4e48cdfeee7d57d7eaf5e51b16b46c52">&#9670;&nbsp;</a></span>mapper_device_link_handler</h2>
@@ -242,13 +178,11 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef void mapper_device_link_handler(<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, <a class="el" href="mapper__types_8h.html#ad48424f51f1e2f8c56de0a857119c43d">mapper_link</a> link, <a class="el" href="group__database.html#gad57bec19920b44f831344b6348dad5a5">mapper_record_event</a> event)</td>
+          <td class="memname">typedef void mapper_device_link_handler(mapper_device dev, mapper_link link, <a class="el" href="group__database.html#gad57bec19920b44f831344b6348dad5a5">mapper_record_event</a> event)</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>A callback function prototype for when a link is added, updated, or removed from a given device. </p>
-<p>Such a function is passed in to <a class="el" href="group__devices.html#ga9aecdddacf2348d6ce16b26c9ad2a81b" title="Set a function to be called when a link involving a device&#39;s local signals is established, modified or destroyed, indicated by the event parameter to the provided function. ">mapper_device_set_link_callback()</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>A callback function prototype for when a link is added, updated, or removed from a given device. Such a function is passed in to <a class="el" href="group__devices.html#ga9aecdddacf2348d6ce16b26c9ad2a81b">mapper_device_set_link_callback()</a>. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device that registered this callback. </td></tr>
     <tr><td class="paramname">link</td><td>The link record. </td></tr>
@@ -266,13 +200,11 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef void mapper_device_map_handler(<a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> dev, <a class="el" href="mapper__types_8h.html#ad20d39a4748cd88abcd7ed16fc3fcfdf">mapper_map</a> map, <a class="el" href="group__database.html#gad57bec19920b44f831344b6348dad5a5">mapper_record_event</a> event)</td>
+          <td class="memname">typedef void mapper_device_map_handler(mapper_device dev, mapper_map map, <a class="el" href="group__database.html#gad57bec19920b44f831344b6348dad5a5">mapper_record_event</a> event)</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>A callback function prototype for when a map is added, updated, or removed from a given device. </p>
-<p>Such a function is passed in to <a class="el" href="group__devices.html#ga616beb2b20e4dfe243a85fb7c7ae97fe" title="Set a function to be called when a map involving a device&#39;s local signals is established, modified or destroyed, indicated by the event parameter to the provided function. ">mapper_device_set_map_callback()</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>A callback function prototype for when a map is added, updated, or removed from a given device. Such a function is passed in to <a class="el" href="group__devices.html#ga616beb2b20e4dfe243a85fb7c7ae97fe">mapper_device_set_map_callback()</a>. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device that registered this callback. </td></tr>
     <tr><td class="paramname">map</td><td>The map record. </td></tr>
@@ -291,9 +223,9 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__types_8h.html#ac1bc9cfd46da51b8e49148b18c4eea6f">mapper_signal</a> mapper_device_add_input_signal </td>
+          <td class="memname">mapper_signal mapper_device_add_input_signal </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
@@ -351,9 +283,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Add an input signal to a mapper device. </p>
-<p>Values and strings pointed to by this call (except user_data) will be copied. For minimum and maximum, actual type must correspond to 'type' (if type='i', then int*, etc). </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Add an input signal to a mapper device. Values and strings pointed to by this call (except user_data) will be copied. For minimum and maximum, actual type must correspond to 'type' (if type='i', then int*, etc). </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to add a signal to. </td></tr>
     <tr><td class="paramname">name</td><td>The name of the signal. </td></tr>
@@ -367,6 +297,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>The new signal. </dd></dl>
 
 </div>
 </div>
@@ -377,9 +308,9 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__types_8h.html#ac1bc9cfd46da51b8e49148b18c4eea6f">mapper_signal</a> mapper_device_add_output_signal </td>
+          <td class="memname">mapper_signal mapper_device_add_output_signal </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
@@ -425,9 +356,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Add an output signal to a mapper device. </p>
-<p>Values and strings pointed to by this call (except user_data) will be copied. For minimum and maximum, actual type must correspond to 'type' (if type='i', then int*, etc). </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Add an output signal to a mapper device. Values and strings pointed to by this call (except user_data) will be copied. For minimum and maximum, actual type must correspond to 'type' (if type='i', then int*, etc). </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to add a signal to. </td></tr>
     <tr><td class="paramname">name</td><td>The name of the signal. </td></tr>
@@ -439,6 +368,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>The new signal. </dd></dl>
 
 </div>
 </div>
@@ -449,15 +379,15 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__types_8h.html#ac1bc9cfd46da51b8e49148b18c4eea6f">mapper_signal</a> mapper_device_add_signal </td>
+          <td class="memname">mapper_signal mapper_device_add_signal </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a7cb7e3e241fa7885c8241ad080ca6c9a">mapper_direction</a>&#160;</td>
+          <td class="paramtype">mapper_direction&#160;</td>
           <td class="paramname"><em>dir</em>, </td>
         </tr>
         <tr>
@@ -521,9 +451,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Add a signal to a mapper device. </p>
-<p>Values and strings pointed to by this call (except user_data) will be copied. For minimum and maximum, actual type must correspond to 'type' (if type='i', then int*, etc). </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Add a signal to a mapper device. Values and strings pointed to by this call (except user_data) will be copied. For minimum and maximum, actual type must correspond to 'type' (if type='i', then int*, etc). </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to add a signal to. </td></tr>
     <tr><td class="paramname">dir</td><td>The signal direction. </td></tr>
@@ -539,6 +467,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>The new signal. </dd></dl>
 
 </div>
 </div>
@@ -549,16 +478,21 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__types_8h.html#a9bb676d7ce1dc92d6f316ae79f4abe3f">mapper_signal_group</a> mapper_device_add_signal_group </td>
+          <td class="memname">mapper_signal_group mapper_device_add_signal_group </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Define a signal group. </p>
+<p>Create a new signal group, used for coordinating signal instances across related signals. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dev</td><td>The device. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A new signal group identifier. Use the function <a class="el" href="group__signals.html#ga197fe050b1f1e220c82b53eb6af0e280">mapper_signal_set_group()</a> to add or remove signals from a group. </dd></dl>
 
 </div>
 </div>
@@ -571,15 +505,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_device_clear_staged_properties </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Clear any staged property changes. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Clear any staged property changes. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to operate on. </td></tr>
   </table>
@@ -595,17 +527,15 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__types_8h.html#ad105c408c28c7e8523d3c5286eb1e364">mapper_database</a> mapper_device_database </td>
+          <td class="memname">mapper_database mapper_device_database </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Return the internal mapper_database structure used by a device. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Return the internal mapper_database structure used by a device. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device structure to query. </td></tr>
   </table>
@@ -624,15 +554,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">const char* mapper_device_description </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Get the description for a specific device. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Get the description for a specific device. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to check. </td></tr>
   </table>
@@ -651,7 +579,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">int mapper_device_fds </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
@@ -673,9 +601,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Write the list of file descriptors for this device to the provided array. </p>
-<p>Up to num file descriptors will be written. These file descriptors can be used as input for the read array of select or poll, for example. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Write the list of file descriptors for this device to the provided array. Up to num file descriptors will be written. These file descriptors can be used as input for the read array of select or poll, for example. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to get file descriptors for. </td></tr>
     <tr><td class="paramname">fds</td><td>Memory to receive file descriptors. </td></tr>
@@ -696,15 +622,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_device_free </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Free resources used by a mapper device. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Free resources used by a mapper device. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to use. </td></tr>
   </table>
@@ -720,17 +644,15 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__constants_8h.html#acc361739803384575b21a5a363f34b47">mapper_id</a> mapper_device_generate_unique_id </td>
+          <td class="memname">mapper_id mapper_device_generate_unique_id </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Return a unique id associated with a given device. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Return a unique id associated with a given device. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to use. </td></tr>
   </table>
@@ -749,15 +671,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">const char* mapper_device_host </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Return a string indicating the device's host, if it is registered. </p>
-<p>The returned string must not be externally modified. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Return a string indicating the device's host, if it is registered. The returned string must not be externally modified. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to query. </td></tr>
   </table>
@@ -774,17 +694,15 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__constants_8h.html#acc361739803384575b21a5a363f34b47">mapper_id</a> mapper_device_id </td>
+          <td class="memname">mapper_id mapper_device_id </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Return the unique id allocated to this device by the mapper network. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Return the unique id allocated to this device by the mapper network. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to query. </td></tr>
   </table>
@@ -803,15 +721,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">int mapper_device_is_local </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Indicate whether this device is local. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Indicate whether this device is local. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to query. </td></tr>
   </table>
@@ -828,15 +744,15 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__types_8h.html#ad48424f51f1e2f8c56de0a857119c43d">mapper_link</a> mapper_device_link_by_remote_device </td>
+          <td class="memname">mapper_link mapper_device_link_by_remote_device </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>remote_dev</em>&#160;</td>
         </tr>
         <tr>
@@ -846,9 +762,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Find information for a registered link. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Find information for a registered link. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>Device record to query. </td></tr>
     <tr><td class="paramname">remote_dev</td><td>Remote device. </td></tr>
@@ -866,15 +780,15 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__types_8h.html#ad48424f51f1e2f8c56de0a857119c43d">mapper_link</a>* mapper_device_links </td>
+          <td class="memname">mapper_link* mapper_device_links </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a7cb7e3e241fa7885c8241ad080ca6c9a">mapper_direction</a>&#160;</td>
+          <td class="paramtype">mapper_direction&#160;</td>
           <td class="paramname"><em>dir</em>&#160;</td>
         </tr>
         <tr>
@@ -884,16 +798,14 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Return the list of network links associated with a given device. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Return the list of network links associated with a given device. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>Device record query. </td></tr>
     <tr><td class="paramname">dir</td><td>The direction of the link relative to the given device. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A double-pointer to the first item in the list of results. Use <a class="el" href="group__links.html#ga9cbdc7a22e327abd5d95e2dcb9ef0780" title="Given a link record pointer returned from a previous link query, get the next item in the list...">mapper_link_query_next()</a> to iterate. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A double-pointer to the first item in the list of results. Use <a class="el" href="group__links.html#ga9cbdc7a22e327abd5d95e2dcb9ef0780">mapper_link_query_next()</a> to iterate. </dd></dl>
 
 </div>
 </div>
@@ -906,15 +818,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">lo_server mapper_device_lo_server </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Get access to the device's underlying lo_server. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Get access to the device's underlying lo_server. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to use. </td></tr>
   </table>
@@ -931,15 +841,15 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__types_8h.html#ad20d39a4748cd88abcd7ed16fc3fcfdf">mapper_map</a>* mapper_device_maps </td>
+          <td class="memname">mapper_map* mapper_device_maps </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a7cb7e3e241fa7885c8241ad080ca6c9a">mapper_direction</a>&#160;</td>
+          <td class="paramtype">mapper_direction&#160;</td>
           <td class="paramname"><em>dir</em>&#160;</td>
         </tr>
         <tr>
@@ -949,16 +859,14 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Return the list of maps associated with a given device. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Return the list of maps associated with a given device. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>Device record query. </td></tr>
     <tr><td class="paramname">dir</td><td>The direction of the map relative to the given device. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A double-pointer to the first item in the list of results. Use <a class="el" href="group__maps.html#ga883142b79c0c9d704542c90f3104dcb5" title="Given a map record pointer returned from a previous map query, get the next item in the list...">mapper_map_query_next()</a> to iterate. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A double-pointer to the first item in the list of results. Use <a class="el" href="group__maps.html#ga883142b79c0c9d704542c90f3104dcb5">mapper_map_query_next()</a> to iterate. </dd></dl>
 
 </div>
 </div>
@@ -971,15 +879,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">const char* mapper_device_name </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Return a string indicating the device's full name, if it is registered. </p>
-<p>The returned string must not be externally modified. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Return a string indicating the device's full name, if it is registered. The returned string must not be externally modified. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to query. </td></tr>
   </table>
@@ -996,17 +902,15 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__types_8h.html#abc035891860283c29f6536c3cbc91e7a">mapper_network</a> mapper_device_network </td>
+          <td class="memname">mapper_network mapper_device_network </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Retrieve the networking structure from a device. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Retrieve the networking structure from a device. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to use. </td></tr>
   </table>
@@ -1023,7 +927,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> mapper_device_new </td>
+          <td class="memname">mapper_device mapper_device_new </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name_prefix</em>, </td>
@@ -1037,7 +941,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#abc035891860283c29f6536c3cbc91e7a">mapper_network</a>&#160;</td>
+          <td class="paramtype">mapper_network&#160;</td>
           <td class="paramname"><em>net</em>&#160;</td>
         </tr>
         <tr>
@@ -1047,9 +951,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Allocate and initialize a mapper device. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Allocate and initialize a mapper device. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">name_prefix</td><td>A short descriptive string to identify the device. Must not contain spaces or the slash character '/'. </td></tr>
     <tr><td class="paramname">port</td><td>An optional port for starting the port allocation scheme. </td></tr>
@@ -1057,8 +959,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A newly allocated mapper device. Should be free using <a class="el" href="group__devices.html#ga86dc92c6700c71cad58bddb478bd1145" title="Free resources used by a mapper device. ">mapper_device_free()</a>.</dd></dl>
-<p>This function is called to create a new mapper_device, not to create a representation of remote devices. </p>
+<dl class="section return"><dt>Returns</dt><dd>A newly allocated mapper device. Should be free using <a class="el" href="group__devices.html#ga86dc92c6700c71cad58bddb478bd1145">mapper_device_free()</a>. </dd></dl>
 
 </div>
 </div>
@@ -1071,15 +972,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">int mapper_device_num_fds </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Return the number of file descriptors needed for this device. </p>
-<p>This can be used to allocated an appropriately-sized list for called to mapper_device_fds. Note that the number of descriptors needed can change throughout the life of a device, therefore this function should be called whenever the list of file descriptors is needed. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Return the number of file descriptors needed for this device. This can be used to allocated an appropriately-sized list for called to mapper_device_fds. Note that the number of descriptors needed can change throughout the life of a device, therefore this function should be called whenever the list of file descriptors is needed. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to count file descriptors for. </td></tr>
   </table>
@@ -1098,13 +997,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">int mapper_device_num_links </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a7cb7e3e241fa7885c8241ad080ca6c9a">mapper_direction</a>&#160;</td>
+          <td class="paramtype">mapper_direction&#160;</td>
           <td class="paramname"><em>dir</em>&#160;</td>
         </tr>
         <tr>
@@ -1114,9 +1013,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Return the number of network links associated with a specific device. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Return the number of network links associated with a specific device. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to check. </td></tr>
     <tr><td class="paramname">dir</td><td>The direction of the links relative to the given device. </td></tr>
@@ -1136,13 +1033,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">int mapper_device_num_maps </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a7cb7e3e241fa7885c8241ad080ca6c9a">mapper_direction</a>&#160;</td>
+          <td class="paramtype">mapper_direction&#160;</td>
           <td class="paramname"><em>dir</em>&#160;</td>
         </tr>
         <tr>
@@ -1152,9 +1049,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Return the number of maps associated with a specific device. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Return the number of maps associated with a specific device. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to check. </td></tr>
     <tr><td class="paramname">dir</td><td>The direction of the maps relative to the given device. </td></tr>
@@ -1174,15 +1069,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">int mapper_device_num_properties </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Get the total number of properties for a specific device. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Get the total number of properties for a specific device. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to check. </td></tr>
   </table>
@@ -1201,13 +1094,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">int mapper_device_num_signals </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a7cb7e3e241fa7885c8241ad080ca6c9a">mapper_direction</a>&#160;</td>
+          <td class="paramtype">mapper_direction&#160;</td>
           <td class="paramname"><em>dir</em>&#160;</td>
         </tr>
         <tr>
@@ -1217,15 +1110,14 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Return the number of signals. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Return the number of signals. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">dev</td><td>The device to use. </td></tr>
+    <tr><td class="paramname">dev</td><td>The device to query. </td></tr>
     <tr><td class="paramname">dir</td><td>The direction of the signals to count. </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>The number of signals. </dd></dl>
 
 </div>
 </div>
@@ -1238,15 +1130,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">unsigned int mapper_device_ordinal </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Return an allocated ordinal which is appended to this device's network name. </p>
-<p>In general the results of this function are not valid unless <a class="el" href="group__devices.html#gacfdc93971c9bb222bc8ca5cf1e8949a1" title="Detect whether a device is completely initialized. ">mapper_device_ready()</a> returns non-zero. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Return an allocated ordinal which is appended to this device's network name. In general the results of this function are not valid unless <a class="el" href="group__devices.html#gacfdc93971c9bb222bc8ca5cf1e8949a1">mapper_device_ready()</a> returns non-zero. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to query. </td></tr>
   </table>
@@ -1265,7 +1155,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">int mapper_device_poll </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
@@ -1281,9 +1171,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Poll this device for new messages. </p>
-<p>Note, if you have multiple devices, the right thing to do is call this function for each of them with block_ms=0, and add your own sleep if necessary. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Poll this device for new messages. Note, if you have multiple devices, the right thing to do is call this function for each of them with block_ms=0, and add your own sleep if necessary. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to check messages for. </td></tr>
     <tr><td class="paramname">block_ms</td><td>Number of milliseconds to block waiting for messages, or 0 for non-blocking behaviour. </td></tr>
@@ -1303,15 +1191,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">unsigned int mapper_device_port </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Return the port used by a device to receive signals, if available. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Return the port used by a device to receive signals, if available. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to query. </td></tr>
   </table>
@@ -1330,15 +1216,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_device_print </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Helper to print the properties of a specific device. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Helper to print the properties of a specific device. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to print. </td></tr>
   </table>
@@ -1356,7 +1240,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">int mapper_device_property </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
@@ -1390,9 +1274,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Look up a device property by name. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Look up a device property by name. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device record to check. </td></tr>
     <tr><td class="paramname">name</td><td>The name of the property to retrieve. </td></tr>
@@ -1415,7 +1297,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">int mapper_device_property_index </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
@@ -1455,9 +1337,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Look up a device property by index. </p>
-<p>To iterate all properties, call this function from index=0, increasing until it returns zero. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Look up a device property by index. To iterate all properties, call this function from index=0, increasing until it returns zero. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device record to check. </td></tr>
     <tr><td class="paramname">index</td><td>Numerical index of a device property. </td></tr>
@@ -1481,15 +1361,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_device_push </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Push any property changes out to the network. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Push any property changes out to the network. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to operate on. </td></tr>
   </table>
@@ -1505,23 +1383,21 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>* mapper_device_query_copy </td>
+          <td class="memname">mapper_device* mapper_device_query_copy </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *&#160;</td>
+          <td class="paramtype">mapper_device *&#160;</td>
           <td class="paramname"><em>query</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Copy a previously-constructed device query. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Copy a previously-constructed device query. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">query</td><td>The previous device record pointer. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A double-pointer to the copy of the list, or zero if none. Use <a class="el" href="group__devices.html#ga5f5f2a4a3bec44e338c0bb50f79260cc" title="Given a device record pointer returned from a previous device query, get the next item in the list...">mapper_device_query_next()</a> to iterate. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A double-pointer to the copy of the list, or zero if none. Use <a class="el" href="group__devices.html#ga5f5f2a4a3bec44e338c0bb50f79260cc">mapper_device_query_next()</a> to iterate. </dd></dl>
 
 </div>
 </div>
@@ -1532,15 +1408,15 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>* mapper_device_query_difference </td>
+          <td class="memname">mapper_device* mapper_device_query_difference </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *&#160;</td>
+          <td class="paramtype">mapper_device *&#160;</td>
           <td class="paramname"><em>query1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *&#160;</td>
+          <td class="paramtype">mapper_device *&#160;</td>
           <td class="paramname"><em>query2</em>&#160;</td>
         </tr>
         <tr>
@@ -1550,16 +1426,14 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Get the difference between two device queries (devices matching query1 but NOT query2). </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Get the difference between two device queries (devices matching query1 but NOT query2). </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">query1</td><td>The first device query. </td></tr>
     <tr><td class="paramname">query2</td><td>The second device query. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A double-pointer to the first item in a list of results. Use <a class="el" href="group__devices.html#ga5f5f2a4a3bec44e338c0bb50f79260cc" title="Given a device record pointer returned from a previous device query, get the next item in the list...">mapper_device_query_next()</a> to iterate. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A double-pointer to the first item in a list of results. Use <a class="el" href="group__devices.html#ga5f5f2a4a3bec44e338c0bb50f79260cc">mapper_device_query_next()</a> to iterate. </dd></dl>
 
 </div>
 </div>
@@ -1572,15 +1446,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_device_query_done </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *&#160;</td>
+          <td class="paramtype">mapper_device *&#160;</td>
           <td class="paramname"><em>query</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Given a device record pointer returned from a previous device query, indicate that we are done iterating. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Given a device record pointer returned from a previous device query, indicate that we are done iterating. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">query</td><td>The previous device record pointer. </td></tr>
   </table>
@@ -1596,9 +1468,9 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> mapper_device_query_index </td>
+          <td class="memname">mapper_device mapper_device_query_index </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *&#160;</td>
+          <td class="paramtype">mapper_device *&#160;</td>
           <td class="paramname"><em>query</em>, </td>
         </tr>
         <tr>
@@ -1614,9 +1486,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Given a device record pointer returned from a previous device query, get an indexed item in the list. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Given a device record pointer returned from a previous device query, get an indexed item in the list. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">query</td><td>The previous device record pointer. </td></tr>
     <tr><td class="paramname">index</td><td>The index of the list element to retrieve. </td></tr>
@@ -1634,15 +1504,15 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>* mapper_device_query_intersection </td>
+          <td class="memname">mapper_device* mapper_device_query_intersection </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *&#160;</td>
+          <td class="paramtype">mapper_device *&#160;</td>
           <td class="paramname"><em>query1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *&#160;</td>
+          <td class="paramtype">mapper_device *&#160;</td>
           <td class="paramname"><em>query2</em>&#160;</td>
         </tr>
         <tr>
@@ -1652,16 +1522,14 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Get the intersection of two device queries (devices matching query1 AND query2). </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Get the intersection of two device queries (devices matching query1 AND query2). </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">query1</td><td>The first device query. </td></tr>
     <tr><td class="paramname">query2</td><td>The second device query. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A double-pointer to the first item in a list of results. Use <a class="el" href="group__devices.html#ga5f5f2a4a3bec44e338c0bb50f79260cc" title="Given a device record pointer returned from a previous device query, get the next item in the list...">mapper_device_query_next()</a> to iterate. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A double-pointer to the first item in a list of results. Use <a class="el" href="group__devices.html#ga5f5f2a4a3bec44e338c0bb50f79260cc">mapper_device_query_next()</a> to iterate. </dd></dl>
 
 </div>
 </div>
@@ -1672,17 +1540,15 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>* mapper_device_query_next </td>
+          <td class="memname">mapper_device* mapper_device_query_next </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *&#160;</td>
+          <td class="paramtype">mapper_device *&#160;</td>
           <td class="paramname"><em>query</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Given a device record pointer returned from a previous device query, get the next item in the list. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Given a device record pointer returned from a previous device query, get the next item in the list. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">query</td><td>The previous device record pointer. </td></tr>
   </table>
@@ -1699,15 +1565,15 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>* mapper_device_query_union </td>
+          <td class="memname">mapper_device* mapper_device_query_union </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *&#160;</td>
+          <td class="paramtype">mapper_device *&#160;</td>
           <td class="paramname"><em>query1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a> *&#160;</td>
+          <td class="paramtype">mapper_device *&#160;</td>
           <td class="paramname"><em>query2</em>&#160;</td>
         </tr>
         <tr>
@@ -1717,16 +1583,14 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Get the union of two device queries (devices matching query1 OR query2). </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Get the union of two device queries (devices matching query1 OR query2). </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">query1</td><td>The first device query. </td></tr>
     <tr><td class="paramname">query2</td><td>The second device query. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A double-pointer to the first item in a list of results. Use <a class="el" href="group__devices.html#ga5f5f2a4a3bec44e338c0bb50f79260cc" title="Given a device record pointer returned from a previous device query, get the next item in the list...">mapper_device_query_next()</a> to iterate. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A double-pointer to the first item in a list of results. Use <a class="el" href="group__devices.html#ga5f5f2a4a3bec44e338c0bb50f79260cc">mapper_device_query_next()</a> to iterate. </dd></dl>
 
 </div>
 </div>
@@ -1739,15 +1603,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">int mapper_device_ready </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Detect whether a device is completely initialized. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Detect whether a device is completely initialized. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to query. </td></tr>
   </table>
@@ -1766,7 +1628,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">int mapper_device_remove_property </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
@@ -1782,9 +1644,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Remove a property of a device. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Remove a property of a device. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to operate on. </td></tr>
     <tr><td class="paramname">name</td><td>The name of the property to remove. </td></tr>
@@ -1792,34 +1652,6 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 if property has been removed, 0 otherwise. </dd></dl>
-
-</div>
-</div>
-<a id="ga753c2ab21fa53c14c6e9763d2dad5d33"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga753c2ab21fa53c14c6e9763d2dad5d33">&#9670;&nbsp;</a></span>mapper_device_remove_signal()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void mapper_device_remove_signal </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
-          <td class="paramname"><em>dev</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#ac1bc9cfd46da51b8e49148b18c4eea6f">mapper_signal</a>&#160;</td>
-          <td class="paramname"><em>sig</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
 
 </div>
 </div>
@@ -1832,13 +1664,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_device_remove_signal_group </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a9bb676d7ce1dc92d6f316ae79f4abe3f">mapper_signal_group</a>&#160;</td>
+          <td class="paramtype">mapper_signal_group&#160;</td>
           <td class="paramname"><em>group</em>&#160;</td>
         </tr>
         <tr>
@@ -1848,8 +1680,13 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Remove a previously-defined multi-signal group. </p>
+<p>Remove a previously-defined multi-signal group. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dev</td><td>The device containing the signal group to be removed. </td></tr>
+    <tr><td class="paramname">group</td><td>The signal group identifier to be removed. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1862,13 +1699,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_device_send_queue </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a>&#160;</td>
+          <td class="paramtype">mapper_timetag_t&#160;</td>
           <td class="paramname"><em>tt</em>&#160;</td>
         </tr>
         <tr>
@@ -1878,12 +1715,10 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Dispatch a time-tagged mapper queue. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Dispatch a time-tagged mapper queue. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to use. </td></tr>
-    <tr><td class="paramname">tt</td><td>The timetag for an existing queue created with <a class="el" href="group__devices.html#ga0cebfc82c17345af1760cc417d630223" title="Start a time-tagged mapper queue. ">mapper_device_start_queue()</a>. </td></tr>
+    <tr><td class="paramname">tt</td><td>The timetag for an existing queue created with <a class="el" href="group__devices.html#ga0cebfc82c17345af1760cc417d630223">mapper_device_start_queue()</a>. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1899,7 +1734,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_device_service_fd </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
@@ -1915,9 +1750,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>If an external event indicates that a file descriptor for this device needs servicing, this function should be called. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>If an external event indicates that a file descriptor for this device needs servicing, this function should be called. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device that needs servicing. </td></tr>
     <tr><td class="paramname">fd</td><td>The file descriptor that needs servicing. </td></tr>
@@ -1936,7 +1769,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_device_set_description </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
@@ -1952,9 +1785,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Set the description property for a specific local device. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Set the description property for a specific local device. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to modify. </td></tr>
     <tr><td class="paramname">description</td><td>The description value to set. </td></tr>
@@ -1973,7 +1804,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_device_set_link_callback </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
@@ -1989,9 +1820,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Set a function to be called when a link involving a device's local signals is established, modified or destroyed, indicated by the event parameter to the provided function. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Set a function to be called when a link involving a device's local signals is established, modified or destroyed, indicated by the event parameter to the provided function. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to use. </td></tr>
     <tr><td class="paramname">handler</td><td>Function to be called when the local maps change. </td></tr>
@@ -2010,7 +1839,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_device_set_map_callback </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
@@ -2026,9 +1855,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Set a function to be called when a map involving a device's local signals is established, modified or destroyed, indicated by the event parameter to the provided function. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Set a function to be called when a map involving a device's local signals is established, modified or destroyed, indicated by the event parameter to the provided function. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to use. </td></tr>
     <tr><td class="paramname">handler</td><td>Function to be called when the local maps change. </td></tr>
@@ -2047,7 +1874,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">int mapper_device_set_property </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
@@ -2087,9 +1914,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Set a property of a device. </p>
-<p>Can be used to provide arbitrary metadata. Value pointed to will be copied. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Set a property of a device. Can be used to provide arbitrary metadata. Value pointed to will be copied. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to operate on. </td></tr>
     <tr><td class="paramname">name</td><td>The name of the property to add. </td></tr>
@@ -2113,7 +1938,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_device_set_user_data </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
@@ -2129,9 +1954,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Associate a device with an arbitrary pointer. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Associate a device with an arbitrary pointer. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to operate on. </td></tr>
     <tr><td class="paramname">user_data</td><td>A pointer to user data to be associated. </td></tr>
@@ -2148,15 +1971,15 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__types_8h.html#ac1bc9cfd46da51b8e49148b18c4eea6f">mapper_signal</a> mapper_device_signal_by_id </td>
+          <td class="memname">mapper_signal mapper_device_signal_by_id </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#acc361739803384575b21a5a363f34b47">mapper_id</a>&#160;</td>
+          <td class="paramtype">mapper_id&#160;</td>
           <td class="paramname"><em>id</em>&#160;</td>
         </tr>
         <tr>
@@ -2166,11 +1989,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Find information for a registered signal. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Find information for a registered signal. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">dev</td><td>Device record to query. </td></tr>
+    <tr><td class="paramname">dev</td><td>The device to query. </td></tr>
     <tr><td class="paramname">id</td><td>Id of the signal to find in the database. </td></tr>
   </table>
   </dd>
@@ -2186,9 +2007,9 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__types_8h.html#ac1bc9cfd46da51b8e49148b18c4eea6f">mapper_signal</a> mapper_device_signal_by_name </td>
+          <td class="memname">mapper_signal mapper_device_signal_by_name </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
@@ -2204,11 +2025,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Find information for a registered signal. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Find information for a registered signal. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">dev</td><td>Device record to query. </td></tr>
+    <tr><td class="paramname">dev</td><td>The device to query. </td></tr>
     <tr><td class="paramname">sig_name</td><td>Name of the signal to find in the database. </td></tr>
   </table>
   </dd>
@@ -2224,15 +2043,15 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="mapper__types_8h.html#ac1bc9cfd46da51b8e49148b18c4eea6f">mapper_signal</a>* mapper_device_signals </td>
+          <td class="memname">mapper_signal* mapper_device_signals </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a7cb7e3e241fa7885c8241ad080ca6c9a">mapper_direction</a>&#160;</td>
+          <td class="paramtype">mapper_direction&#160;</td>
           <td class="paramname"><em>dir</em>&#160;</td>
         </tr>
         <tr>
@@ -2242,16 +2061,14 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Return the list of signals for a given device. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Return the list of signals for a given device. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">dev</td><td>Device record to query. </td></tr>
+    <tr><td class="paramname">dev</td><td>The device to query. </td></tr>
     <tr><td class="paramname">dir</td><td>The direction of the signals to return. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A double-pointer to the first item in the list of results. Use <a class="el" href="group__signals.html#gacb141ad0874d0509272100e593df3c9d" title="Given a signal record pointer returned from a previous signal query, get the next item in the list...">mapper_signal_query_next()</a> to iterate. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A double-pointer to the first item in the list of results. Use <a class="el" href="group__signals.html#gacb141ad0874d0509272100e593df3c9d">mapper_signal_query_next()</a> to iterate. </dd></dl>
 
 </div>
 </div>
@@ -2264,13 +2081,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_device_start_queue </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a>&#160;</td>
+          <td class="paramtype">mapper_timetag_t&#160;</td>
           <td class="paramname"><em>tt</em>&#160;</td>
         </tr>
         <tr>
@@ -2280,9 +2097,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Start a time-tagged mapper queue. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Start a time-tagged mapper queue. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to use. </td></tr>
     <tr><td class="paramname">tt</td><td>A timetag to use for the updates bundled by this queue. </td></tr>
@@ -2301,13 +2116,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void mapper_device_synced </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="mapper__constants_8h.html#a9a3621ce0cd8707ee979405241f3e178">mapper_timetag_t</a> *&#160;</td>
+          <td class="paramtype">mapper_timetag_t *&#160;</td>
           <td class="paramname"><em>tt</em>&#160;</td>
         </tr>
         <tr>
@@ -2317,9 +2132,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Recover a timetag specifying the last time a device made contact. </p>
-<p>If the device is local this will be the current time. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Recover a timetag specifying the last time a device made contact. If the device is local this will be the current time. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device whose time we are asking for. </td></tr>
     <tr><td class="paramname">tt</td><td>A previously allocated timetag to initialize. </td></tr>
@@ -2338,15 +2151,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void* mapper_device_user_data </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Retrieve the arbitrary pointer associated with a device. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Retrieve the arbitrary pointer associated with a device. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to operate on. </td></tr>
   </table>
@@ -2365,15 +2176,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">int mapper_device_version </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="mapper__types_8h.html#a5bb6128a4474ce3518cdcf19969d4fe4">mapper_device</a>&#160;</td>
+          <td class="paramtype">mapper_device&#160;</td>
           <td class="paramname"><em>dev</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Return the current version number for a device. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Return the current version number for a device. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dev</td><td>The device to query. </td></tr>
   </table>
@@ -2386,7 +2195,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Aug 19 2017 19:22:31 for libmapper by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>
