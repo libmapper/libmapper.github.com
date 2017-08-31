@@ -47,25 +47,27 @@
           <li><a href="puredata.html">Pd</a></li>
         </ul>
 
-<h3>Getting started</h3>
+<!--start of exported tutorial-->
+
+<h1>Getting started with libmapper and Max</h1>
 
 <p>Note: this tutorial will introduce the original bindings for MaxMSP (before July 2013). You can access the tutorial for the revised multi-object bindings <a href="./maxmsp_multiobj.html">here</a>.</p>
 
 <p>To start using the <em>libmapper</em> with MaxMSP you will need to:</p>
 
 <ul>
-<li>Install <em>libmapper</em> for your platform (Linux, OSX, Windows)</li>
-<li>Download the <code>[mapper]</code> external object from our <a href="../downloads.html">downloads page</a>.
-Alternatively, you can build the object from
-<a href="http://github.com/malloch/mapper-max-pd">source</a> instead.</li>
-<li>Download a <a href="../downloads.html#GUIs">graphical user interface</a> for
-creating and editing mapping connections.</li>
+    <li>Install <em>libmapper</em> for your platform (Linux, OSX, Windows)</li>
+    <li>Download the <code>[mapper]</code> external object from our <a href="../downloads.html">downloads page</a>.
+        Alternatively, you can build the object from
+        <a href="http://github.com/malloch/mapper-max-pd">source</a> instead.</li>
+    <li>Download a <a href="../downloads.html#GUIs">graphical user interface</a> for
+        creating and editing mapping connections.</li>
 </ul>
 
 
-<h3>Devices</h3>
+<h2>Devices</h2>
 
-<h4>Creating a device</h4>
+<h3>Creating a device</h3>
 
 <p>To create a <em>libmapper</em> device, it is necessary to provide a device
 name to the <code>[mapper]</code> object using the property <code>@alias</code>.
@@ -83,7 +85,7 @@ we will assume that you do not have a prepared device definition file.</p>
 
 <p>A third optional parameter of the <code>[mapper]</code> object is a network
 interface name.  By default, libmapper will try to guess which network
-interface to use for mapping, defaulting to the local loopback interface
+interface to use for mapping, defaulting to the local loopback interface if
 ethernet or wifi is not available.  You can force the object to use a
 particular interface by using the <code>@interface</code> property.</p>
 
@@ -95,40 +97,55 @@ particular interface by using the <code>@interface</code> property.</p>
 outlet:</p>
 
 <ul>
-<li>The complete device name, including an appended ordinal for distinguishing
-between multiple active devices with the same name.</li>
-<li>The IP address and port in use by the object.</li>
-<li>The number of input and output signals associated with the object.</li>
-<li>The network interface in use by the object.</li>
+    <li>The complete device name, including an appended ordinal for distinguishing
+        between multiple active devices with the same name.</li>
+    <li>The IP address and port in use by the object.</li>
+    <li>The number of input and output signals associated with the object.</li>
+    <li>The network interface in use by the object.</li>
 </ul>
 
 
-<h3>Signals</h3>
+<h2>Signals</h2>
 
 <p>Now that we have created a device, we only need to know how to
-add signals in order to give our program some input/output functionality.</p>
-
-<p>We'll start with creating a "sender", so we will first talk about how
-to update output signals.</p>
-
-<h4>Creating a signal</h4>
-
-<p>Creating a signal requires two pieces of information:</p>
+add signals in order to give our program some input/output functionality.
+While libmapper enables arbitrary connections between <em>any</em> declared signals,
+we still find it helpful to distinguish between two type of signals: <code>inputs</code>
+and <code>outputs</code>.</p>
 
 <ul>
-<li>a name for the signal (must be unique within a devices inputs or outputs)</li>
-<li>the signal's data type expressed as a character 'i' for <code>integer</code>, 'f'
-for <code>float</code></li>
+    <li><code>outputs</code> signals are <em>sources</em> of data, updated locally by their parent device</li>
+    <li><code>inputs</code> signals are <em>consumers</em> of data and are <strong>not</strong> generally
+        updated locally by their parent device.</li>
+</ul>
+
+
+<p>This can become a bit confusing, since the "reverb" parameter of a sound
+synthesizer might be updated locally through user interaction with a GUI,
+however the normal use of this signal is as a <em>destination</em> for control data
+streams so it should be defined as an <code>input</code> signal.  Note that this distinction
+is to help with GUI organization and user-understanding – <em>libmapper</em>
+enables connections from input signals and to output signals if desired.</p>
+
+<h3>Creating a signal</h3>
+
+<p>We'll start with creating a "sender", so we will first talk about how
+to update output signals.  Creating a signal requires two pieces of information:</p>
+
+<ul>
+    <li>a name for the signal (must be unique within a devices inputs or outputs)</li>
+    <li>the signal's data type expressed as a character 'i' for <code>integer</code>, 'f'
+        for <code>float</code></li>
 </ul>
 
 
 <p>Additional signal properties can also (optionally) be added:</p>
 
 <ul>
-<li>the signal's vector length</li>
-<li>the signal's unit</li>
-<li>the signal's minimum value</li>
-<li>the signal's maximum value</li>
+    <li>the signal's vector length</li>
+    <li>the signal's unit</li>
+    <li>the signal's minimum value</li>
+    <li>the signal's maximum value</li>
 </ul>
 
 
@@ -138,9 +155,7 @@ for <code>float</code></li>
 
 <p>The only <em>required</em> parameters here are the signal name,
 and data type.  If no <code>length</code> property is provided, the signal is
-assumed to have length 1.  A signal name should start with "/",
-as this is how it is represented in the OSC address.
-(One will be added if you forget to do this.)
+assumed to have length 1.<br/>
 Finally, supported types are currently 'i' or 'f' for <code>int</code> or
 <code>float</code> values, respectively.</p>
 
@@ -149,8 +164,8 @@ information you provide, the more the mapper can do some things
 automatically.  For example, if <code>minimum</code> and <code>maximum</code> are provided,
 it will be possible to create linear-scaled connections very quickly.
 If <code>unit</code> is provided, the mapper will be able to similarly figure out
-a linear scaling based on unit conversion. (Centimeters to inches for
-example.) Currently automatic unit-based scaling is not a supported
+a linear scaling based on unit conversion (centimeters to inches for
+example).  Currently automatic unit-based scaling is not a supported
 feature, but will be added in the future.  You can take advantage of
 this future development by simply providing unit information whenever
 it is available.  It is also helpful documentation for users.</p>
@@ -167,7 +182,7 @@ no unit, minimum, or maximum information:</p>
 <p>So far we know how to create a device and to specify an output signal
 for it.</p>
 
-<h4>Updating signals</h4>
+<h3>Updating signals</h3>
 
 <p>We can imagine the above program getting sensor information in a loop.
 It could be running on a computer and reading data from an Arduino
@@ -180,7 +195,7 @@ is mapped.</p>
 starting with the signal name:</p>
 
 <pre><code>(&lt;signal_name&gt; &lt;value&gt;)
- |
+    |
 </code></pre>
 
 <p>So in the "sensor 1 voltage" example, assuming that we have some code
@@ -195,7 +210,7 @@ to create a mapping between this value and a receiver, where it could
 control a synthesizer parameter or change the brightness of an LED,
 or whatever else you want to do.</p>
 
-<h4>Signal conditioning</h4>
+<h3>Signal conditioning</h3>
 
 <p>Most synthesizers of course will not know what to do with
 "voltage"--it is an electrical property that has nothing to do with
@@ -228,7 +243,7 @@ if desired, in order to expose both processed and raw data.  Keep in
 mind that these will not take up significant processing time, and
 <em>zero</em> network bandwidth, if they are not mapped.</p>
 
-<h4>Receiving signals</h4>
+<h3>Receiving signals</h3>
 
 <p>Receiving signals is even easier: after adding an input using the <code>add input</code>
 message, updates for this signal will be routed to the left output
@@ -237,9 +252,8 @@ for testing.</p>
 
 <p><img src="./images/maxmsp_central6.png" alt="Sending and receiving signal updates" /></p>
 
-<p>If you use your mapping GUI to create a link between the two devices
-<em>sender</em> and <em>receiver</em> and a connection between your two signals
-<em>/sendsig</em> and <em>/recvsig</em>, any change made to the float value on the left
+<p>If you use your mapping GUI to create a map between your two signals
+<em>sendsig</em> and <em>recvsig</em>, any change made to the float value on the left
 will cause a corresponding output on the right.</p>
 
 <p>Congratulations - you have created your first mapping connection! This
@@ -248,17 +262,17 @@ between the two float objects and accomplished the same thing, but your
 "mapping" represents something more:</p>
 
 <ul>
-<li>It can be edited remotely from another machine on the network.</li>
-<li>It can connect signals on different computers.</li>
-<li>It can connect different signals implemented in different programming
-languages such as C, C++, Python, Java, and SuperCollider.</li>
-<li>It can be edited to provide signal processing, including automatic
-linear scaling, calibration, muting, clipping, or an arbitrary
-expression - even FIR and IIR filters.</li>
+    <li>It can be edited remotely from another machine on the network.</li>
+    <li>It can connect signals on different computers.</li>
+    <li>It can connect different signals implemented in different programming
+        languages such as C, C++, Python, Java, and SuperCollider.</li>
+    <li>It can be edited to provide signal processing, including automatic
+        linear scaling, calibration, muting, clipping, or an arbitrary
+        expression - even FIR and IIR filters.</li>
 </ul>
 
 
-<h4>Learn mode</h4>
+<h3>Learn mode</h3>
 
 <p>For patches with only outputs, lazy users can also declare the signals
 automatically using <code>learn</code> mode. You can either send the message
@@ -273,33 +287,33 @@ and add any unknown signals automatically. Signals added this way will not
 have associated minimum or maximum values, however, so it is usually
 recommended to add the signals explicitly using messages.</p>
 
-<h4>Device definitions</h4>
+<h3>Device definitions</h3>
 
 <p>If you wish, you can declare your libmapper signals using a device definition
 file instead of sending messages to the <code>[mapper]</code> object. This file should be
 correctly-formatted JSON with the following structure:</p>
 
 <pre><code>{
-     "device" : {
-        "fileversion" : "dot-1",
-        "name" : "tester",
-        "inputs" : [
-            {
-                "name" : "/in1",
-                "type" : "f"
-            }
-        ],
-        "outputs" : [
-            {
-                "name" : "/out1",
-                "type" : "f",
-                "units" : "cm",
-                "minimum" : 4.0,
-                "maximum" : 5.1
-            }
-        ]
+    "device" : {
+    "fileversion" : "dot-1",
+    "name" : "tester",
+    "inputs" : [
+    {
+    "name" : "/in1",
+    "type" : "f"
     }
-}
+    ],
+    "outputs" : [
+    {
+    "name" : "/out1",
+    "type" : "f",
+    "units" : "cm",
+    "minimum" : 4.0,
+    "maximum" : 5.1
+    }
+    ]
+    }
+    }
 </code></pre>
 
 <p>To load your device definition, simply instantiate your <code>[mapper]</code> object with
@@ -307,7 +321,7 @@ the file name as a property:</p>
 
 <p><img src="./images/maxmsp_central8.png" alt="Loading a device definition file" /></p>
 
-<h3>Publishing metadata</h3>
+<h2>Publishing metadata</h2>
 
 <p>Things like device names, signal units, and ranges, are examples of
 metadata--information about the data you are exposing on the network.</p>
@@ -319,8 +333,8 @@ This can be used for instance to label a device with its location, or
 to perhaps give a signal some property like "reliability", or some
 category like "light", "motor", "shaker", etc.</p>
 
-<p>Some GUI implementing a Monitor could then use this information to
-display information about the network in an intelligent manner.</p>
+<p>Some GUI could then use this information to display information about the
+network in an intelligent manner.</p>
 
 <p>Any time there may be extra knowledge about a signal or device, it is
 a good idea to represent it by adding such properties, which can be of
@@ -340,11 +354,37 @@ arguments</p>
 
 <p><img src="./images/maxmsp_central10.png" alt="Adding extra properties to a signal" /></p>
 
-<p>In general you can use any property name not already in use by the
-device or signal data structure.  Reserved words for signals are:
-<code>device_name</code> <code>direction</code> <code>length</code> <code>max</code> <code>min</code> <code>name</code> <code>type</code> <code>unit</code></p>
+<h3>Reserved keys</h3>
 
-<p>for devices, they are: <code>host</code> <code>port</code> <code>name</code></p>
+<p>You can use any property name not already reserved by libmapper.</p>
+
+<h4>Reserved keys for devices</h4>
+
+<p><code>description</code>, <code>host</code>, <code>id</code>, <code>is_local</code>, <code>libversion</code>, <code>name</code>, <code>num_incoming_maps</code>,
+<code>num_outgoing_maps</code>, <code>num_inputs</code>, <code>num_outputs</code>, <code>port</code>, <code>synced</code>, <code>value</code>, <code>version</code>,
+<code>user_data</code></p>
+
+<h4>Reserved keys for signals</h4>
+
+<p><code>description</code>, <code>direction</code>, <code>id</code>, <code>is_local</code>, <code>length</code>, <code>max</code>, <code>maximum</code>, <code>min</code>,
+<code>minimum</code>, <code>name</code>, <code>num_incoming_maps</code>, <code>num_instances</code>, <code>num_outgoing_maps</code>, <code>rate</code>,
+<code>type</code>, <code>unit</code>, <code>user_data</code></p>
+
+<h4>Reserved keys for links</h4>
+
+<p><code>description</code>, <code>id</code>, <code>is_local</code>, <code>num_maps</code></p>
+
+<h4>Reserved keys for maps</h4>
+
+<p><code>description</code>, <code>expression</code>, <code>id</code>, <code>is_local</code>, <code>mode</code>, <code>muted</code>, <code>num_destinations</code>,
+<code>num_sources</code>, <code>process_location</code>, <code>ready</code>, <code>status</code></p>
+
+<h4>Reserved keys for map slots</h4>
+
+<p><code>bound_max</code>, <code>bound_min</code>, <code>calibrating</code>, <code>causes_update</code>, <code>direction</code>, <code>length</code>,
+<code>maximum</code>, <code>minimum</code>, <code>num_instances</code>, <code>use_as_instance</code>, <code>type</code></p>
+
+<!--end if exported tutorial-->
 
       </section>
     </div>    

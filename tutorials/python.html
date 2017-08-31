@@ -47,558 +47,533 @@
           <li><a href="puredata.html">Pd</a></li>
         </ul>
 
-<h3>Getting started</h3>
+<!--start of exported tutorial-->
 
-<p>Since <em>libmapper</em> uses GNU autoconf, getting started with the library
-is the same as any other library on Linux; use <code>./configure</code> and then
-<code>make</code> to compile it.  You'll need <code>swig</code> available if you want to
-compile the Python bindings.  On Mac OS X, we provide a precompiled
-Framework bundle for 32- and 64-bit Intel platforms, so using it with
-XCode should be a matter of including it in your project.</p>
+<h1>Getting started with libmapper and Python</h1>
+
+<p>Since <em>libmapper</em> uses GNU autoconf, getting started with the library is the
+same as any other library on Linux; use <code>./configure</code> and then <code>make</code> to compile
+it.  You'll need <code>swig</code> available if you want to compile the Python bindings.
+On Mac OS X, we provide a precompiled Framework bundle for 32- and 64-bit Intel
+platforms, so using it with XCode should be a matter of including it in your
+project.</p>
 
 <p>Once you have libmapper installed, it can be imported into your program:</p>
 
-<pre><code>import mapper
-</code></pre>
+<pre>import mapper</pre>
 
-<h3>Overview of the API organization</h3>
+<h2>Overview of the API organization</h2>
 
 <p>The libmapper API is is divided into the following sections:</p>
 
 <ul>
-<li>Signals</li>
-<li>Devices</li>
-<li>Admins</li>
-<li>Device database</li>
-<li>Signal database</li>
-<li>Connections database</li>
-<li>Links database</li>
-<li>Monitors</li>
+    <li>Networks</li>
+    <li>Devices</li>
+    <li>Signals</li>
+    <li>Maps</li>
+    <li>Slots</li>
+    <li>Databases</li>
 </ul>
 
 
-<p>For this tutorial, the only sections to pay attention to are Devices
-and Signals.  Admins is reserved for providing custom networking
-configurations, but in general you don't need to worry about it.</p>
+<p>For this tutorial, the only sections to pay attention to are <strong>Devices</strong> and
+<strong>Signals</strong>.  <strong>Networks</strong> are reserved for providing custom networking
+configurations, but in general you don't need to worry about it. <strong>Databases</strong>,
+<strong>Maps</strong> and <strong>Slots</strong> are mostly used when building user interfaces for
+designing mapping configurations.</p>
 
-<p>Monitor and the various database modules are used to keep track of
-what devices, signals and connections are on the network.  Devices do
-not need to worry about this.  It is used mainly for creating user
-interfaces for mapping design and will also not be covered here.</p>
+<h2>Devices</h2>
 
-<h3>Devices</h3>
+<h3>Creating a device</h3>
 
-<h4>Creating a device</h4>
+<p>To create a <em>libmapper</em> device, it is necessary to provide a device name to the
+constructor.  There is an initialization period after a device is created where
+a unique ordinal is chosen to append to the device name.  This allows multiple
+devices with the same name to exist on the network.</p>
 
-<p>To create a <em>libmapper</em> device, it is necessary to provide a device
-name to the constructor.  There is an initialization period after a
-device is created where a unique ordinal is chosen to append to the
-device name.  This allows multiple devices with the same name to
-exist on the network.</p>
+<p>If no other arguments are given, libmapper will randomly choose a port to use
+for exchanging signal data.  If desired, a second argument setting a specific
+"starting port" can be given, but the allocation algorithm will possibly choose
+another port number close to it if the port is in use.</p>
 
-<p>If no other arguments are given, libmapper will randomly choose a port
-to use for exchanging signal data.  If desired, a second argument setting
-a specific "starting port" can be given, but the allocation algorithm will
-possibly choose another port number close to it if the port is in use.</p>
-
-<p>A third optional parameter of the constructor is an admin object.  It is
-not necessary to provide this, but can be used to specify different
-networking parameters, such as specifying the name of the network
-interface to use.</p>
+<p>A third optional parameter of the constructor is a network object.  It is not
+necessary to provide this, but can be used to specify different networking
+parameters, such as specifying the name of the network interface to use.</p>
 
 <p>An example of creating a device:</p>
 
-<pre><code>dev = mapper.device( "my_device" )
-</code></pre>
+<pre>dev = mapper.device("my_device")</pre>
 
-<h4>Polling the device</h4>
+<h2>Polling the device</h2>
 
 <p>The device lifecycle looks like this, in terrible ASCII diagram art:</p>
 
-<pre><code>creation --&gt; poll --+--&gt; destruction
+<pre>creation --&gt; poll --+--&gt; destruction
               |     |
               +--&lt;--+
-</code></pre>
+</pre>
 
-<p>In other words, after a device is created, it must be continuously
-polled during its lifetime.</p>
+<p>In other words, after a device is created, it must be continuously polled during
+its lifetime.</p>
 
-<p>The polling is necessary for several reasons: to respond to requests
-on the admin bus; to check for incoming signals; to update outgoing
-signals.  Therefore even a device that does not have signals must be
-polled.  The user program must organize to have a timer or idle
-handler which can poll the device often enough.  The polling interval is
-not extremely sensitive, but should be 100 ms or less.  The more often
-it is polled, the faster it can handle incoming and outgoing
-signals.</p>
+<p>The polling is necessary for several reasons: to respond to requests on the
+admin bus; to check for incoming signals; to update outgoing signals.  Therefore
+even a device that does not have signals must be polled.  The user program must
+organize to have a timer or idle handler which can poll the device often enough.
+The polling interval is not extremely sensitive, but should be 100 ms or less.
+The more often it is polled, the faster it can handle incoming signals.</p>
 
-<p>The <code>poll</code> function can be blocking or non-blocking, depending on
-how you want your application to behave.  It takes a number of
-milliseconds during which it should do some work, or 0 if it should
-check for any immediate actions and then return without waiting:</p>
+<p>The <code>poll</code> function can be blocking or non-blocking, depending on how you want
+your application to behave.  It takes a number of milliseconds during which it
+should do some work, or 0 if it should check for any immediate actions and then
+return without waiting:</p>
 
-<pre><code>int count = dev.poll( int block_ms )
-</code></pre>
+<pre>dev.poll(block_ms)</pre>
 
 <p>An example of calling it with non-blocking behaviour:</p>
 
-<pre><code>dev.poll( 0 )
-</code></pre>
+<pre>dev.poll(0)</pre>
 
-<p>If your polling is in the middle of a processing function or in
-response to a GUI event for example, non-blocking behaviour is
-desired.  On the other hand if you put it in the middle of a loop
-which reads incoming data at intervals or steps through a simulation
-for example, you can use <code>poll()</code> as your "sleep" function, so that
-it will react to network activity while waiting.</p>
+<p>If your polling is in the middle of a processing function or in response to a
+GUI event for example, non-blocking behaviour is desired.  On the other hand if
+you put it in the middle of a loop which reads incoming data at intervals or
+steps through a simulation for example, you can use <code>poll()</code> as your "sleep"
+function, so that it will react to network activity while waiting.</p>
 
-<p>It returns the number of messages handled, so optionally you could
-continue to call it until there are no more messages waiting.  Of
-course, you should be careful doing that without limiting the time it
-will loop for, since if the incoming stream is fast enough you might
-never get anything else done!</p>
+<p>It returns the number of messages handled, so optionally you could continue to
+call it until there are no more messages waiting.  Of course, you should be
+careful doing that without limiting the time it will loop for, since if the
+incoming stream is fast enough you might never get anything else done!</p>
 
-<p>Note that an important difference between blocking and non-blocking
-polling is that during the blocking period, messages will be handled
-immediately as they are received.  On the other hand, if you use your
-own sleep, messages will be queued up until you can call <code>poll()</code>;
-stated differently, it will "time-quantize" the message handling.
-This is not necessarily bad, but you should be aware of this effect.</p>
+<p>Note that an important difference between blocking and non-blocking polling is
+that during the blocking period, messages will be handled immediately as they
+are received.  On the other hand, if you use your own sleep, messages will be
+queued up until you can call <code>poll()</code>; stated differently, it will
+"time-quantize" the message handling.  This is not necessarily bad, but you
+should be aware of this effect.</p>
 
-<p>Since there is a delay before the device is completely initialized, it
-is sometimes useful to be able to determine this using <code>ready()</code>.
-Only when <code>ready()</code> returns non-zero is it valid to use the
-device's name.</p>
+<p>Since there is a delay before the device is completely initialized, it is
+sometimes useful to be able to determine this using <code>ready()</code>.  Only when
+<code>ready()</code> returns non-zero is it valid to use the device's name.</p>
 
-<h3>Signals</h3>
+<h2>Signals</h2>
 
-<p>Now that we know how to create a device and poll it, we only
-need to know how to add signals in order to give our program some
-input/output functionality.</p>
-
-<p>We'll start with creating a "sender", so we will first talk about how
-to update output signals.</p>
-
-<h4>Creating a signal</h4>
-
-<p>A signal requires a bit more information than a device, much of which
-is optional:</p>
+<p>Now that we know how to create a device and poll it, we only need to know how to
+add signals in order to give our program some input/output functionality.  While
+libmapper enables arbitrary connections between <em>any</em> declared signals, we still
+find it helpful to distinguish between two type of signals: <code>inputs</code> and
+<code>outputs</code>.</p>
 
 <ul>
-<li>a name for the signal (must be unique within a devices inputs or outputs)</li>
-<li>the signal's vector length</li>
-<li>the signal's data type expressed as a character 'i', 'f', 'd'</li>
-<li>the signal's unit (optional)</li>
-<li>the signal's minimum value (optional)</li>
-<li>the signal's maximum value (optional)</li>
+    <li><code>outputs</code> signals are <em>sources</em> of data, updated locally by their parent
+        device</li>
+    <li><code>inputs</code> signals are <em>consumers</em> of data and are <strong>not</strong> generally
+        updated locally by their parent device.</li>
+</ul>
+
+
+<p>This can become a bit confusing, since the "reverb" parameter of a sound
+synthesizer might be updated locally through user interaction with a GUI,
+however the normal use of this signal is as a <em>destination</em> for control data
+streams so it should be defined as an <code>input</code> signal.  Note that this distinction
+is to help with GUI organization and user-understanding – <em>libmapper</em> enables
+connections from input signals and to output signals if desired.</p>
+
+<h3>Creating a signal</h3>
+
+<p>We'll start with creating a "sender", so we will first talk about how to update
+output signals.  A signal requires a bit more information than a device, much of
+which is optional:</p>
+
+<ul>
+    <li>a name for the signal (must be unique within a devices inputs or outputs)</li>
+    <li>the signal's vector length</li>
+    <li>the signal's data type expressed as a character 'i', 'f', 'd'</li>
+    <li>the signal's unit (optional)</li>
+    <li>the signal's minimum value (optional)</li>
+    <li>the signal's maximum value (optional)</li>
 </ul>
 
 
 <p>for input signals there is an additional argument:</p>
 
 <ul>
-<li>a function to be called when the signal is updated</li>
+    <li>a function to be called when the signal is updated</li>
 </ul>
 
 
 <p>examples:</p>
 
-<pre><code>sig_in = dev.add_input( "/my_input", 1, 'f', "m/s", -10, 10, h )
+<pre>sig_in = dev.add_input_signal("my_input", 1, 'f', "m/s", -10, 10, h)
+sig_out = dev.add_output_signal("my_output", 4, 'i', None, 0, 1000)
+</pre>
 
-sig_out = dev.add_output( "/my_output", 4, 'i', None, 0, 1000 )
-</code></pre>
+<p>The only <em>required</em> parameters here are the signal "length", its name, and data
+type.  Signals are assumed to be vectors of values, so for usual single-valued
+signals, a length of 1 should be specified.  Finally, supported types are
+currently 'i' or 'f' for <code>int</code> or <code>float</code> values, respectively.</p>
 
-<p>The only <em>required</em> parameters here are the signal "length", its name,
-and data type.  Signals are assumed to be vectors of values, so for
-usual single-valued signals, a length of 1 should be specified.  A
-signal name should start with "/", as this is how it is represented in
-the OSC address.  (One will be added if you forget to do this.)
-Finally, supported types are currently 'i' or 'f' for <code>int</code> or
-<code>float</code> values, respectively.</p>
+<p>The other parameters are not strictly required, but the more information you
+provide, the more the mapper can do some things automatically.  For example, if
+<code>minimum</code> and <code>maximum</code> are provided, it will be possible to create
+linear-scaled connections very quickly.  If <code>unit</code> is provided, the mapper will
+be able to similarly figure out a linear scaling based on unit conversion
+(centimeters to inches for example).  Currently automatic unit-based scaling is
+not a supported feature, but will be added in the future.  You can take
+advantage of this future development by simply providing unit information
+whenever it is available.  It is also helpful documentation for users.</p>
 
-<p>The other parameters are not strictly required, but the more
-information you provide, the more the mapper can do some things
-automatically.  For example, if <code>minimum</code> and <code>maximum</code> are provided,
-it will be possible to create linear-scaled connections very quickly.
-If <code>unit</code> is provided, the mapper will be able to similarly figure out
-a linear scaling based on unit conversion. (Centimeters to inches for
-example.)^[Currently automatic unit-based scaling is not a supported
-feature, but will be added in the future.  You can take advantage of
-this future development by simply providing unit information whenever
-it is available.  It is also helpful documentation for users.]</p>
+<p>Lastly, it is usually necessary to be informed when input signal values change.
+This is done by providing a function to be called whenever its value is modified
+by an incoming message.  It is passed in the <code>handler</code> parameter.</p>
 
-<p>Lastly, it is usually necessary to be informed when input signal
-values change.  This is done by providing a function to be called
-whenever its value is modified by an incoming message.  It is passed
-in the <code>handler</code> parameter.</p>
+<p>An example of creating a "barebones" <code>int</code> scalar output signal with no unit,
+minimum, or maximum information:</p>
 
-<p>An example of creating a "barebones" <code>int</code> scalar output signal with
-no unit, minimum, or maximum information:</p>
-
-<pre><code>outA = dev.add_output( "/outA", 1, 'i', None, None, None )
-</code></pre>
+<pre>outA = dev.add_output_signal("outA", 1, 'i', None, None, None)</pre>
 
 <p>or omitting some arguments:</p>
 
-<pre><code>outA = dev.add_output( "/outA", 1, 'i' )
-</code></pre>
+<pre>outA = dev.add_output_signal("outA", 1, 'i')</pre>
 
 <p>An example of a <code>float</code> signal where some more information is provided:</p>
 
-<pre><code>sensor1_voltage = dev.add_output( "/sensor1", 1, 'f', "V", 0.0, 5.0 )
-</code></pre>
+<pre>sensor1 = dev.add_output_signal("sensor1", 1, 'f', "V", 0.0, 5.0)</pre>
 
-<p>So far we know how to create a device and to specify an output signal
-for it.  To recap, let's review the code so far:</p>
+<p>So far we know how to create a device and to specify an output signal for it.
+To recap, let's review the code so far:</p>
 
-<pre><code>import mapper
+<pre>import mapper
 
-dev = mapper.device( "test_sender" )
-sensor1_voltage = dev.add_output( "/sensor1", 1, 'f', "V", 0.0, 5.0 )
+dev = mapper.device("test_sender")
+sensor1 = dev.add_output_signal("sensor1", 1, 'f', "V", 0.0, 5.0)
 
 while 1:
-    dev.poll( 50 )
+    dev.poll(50)
     ... do stuff ...
     ... update signals ...
-</code></pre>
+</pre>
 
-<p>It is possible to retrieve a device's inputs or outputs by name or by
-index at a later time using the functions
-<code>get_&lt;input/output&gt;_by_&lt;name/index&gt;</code>.</p>
+<p>It is possible to retrieve a device's inputs or outputs by name or by index at a
+later time using the functions <code>get_signal_by_&lt;name/index&gt;</code>.</p>
 
-<h4>Updating signals</h4>
+<h3>Updating signals</h3>
 
-<p>We can imagine the above program getting sensor information in a loop.
-It could be running on an network-enabled ARM device and reading the
-ADC register directly, or it could be running on a computer and
-reading data from an Arduino over a USB serial port, or it could just
-be a mouse-controlled GUI slider.  However it's getting the data, it
-must provide it to <em>libmapper</em> so that it will be sent to other
-devices if that signal is mapped.</p>
+<p>We can imagine the above program getting sensor information in a loop.  It could
+be running on an network-enabled ARM device and reading the ADC register
+directly, or it could be running on a computer and reading data from an Arduino
+over a USB serial port, or it could just be a mouse-controlled GUI slider.
+However it's getting the data, it must provide it to <em>libmapper</em> so that it will
+be sent to other devices if that signal is mapped.</p>
 
 <p>This is accomplished by the <code>update</code> function:</p>
 
-<pre><code>&lt;sig&gt;.update( &lt;value&gt; )
-</code></pre>
+<pre>&lt;sig&gt;.update(value)</pre>
 
-<p>So in the "sensor 1 voltage" example, assuming in "do stuff" we have
-some code which reads sensor 1's value into a float variable called
-<code>v1</code>, the loop becomes:</p>
+<p>So in the "sensor 1 voltage" example, assuming in <code>do_stuff()</code> we have some code
+which reads sensor 1's value into a float variable called <code>v1</code>, the loop
+becomes:</p>
 
-<pre><code>while 1:
-    dev.poll( 50 )
-    v1 = read_sensor_1()
-    sensor1_voltage.update( v1 )
-</code></pre>
+<pre>while 1:
+    dev.poll(50)
+    v1 = do_stuff()
+    sensor1.update(v1)
+</pre>
 
-<p>This is about all that is needed to expose sensor 1's voltage to the
-network as a mappable parameter.  The <em>libmapper</em> GUI can now be used
-to create a mapping between this value and a receiver, where it could
-control a synthesizer parameter or change the brightness of an LED,
-or whatever else you want to do.</p>
+<p>This is about all that is needed to expose sensor 1's voltage to the network as
+a mappable parameter.  The <em>libmapper</em> GUI can now be used to create a mapping
+between this value and a receiver, where it could control a synthesizer
+parameter or change the brightness of an LED, or whatever else you want to do.</p>
 
-<h4>Signal conditioning</h4>
+<h3>Signal conditioning</h3>
 
-<p>Most synthesizers of course will not know what to do with
-"voltage"--it is an electrical property that has nothing to do with
-sound or music.  This is where <em>libmapper</em> really becomes useful.</p>
+<p>Most synthesizers of course will not know what to do with "voltage"--it is an
+electrical property that has nothing to do with sound or music.  This is where
+<em>libmapper</em> really becomes useful.</p>
 
-<p>Scaling or other signal conditioning can be taken care of <em>before</em>
-exposing the signal, or it can be performed as part of the mapping.
-Since the end user can demand any mathematical operation be performed
-on the signal, he can perform whatever mappings between signals as he
-wishes.</p>
+<p>Scaling or other signal conditioning can be taken care of <em>before</em> exposing the
+signal, or it can be performed as part of the mapping.  Since the end user can
+demand any mathematical operation be performed on the signal, he can perform
+whatever mappings between signals as he wishes.</p>
 
-<p>As a developer, it is therefore your job to provide information that
-will be useful to the end user.</p>
+<p>As a developer, it is therefore your job to provide information that will be
+useful to the end user.</p>
 
-<p>For example, if sensor 1 is a position sensor, instead of publishing
-"voltage", you could convert it to centimeters or meters based on the
-known dimensions of the sensor, and publish a "/sensor1/position"
-signal instead, providing the unit information as well.</p>
+<p>For example, if sensor 1 is a position sensor, instead of publishing "voltage",
+you could convert it to centimeters or meters based on the known dimensions of
+the sensor, and publish a "sensor1/position" signal instead, providing the unit
+information as well.</p>
 
-<p>We call such signals "semantic", because they provide information with
-more meaning than a relatively uninformative value based on the
-electrical properties of the sensing technique.  Some sensors can
-benefit from low-pass filtering or other measures to reduce noise.
-Some sensor data may need to be combined in order to derive physical
-meaning.  What you choose to expose as outputs of your device is
-entirely application-dependent.</p>
+<p>We call such signals "semantic", because they provide information with more
+meaning than a relatively uninformative value based on the electrical properties
+of the sensing technique.  Some sensors can benefit from low-pass filtering or
+other measures to reduce noise.  Some sensor data may need to be combined in
+order to derive physical meaning.  What you choose to expose as outputs of your
+device is entirely application-dependent.</p>
 
-<p>You can even publish both "/sensor1/position" and "/sensor1/voltage"
-if desired, in order to expose both processed and raw data.  Keep in
-mind that these will not take up significant processing time, and
-<em>zero</em> network bandwidth, if they are not mapped.</p>
+<p>You can even publish both "sensor1/position" and "sensor1/voltage" if desired,
+in order to expose both processed and raw data.  Keep in mind that these will
+not take up significant processing time, and <em>zero</em> network bandwidth, if they
+are not mapped.</p>
 
-<h4>Receiving signals</h4>
+<h3>Receiving signals</h3>
 
-<p>Now that we know how to create a sender, it would be useful to also
-know how to receive signals, so that we can create a sender-receiver
-pair to test out the provided mapping functionality.</p>
+<p>Now that we know how to create a sender, it would be useful to also know how to
+receive signals, so that we can create a sender-receiver pair to test out the
+provided mapping functionality.</p>
 
-<p>As mentioned above, the <code>add_input</code> function takes an optional
-<code>handler</code>.  This is a function that will be called whenever the value
-of that signal changes.  To create a receiver for a synthesizer
-parameter "pulse width" (given as a ratio between 0 and 1), specify
-a handler when calling <code>add_input</code>.  We'll imagine there is some
-python synthesizer implemented as a class <code>synthesizer</code> which has
-functions <code>setPulseWidth()</code> which sets the pulse width in a
-thread-safe manner, and <code>startAudioInBackground()</code> which sets up the
-audio thread.</p>
+<p>As mentioned above, the <code>add_input_signal()</code> function takes an optional
+<code>handler</code>.  This is a function that will be called whenever the value of that
+signal changes.  To create a receiver for a synthesizer parameter "pulse width"
+(given as a ratio between 0 and 1), specify a handler when calling
+<code>add_input_signal()</code>.  We'll imagine there is some python synthesizer
+implemented as a class <code>synthesizer</code> which has functions <code>setPulseWidth()</code> which
+sets the pulse width in a thread-safe manner, and <code>startAudioInBackground()</code>
+which sets up the audio thread.</p>
 
 <p>Let's use a real-world example using the
-<a href="http://code.google.com/p/pyo/">pyo DSP library for Python</a> to create a
-simple synth consisting of one sine wave. For now, we will only worry
-about controlling one parameter: the frequency of the sine.</p>
+<a href="http://code.google.com/p/pyo/">pyo DSP library for Python</a> to create a simple
+synth consisting of one sine wave. For now, we will only worry about controlling
+one parameter: the frequency of the sine.</p>
 
 <p>We need to create a handler function for libmapper to update the pyo synth:</p>
 
-<pre><code>def frequency_handler(sig, id, val, timetag):
+<pre>def frequency_handler(sig, id, val, timetag):
     try:
-        sine.setFreq( val )
+        sine.setFreq(val)
     except:
         print 'exception'
         print sig, val
-</code></pre>
+</pre>
 
 <p>Then our program will look like this:</p>
 
-<pre><code>from pyo import *
+<pre>from pyo import *
 import mapper
 
 # Some pyo stuff
 synth = Server().boot().start()
-sine = Sine( freq=200, mul=0.5 ).out()
+sine = Sine(freq=200, mul=0.5).out()
 
-def freq_handler( sig, id, val, timetag ):
+def freq_handler(sig, id, val, timetag):
     try:
-        sine.setFreq( val )
+        sine.setFreq(val)
     except:
         print 'exception'
         print sig, val
 
-dev = mapper.device( 'pyo_example' )
-dev.add_input( '/freq', 1, 'f', 'Hz', 20, 2000, freq_handler )
+dev = mapper.device('pyo_example')
+dev.add_input_signal('frequency', 1, 'f', 'Hz', 20, 2000, freq_handler)
 
 while True:
-    dev.poll( 100 )
+    dev.poll(100)
 
 synth.stop()
-</code></pre>
+</pre>
 
-<p>Alternately, we can simplify our code by using a <code>lambda function</code>
-instead of a separate handler:</p>
+<p>Alternately, we can simplify our code by using a <code>lambda function</code> instead of a
+separate handler:</p>
 
-<pre><code>from pyo import *
+<pre>from pyo import *
 import mapper
 
 # Some pyo stuff
 synth = Server().boot().start()
-sine = Sine( freq=200, mul=0.5 ).out()
+sine = Sine(freq=200, mul=0.5).out()
 
-dev = mapper.device( 'pyo_example' )
-dev.add_input( '/freq', 1, 'f', "Hz", 20, 2000, lambda s, i, f, t: sine.setFreq(f) )
+dev = mapper.device('pyo_example')
+dev.add_input_signal('frequency', 1, 'f', "Hz", 20, 2000,
+lambda s, i, f, t: sine.setFreq(f))
 
 while True:
-    dev.poll( 100 )
+    dev.poll(100)
 
 synth.stop()
-</code></pre>
+</pre>
 
-<h3>Working with timetags</h3>
+<h2>Working with timetags</h2>
 
 <p><em>libmapper</em> uses the <code>mapper_timetag_t</code> data structure internally to store
 <a href="http://en.wikipedia.org/wiki/Network_Time_Protocol#NTP_timestamps">NTP timestamps</a>,
-but this value is represented using the <code>double</code> type in the python bindings.
+but this value is represented using the <code>timetag</code> type in the python bindings.
 For example, the handler function called when a signal update is received
-contains a <code>timetag</code> argument.  This argument indicates the time at
-which the source signal was <em>sampled</em> (in the case of sensor signals)
-or <em>generated</em> (in the case of sequenced or algorithimically-generated
-signals).</p>
+contains a <code>timetag</code> argument.  This argument indicates the time at which the
+source signal was <em>sampled</em> (in the case of sensor signals) or <em>generated</em> (in
+the case of sequenced or algorithimically-generated signals).</p>
 
-<p>The <code>update</code> function for output signals is overloaded; calling the function
-without a timetag argument will automatically label the outgoing signal
-update with the current time. In cases where the update should more
-properly be labeled with another time, this can be accomplished by simply
-adding the timetag as a second argument.  This timestamp should only be
-overridden if your program has access to a more accurate measurement
-of the real time associated with the signal update, for example if
-you are writing a driver for an outboard sensor system that provides
-the sampling time.</p>
+<p>The <code>update()</code> function for output signals is overloaded; calling the function
+without a timetag argument will automatically label the outgoing signal update
+with the current time. In cases where the update should more properly be labeled
+with another time, this can be accomplished by simply adding the timetag as a
+second argument.  This timestamp should only be overridden if your program has
+access to a more accurate measurement of the real time associated with the
+signal update, for example if you are writing a driver for an outboard sensor
+system that provides the sampling time.</p>
 
-<p><em>libmapper</em> also provides helper functions for getting the current
-device-time:</p>
+<p>Creating a new <code>timetag</code> without arguments causes it to be initialized with the
+current system time:</p>
 
-<pre><code>now = &lt;device&gt;.now()
-</code></pre>
+<pre>now = mapper.timetag()</pre>
 
-<h3>Working with signal instances</h3>
+<h2>Working with signal instances</h2>
 
 <p><em>libmapper</em> also provides support for signals with multiple <em>instances</em>,
 for example:</p>
 
 <ul>
-<li>control parameters for polyphonic synthesizers;</li>
-<li>touches tracked by a multitouch surface;</li>
-<li>"blobs" identified by computer vision systems;</li>
-<li>objects on a tabletop tangible user interface;</li>
-<li><em>temporal</em> objects such as gestures or trajectories.</li>
+    <li>control parameters for polyphonic synthesizers;</li>
+    <li>touches tracked by a multitouch surface;</li>
+    <li>"blobs" identified by computer vision systems;</li>
+    <li>objects on a tabletop tangible user interface;</li>
+    <li><em>temporal</em> objects such as gestures or trajectories.</li>
 </ul>
 
 
 <p>The important qualities of signal instances in <em>libmapper</em> are:</p>
 
 <ul>
-<li><strong>instances are interchangeable</strong>: if there are semantics attached
-to a specific instance it should be represented with separate signals
-instead.</li>
-<li><strong>instances can be ephemeral</strong>: signal instances can be dynamically
-created and destroyed. <em>libmapper</em> will ensure that linked devices
-share a common understanding of the relatonships between instances
-when they are mapped.</li>
-<li><strong>one mapping connection serves to map all of its instances.</strong></li>
+    <li><strong>instances are interchangeable</strong>: if there are semantics attached to a
+        specific instance it should be represented with separate signals instead.</li>
+    <li><strong>instances can be ephemeral</strong>: signal instances can be dynamically created
+        and destroyed. <em>libmapper</em> will ensure that linked devices share a common
+        understanding of the relatonships between instances when they are mapped.</li>
+    <li><strong>one mapping connection serves to map all of its instances.</strong></li>
 </ul>
 
 
-<p>All signals possess one instance by default. If you would like to reserve
-more instances you can use:</p>
+<p>All signals possess one instance by default. If you would like to reserve more
+instances you can use:</p>
 
-<pre><code>&lt;sig&gt;.reserve_instances( int num )
-</code></pre>
+<pre>&lt;sig&gt;.reserve_instances(num)</pre>
 
 <p>After reserving instances you can update a specific instance:</p>
 
-<pre><code>&lt;sig&gt;.update_instance( int instance_id,
-                       &lt;value&gt; )
-</code></pre>
+<pre>&lt;sig&gt;.update_instance(id, value)</pre>
 
 <p>or</p>
 
-<pre><code>&lt;sig&gt;.update_instance( int instance_id,
-                       &lt;value&gt;,
-                       double timetag )
-</code></pre>
+<pre>&lt;sig&gt;.instance_update(id, value, timetag)</pre>
 
-<p>All of the arguments except one should be familiar from the
-documentation of <code>msig_update()</code> presented earlier.
-The <code>instance_id</code> argument does not have to be considered as an array
-index - it can be any integer that is convenient for labelling your
-instance. <em>libmapper</em> will internally create a map from your id label
-to one of the preallocated instance structures.</p>
+<p>All of the arguments except one should be familiar from the documentation of
+<code>update()</code> presented earlier.  The <code>instance_id</code> argument does not have to be
+considered as an array index - it can be any integer that is convenient for
+labelling your instance.  <em>libmapper</em> will internally create a map from your id
+label to one of the preallocated instance structures.</p>
 
-<h4>Receiving instances</h4>
+<h3>Receiving instances</h3>
 
-<p>You might have noticed earlier that the handler function called when
-a signal update is received has a argument called <code>id</code>. Here
-is the function prototype again:</p>
+<p>You might have noticed earlier that the handler function called when a signal
+update is received has a argument called <code>id</code>. Here is the function prototype
+again:</p>
 
-<pre><code>def frequency_handler( signal, id, value, timetag ):
-</code></pre>
+<pre>def frequency_handler(signal, id, value, timetag):</pre>
 
-<p>Under normal usage, the <code>id</code> argument will have a value (0 &lt;= n &lt;= num_instances)
-and can be used as an array index. Remember that you will need to reserve
-instances for your input signal using <code>&lt;sig&gt;.reserve_instances()</code> if you
+<p>Under normal usage, the <code>id</code> argument will have a value (0 &lt;= n &lt;=
+num_instances) and can be used as an array index. Remember that you will need to
+reserve instances for your input signal using <code>&lt;sig&gt;.reserve_instances()</code> if you
 want to receive instance updates.</p>
 
-<h4>Instance Stealing</h4>
+<h3>Instance Stealing</h3>
 
-<p>For handling cases in which the sender signal has more instances than
-the receiver signal, the <em>instance allocation mode</em> can be set for an
-input signal to set an action to take in case all allocated instances are in
-use and a previously unseen instance id is received. Use the function:</p>
+<p>For handling cases in which the sender signal has more instances than the
+receiver signal, the <em>instance allocation mode</em> can be set for an input signal
+to set an action to take in case all allocated instances are in use and a
+previously unseen instance id is received. Use the function:</p>
 
-<pre><code>&lt;sig&gt;.set_instance_allocation_mode( mapper_instance_allocation_type mode );
-</code></pre>
+<pre>&lt;sig&gt;.set_instance_stealing_mode(mode);</pre>
 
 <p>The argument <code>mode</code> can have one of the following values:</p>
 
 <ul>
-<li><code>mapper.IN_UNDEFINED</code> Default value, in which no stealing of instances will occur;</li>
-<li><code>mapper.IN_STEAL_OLDEST</code> Release the oldest active instance and reallocate its
-resources to the new instance;</li>
-<li><code>mapper.IN_STEAL_NEWEST</code> Release the newest active instance and reallocate its
-resources to the new instance;</li>
+    <li><code>mapper.NO_STEALING</code> Default value, in which no stealing of instances will
+        occur;</li>
+    <li><code>mapper.STEAL_OLDEST</code> Release the oldest active instance and reallocate its
+        resources to the new instance;</li>
+    <li><code>mapper.STEAL_NEWEST</code> Release the newest active instance and reallocate its
+        resources to the new instance;</li>
 </ul>
 
 
-<p>If you want to use another method for determining which active instance
-to release (e.g. the sound with the lowest volume), you can create an <code>instance_event_handler</code> for the signal and write the method yourself:</p>
+<p>If you want to use another method for determining which active instance to
+release (e.g. the sound with the lowest volume), you can create an
+<code>instance_event_handler</code> for the signal and write the method yourself:</p>
 
-<pre><code>def my_handler( sig, id, event, timetag ):
+<pre>def my_handler(sig, id, event, timetag):
     # user code chooses which instance to release
-    id = choose_instance_to_release( msig )
+    id = choose_instance_to_release(sig)
+    sig.instance_release(id, timetag)
+</pre>
 
-    sig.release_instance( id, timetag )
-</code></pre>
+<p>For this function to be called when instance stealing is necessary, we need to
+register it for <code>mapper.IN_OVERFLOW</code> events:</p>
 
-<p>For this function to be called when instance stealing is necessary, we
-need to register it for <code>mapper.IN_OVERFLOW</code> events:</p>
+<pre>&lt;sig&gt;.set_instance_event_callback(my_handler, mapper.IN_OVERFLOW)</pre>
 
-<pre><code>&lt;sig&gt;.set_instance_event_callback( my_handler,
-                                   mapper.IN_OVERFLOW )
-</code></pre>
-
-<h3>Publishing metadata</h3>
+<h2>Publishing metadata</h2>
 
 <p>Things like device names, signal units, and ranges, are examples of
 metadata--information about the data you are exposing on the network.</p>
 
-<p><em>libmapper</em> also provides the ability to specify arbitrary extra
-metadata in the form of name-value pairs.  These are not interpreted
-by <em>libmapper</em> in any way, but can be retrieved over the network.
-This can be used for instance to label a device with its loation, or
-to perhaps give a signal some property like "reliability", or some
-category like "light", "motor", "shaker", etc.</p>
+<p><em>libmapper</em> also provides the ability to specify arbitrary extra metadata in the
+form of name-value pairs.  These are not interpreted by <em>libmapper</em> in any way,
+but can be retrieved over the network.  This can be used for instance to label a
+device with its loation, or to perhaps give a signal some property like
+"reliability", or some category like "light", "motor", "shaker", etc.</p>
 
-<p>Some GUI implementing a Monitor could then use this information to
-display information about the network in an intelligent manner.</p>
+<p>Some GUI could then use this information to display information about the
+network in an intelligent manner.</p>
 
-<p>Any time there may be extra knowledge about a signal or device, it is
-a good idea to represent it by adding such properties, which can be of
-any OSC-compatible type.  (So, numbers and strings, etc.)</p>
+<p>Any time there may be extra knowledge about a signal or device, it is a good
+idea to represent it by adding such properties, which can be of any
+OSC-compatible type.  (So, numbers and strings, etc.)</p>
 
 <p>The property interface is through the functions,</p>
 
-<pre><code>set_property( key, value )
-</code></pre>
+<pre>set_property(key, value)</pre>
 
-<p>where the value can any OSC-compatible type. This function can be called
-for devices or signals.</p>
+<p>where the value can any OSC-compatible type. This function can be called for
+devices or signals.</p>
 
-<p>For example, to store a <code>float</code> indicating the X position of a device
-<code>dev</code>, you can call it like this:</p>
+<p>For example, to store a <code>float</code> indicating the X position of a device <code>dev</code>, you
+can call it like this:</p>
 
-<pre><code>dev.set_property( "x", 12.5 )
-</code></pre>
+<pre>dev.set_property("x", 12.5)</pre>
 
 <p>To specify a string property of a signal:</p>
 
-<pre><code>sig.set_property( "sensingMethod", "resistive" )
-</code></pre>
+<pre>sig.set_property("sensingMethod", "resistive")</pre>
 
-<p>In general you can use any property name not already in use by the
-device or signal data structure.  Reserved words for signals are:</p>
+<h3>Reserved keys</h3>
 
-<pre><code>device_name, direction, length, max, min, name, type, unit, user_data
-</code></pre>
+<p>You can use any property name not already reserved by libmapper.</p>
 
-<p>for devices, they are:</p>
+<h4>Reserved keys for devices</h4>
 
-<pre><code>host, port, name, user_data
-</code></pre>
+<p><code>description</code>, <code>host</code>, <code>id</code>, <code>is_local</code>, <code>libversion</code>, <code>name</code>,
+<code>num_incoming_maps</code>, <code>num_outgoing_maps</code>, <code>num_inputs</code>, <code>num_outputs</code>, <code>port</code>,
+<code>synced</code>, <code>value</code>, <code>version</code>, <code>user_data</code></p>
 
-<p>By the way, if you query or set signal properties using these
-keywords, you will get or modify the same information that is
-available directly from the <code>signal</code> data structure.
-Therefore this can provide a unified string-based method for accessing
-any signal property:</p>
+<h4>Reserved keys for signals</h4>
 
-<pre><code>props = sig.get_properties()
-sensingMethod = props[ 'sensingMethod' ]
-</code></pre>
+<p><code>description</code>, <code>direction</code>, <code>id</code>, <code>is_local</code>, <code>length</code>, <code>max</code>, <code>maximum</code>, <code>min</code>,
+<code>minimum</code>, <code>name</code>, <code>num_incoming_maps</code>, <code>num_instances</code>, <code>num_outgoing_maps</code>,
+<code>rate</code>, <code>type</code>, <code>unit</code>, <code>user_data</code></p>
 
-<p>Primarily this is an interface meant for network monitors, but may
-come in useful for an application implementing a device.</p>
+<h4>Reserved keys for links</h4>
+
+<p><code>description</code>, <code>id</code>, <code>is_local</code>, <code>num_maps</code></p>
+
+<h4>Reserved keys for maps</h4>
+
+<p><code>description</code>, <code>expression</code>, <code>id</code>, <code>is_local</code>, <code>mode</code>, <code>muted</code>,
+<code>num_destinations</code>, <code>num_sources</code>, <code>process_location</code>, <code>ready</code>, <code>status</code></p>
+
+<h4>Reserved keys for map slots</h4>
+
+<p><code>bound_max</code>, <code>bound_min</code>, <code>calibrating</code>, <code>causes_update</code>, <code>direction</code>, <code>length</code>,
+<code>maximum</code>, <code>minimum</code>, <code>num_instances</code>, <code>use_as_instance</code>, <code>type</code></p>
+
+<!--end of exported tutorial-->
 
       </section>
     </div>    
