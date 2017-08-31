@@ -165,6 +165,7 @@ img.logo {
 
 code, pre {
 	font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+/*    font-family: Monaco;*/
   color:#000;
   font-size:13px;
 }
