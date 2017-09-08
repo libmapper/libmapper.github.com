@@ -30,7 +30,7 @@ body {
   font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 14px;
 	color: #232323;
-	background-color: #FBFAF7;
+	background-color: #FFF;
 	margin: 0;
 	line-height: 1.8em;
 	-webkit-font-smoothing: antialiased;
@@ -76,7 +76,7 @@ h4, h5, h6 {
 }
 
 a {
-  color:#C30000;
+  color:#0000C3;
   text-decoration:none;
 }
 
@@ -156,8 +156,10 @@ section img {
 
 img.logo {
   box-shadow: none;
+  height: 100px;
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
+  padding: 10px;
 }
 
 
@@ -320,7 +322,6 @@ header li:hover {
 }
 
 li.selected {
-  margin-left: 20px;
   padding: 6px 7px 6px 7px;
   text-align: left;
   background: #C3001D;
