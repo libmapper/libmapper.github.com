@@ -383,7 +383,7 @@ sine = Sine(freq=200, mul=0.5).out()
 
 dev = mapper.device('pyo_example')
 dev.add_input_signal('frequency', 1, 'f', "Hz", 20, 2000,
-lambda s, i, f, t: sine.setFreq(f))
+                     lambda s, i, f, t: sine.setFreq(f))
 
 while True:
     dev.poll(100)
