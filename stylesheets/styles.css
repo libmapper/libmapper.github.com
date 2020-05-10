@@ -368,6 +368,26 @@ ul.tabs a {
     color: #232323;
 }
 
+/* For list of videos */
+
+.videothumbnail {
+    float: right;
+    margin-left: 0.7em;
+}
+
+.videosignature {
+    text-align:right;
+    font-style:italic;
+}
+
+.videotitle {
+    margin-bottom: 0.3em;
+}
+
+.videodescription {
+    margin-bottom: 0.3em;
+}
+
 /* Footer */
 
 footer {
