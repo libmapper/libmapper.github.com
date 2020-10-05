@@ -11,29 +11,12 @@
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <script type="text/javascript" src="../javascripts/jquery-3.5.1.min.js"></script>
   </head>
   <body>
     <div class="wrapper">
-      <header>
-        <a href="../index.html">
-          <img class="logo" src="../images/libmapper_logo_black_512px.png" alt="libmapper logo" />
-          <h1 class="header">libmapper</h1>
-        </a>
-
-        <ul>
-          <li><a href="../about.html">About</a></li>
-          <li><a href="../downloads.html">Downloads</a></li>
-          <li><a href="../api/index.html" target="_blank">Documentation</a></li>
-          <li><a href="../videos.html">Videos</a></li>
-          <li><a href="../tutorials/introduction.html">Tutorials</a></li>
-          <li class="selected"><a>Ecosystem</a></li>
-          <li><a href="../projects.html">Projects</a></li>
-          <li><a href="https://github.com/libmapper/libmapper" target="_blank">Repository</a></li>
-          <li><a href="https://groups.google.com/group/dot_mapper" target="_blank">Mailing List</a></li>
-          <li><a href="../support.html">Support</a></li>
-        </ul>
-
-      </header>
+      <div id="header">
+      </div>
       <section>
 
         <h2>The libmapper Software Ecosystem</h2>
@@ -56,4 +39,9 @@
       </section>
     </div>
   </body>
+  <script>
+      window.onload = function() {
+          $("#header").load("./sidebar.html");
+      };
+  </script>
 </html>
