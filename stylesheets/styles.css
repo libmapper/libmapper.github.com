@@ -40,8 +40,12 @@ h1, h2, h3, h4, h5, h6 {
     margin: 36px 0 10px;
 }
 
-p, ul, ol, table, dl {
+p, ol, table, dl {
     margin: 0 0 22px;
+}
+
+ul {
+    margin: 0 22px 0;
 }
 
 h1, h2, h3 {
@@ -326,6 +330,7 @@ ul.tabs {
     height: 30px;
     text-align: center;
     display: block;
+    margin: 0 0 22px;
 }
 
 /* single tab */

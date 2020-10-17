@@ -32,83 +32,66 @@
 
 <!--start of exported tutorial here-->
 
-<h1>Getting started with libmapper</h1>
+<h1 id="toc_0">Getting started with libmapper</h1>
 
 <p>Since <em>libmapper</em> uses GNU autoconf, getting started with the library is the
 same as any other library on Linux; use <code>./configure</code> and then <code>make</code> to compile
-it.  You'll need <code>swig</code> available if you want to compile the Python bindings.
+it.  You&#39;ll need <code>swig</code> available if you want to compile the Python bindings.
 On Mac OS X, we provide a precompiled Framework bundle for 32- and 64-bit Intel
 platforms, so using it with XCode should be a matter of including it in your
 project.</p>
 
-<h2>Overview of the API structure</h2>
+<h2 id="toc_1">Overview of the API structure</h2>
 
 <p>If you take a look at the API documentation, there is a section called
-"modules".  This is divided into the following sections:</p>
+&quot;modules&quot;.  This is divided into the following main sections:</p>
 
 <ul>
-    <li><a href="../api/1.2/group__networks.html">Networks</a></li>
-    <li><a href="../api/1.2/group__devices.html">Devices</a></li>
-    <li><a href="../api/1.2/group__signals.html">Signals</a></li>
-    <li><a href="../api/1.2/group__maps.html">Maps</a></li>
-    <li><a href="../api/1.2/group__slots.html">Slots</a></li>
-    <li><a href="../api/1.2/group__databases.html">Databases</a></li>
+    <li><a href="../html/group__graphs.html">Graphs</a></li>
+    <li><a href="../html/group__objects.html">Objects</a></li>
+    <ul>
+        <li><a href="../html/group__devices.html">Devices</a></li>
+        <li><a href="../html/group__signals.html">Signals</a> and <a href="../html/group__instances.html">Signal Instances</a></li>
+        <li><a href="../html/group__maps.html">Maps</a></li>
+    </ul>
+    <li><a href="../html/group__lists.html">Lists</a></li>
 </ul>
 
-
 <p>For this tutorial, the only sections to pay attention to are <strong>Devices</strong> and
-<strong>Signals</strong>.  <strong>Networks</strong> are reserved for providing custom networking
-configurations, but in general you don't need to worry about it.</p>
+<strong>Signals</strong>. The other sections are mostly used when building user interfaces for
+designing mapping configurations. Functions and types from each module are prefixed
+with <code>mpr_&lt;module&gt;_</code>, in order to avoid namespace clashing.</p>
 
-<p>The <strong>Database</strong> module is used to keep track of what devices, signals and maps
-are on the network.  It is used mainly for creating user interfaces for mapping
-design and will also not be covered here.</p>
+<h2 id="toc_2">Devices</h2>
 
-<p>Functions and types from each module are prefixed with <code>mapper_&lt;module&gt;_</code>, in
-order to avoid namespace clashing.</p>
+<h3 id="toc_3">Creating a device</h3>
 
-<h2>Devices</h2>
+<p>To create a <em>libmapper</em> device, it is necessary to provide two arguments to the
+function <code>mpr_dev_new</code>:</p>
 
-<h3>Creating a device</h3>
+<pre>mpr_dev mpr_dev_new(const char *name_prefix, mpr_graph graph);</pre>
 
-<p>To create a <em>libmapper</em> device, it is necessary to provide a few parameters to
-<code>mapper_device_new</code>:</p>
+<p>Every device on the network needs a descriptive name – the name does not have to
+be unique since during initialization a unique ordinal will be appended to the
+device name. This allows multiple devices with the same name to exist on the
+network.</p>
 
-<pre>mapper_device mapper_device_new(const char *name_prefix,
-                                int initial_port,
-                                mapper_network network);
-</pre>
-
-<p>Every device on the network needs a name and port.  In fact the requested name
-and port are only "starting values".  There is an initialization period after a
-device is created where a unique ordinal is chosen to append to the device name.
-This allows multiple devices with the same name to exist on the network.</p>
-
-<p>Similarly, each device gets a unique port to use for exchanging signal data.
-The provided port number is the "starting port", but the allocation algorithm
-will possibly choose another port number close to it if someone else on the
-network is already using it.  We usually use a port number of 9000, and let the
-system decide if this is appropriate.^[Strictly this is only necessary for
-devices on the same computer, but port numbers are in abundance so we just
-allocate one per device to keep things consistent.]</p>
-
-<p>The third parameter of mapper_device_new is an optional network instance.
-It is not necessary to provide this, but can be used to specify different
-networking parameters, such as specifying the name of the network interface
-to use.</p>
+<p>The second argument is an optional graph instance. It is not necessary to provide
+this, but can be used to specify different networking parameters, such as specifying
+the name of the network interface to use. For this tutorial we will let libmapper
+choose a default interface.</p>
 
 <p>An example of creating a device:</p>
 
-<pre>mapper_device my_device = mapper_device_new("test", 0, 0);</pre>
+    mpr_dev my_dev = mpr_dev_new(&quot;test&quot;, 0);</pre>
 
-<h3>Polling the device</h3>
+<h3 id="toc_4">Polling the device</h3>
 
 <p>The device lifecycle looks like this, in terrible ASCII diagram art:</p>
 
-<pre>mapper_device_new -&gt; mapper_device_poll +-&gt; mapper_device_free
-                        |               |
-                        +-------&lt;-------+
-</pre>
+<pre>mpr_dev_new -&gt; mpr_dev_poll +-&gt; mpr_dev_free
+                |           |
+                +-----&lt;-----+</pre>
 
 <p>In other words, after a device is created, it must be continuously polled during
 its lifetime, and then explicitly freed when it is no longer needed.</p>
@@ -121,22 +104,22 @@ Polling interval is not extremely sensitive, but should be at least 100 ms or
 less.  The faster it is polled, the faster it can handle incoming and outgoing
 signals.</p>
 
-<p>The <code>mapper_device_poll</code> function can be blocking or non-blocking, depending on
-how you want your application to behave.  It takes a number of milliseconds
-during which it should do some work, or 0 if it should check for any immediate
-actions and then return without waiting:</p>
+<p>The <code>mpr_dev_poll</code> function can be blocking or non-blocking, depending on how
+you want your application to behave.  It takes a number of milliseconds during
+which it should do some work, or 0 if it should check for any immediate actions
+and then return without waiting:</p>
 
-<pre>int mapper_device_poll(mapper_device dev, int block_ms);</pre>
+<pre>int mpr_dev_poll(mpr_dev dev, int block_ms);</pre>
 
 <p>An example of calling it with non-blocking behaviour:</p>
 
-<pre>mapper_device_poll(my_device, 0);</pre>
+<pre>mpr_dev_poll(my_dev, 0);</pre>
 
 <p>If your polling is in the middle of a processing function or in response to a
 GUI event for example, non-blocking behaviour is desired.  On the other hand if
 you put it in the middle of a loop which reads incoming data at intervals or
-steps through a simulation for example, you can use <code>mapper_device_poll</code> as your
-"sleep" function, so that it will react to network activity while waiting.</p>
+steps through a simulation for example, you can use <code>mpr_dev_poll</code> as your
+&quot;sleep&quot; function, so that it will react to network activity while waiting.</p>
 
 <p>It returns the number of messages handled, so optionally you could continue to
 call it until there are no more messages waiting.  Of course, you should be
@@ -146,42 +129,41 @@ incoming stream is fast enough you might never get anything else done!</p>
 <p>Note that an important difference between blocking and non-blocking polling is
 that during the blocking period, messages will be handled immediately as they
 are received.  On the other hand, if you use your own sleep, messages will be
-queued up until you can call poll(); stated differently, it will "time-quantize"
+queued up until you can call poll(); stated differently, it will &quot;time-quantize&quot;
 the message handling.  This is not necessarily bad, but you should be aware of
 this effect.</p>
 
 <p>Since there is a delay before the device is completely initialized, it is
-sometimes useful to be able to determine this using <code>mapper_device_ready</code>.
-Only when <code>mapper_device_ready</code> returns non-zero is it valid to use the device's
+sometimes useful to be able to determine this using <code>mpr_dev_ready</code>.
+Only when <code>mpr_dev_ready</code> returns non-zero is it valid to use the device&#39;s
 name.</p>
 
-<h3>Freeing the device</h3>
+<h3 id="toc_5">Freeing the device</h3>
 
 <p>It is necessary to explicitly free the device at the end of your program.  This
-not only frees memory, but also sends some messages to "politely" remove itself
+not only frees memory, but also sends some messages to &quot;politely&quot; remove itself
 from the network.</p>
 
 <p>An example of freeing a device:</p>
 
-<pre>mapper_device_free(my_device);</pre>
+<pre>mpr_dev_free(my_dev);</pre>
 
-<h2>Signals</h2>
+<h2 id="toc_6">Signals</h2>
 
 <p>Now that we know how to create a device, poll it, and free it, we only need to
 know how to add signals in order to give our program some input/output
-functionality.  While libmapper enables arbitrary connections between <em>any</em>
+functionality.  While <em>libmapper</em> enables arbitrary connections between <em>any</em>
 declared signals, we still find it helpful to distinguish between two type of
-signals: <code>inputs</code> and <code>outputs</code>.</p>
+signals: <code>inputs</code> and <code>outputs</code>. </p>
 
 <ul>
-    <li><code>outputs</code> signals are <em>sources</em> of data, updated locally by their parent
-        device</li>
-    <li><code>inputs</code> signals are <em>consumers</em> of data and are <strong>not</strong> generally updated
-        locally by their parent device.</li>
+<li><code>outputs</code> signals are <em>sources</em> of data, updated locally by their parent
+device</li>
+<li><code>inputs</code> signals are <em>consumers</em> of data and are <strong>not</strong> generally updated
+locally by their parent device.</li>
 </ul>
 
-
-<p>This can become a bit confusing, since the "reverb" parameter of a sound
+<p>This can become a bit confusing, since the &quot;reverb&quot; parameter of a sound
 synthesizer might be updated locally through user interaction with a GUI,
 however the normal use of this signal is as a <em>destination</em> for control data
 streams so it should be defined as an <code>input</code> signal.  Note that this
@@ -189,139 +171,115 @@ distinction is to help with GUI organization and user-understanding –
 <em>libmapper</em> enables connections from input signals and to output signals if
 desired.</p>
 
-<h3>Creating a signal</h3>
+<h3 id="toc_7">Creating a signal</h3>
 
-<p>We'll start with creating a "sender", so we will first talk about how to update
+<p>We&#39;ll start with creating a &quot;sender&quot;, so we will first talk about how to update
 output signals.  A signal requires a bit more information than a device, much of
 which is optional:</p>
 
-<pre>mapper_signal mapper_device_add_input_signal(mapper_device dev, const char *name,
-                                             int length, char type, const char *unit,
-                                             void *minimum, void *maximum,
-                                             mapper_signal_handler *h,
-                                             void *user_data);
+<pre>mpr_sig mpr_sig_new(mpr_dev parent, mpr_dir dir, const char *name, int length,
+                    mpr_type type, const char *unit, void *min, void *max,
+                    int *num_inst, mpr_sig_handler *h, int events);</pre>
 
-mapper_signal mapper_device_add_output_signal(mapper_device dev, const char *name,
-                                              int length, char type, const char *unit,
-                                              void *minimum, void *maximum);
-</pre>
-
-<p>The only <em>required</em> parameters here are the signal "length", its name, and data
-type.  Signals are assumed to be vectors of values, so for usual single-valued
-signals, a length of 1 should be specified.  Finally, supported types are
-currently 'i', 'f', or 'd' (specified as characters in C, not strings), for
-<code>int</code>, <code>float</code>, and <code>double</code> values, respectively.</p>
+<p>The only <em>required</em> parameters here are the signal direction, name, vector length
+and data type.  Signals are assumed to be vectors of values, so for usual
+single-valued signals, a length of 1 should be specified.  Finally, supported types
+are currently <code>MPR_INT32</code>, <code>MPR_FLT</code>, or <code>MPR_DBL</code> for
+<a href="https://en.wikipedia.org/wiki/C_data_types">integer, float, and double</a>
+values, respectively.</p>
 
 <p>The other parameters are not strictly required, but the more information you
-provide, the more the mapper can do some things automatically.  For example, if
-<code>minimum</code> and <code>maximum</code> are provided, it will be possible to create
-linear-scaled connections very quickly.  If <code>unit</code> is provided, the mapper will
-be able to similarly figure out a linear scaling based on unit conversion (from
-centimeters to inches for example). Currently automatic unit-based scaling is
-not a supported feature, but will be added in the future.  You can take
-advantage of this future development by simply providing unit information
-whenever it is available.  It is also helpful documentation for users.</p>
+provide, the more <em>libmapper</em> can do some things automatically.  For example, if
+<code>min</code> and <code>max</code> are provided, it will be possible to create linear-scaled
+connections very quickly.  If <code>unit</code> is provided, <em>libmapper</em> will be able to
+similarly figure out a linear scaling based on unit conversion (from cm to
+inches for example). Currently automatic unit-based scaling is not a supported
+feature, but will be added in the future.  You can take advantage of this
+future development by simply providing unit information whenever it is
+available.  It is also helpful documentation for users.</p>
 
-<p>Notice that optional values are provided as <code>void*</code> pointers.  This is because a
-signal can either be <code>int</code>, <code>float</code>, or <code>double</code>, and your maximum and minimum
-values should correspond in type.  So you should pass in a <code>int*</code>, <code>float*</code>, or
-<code>double*</code> by taking the address of a local variable.</p>
+<p>Notice that these optional values are provided as <code>void*</code> pointers.  This is
+because a signal can either be <code>int</code>, <code>float</code>, or <code>double</code>, and your maximum and
+minimum values should correspond in type and length.  So you should pass in a
+<code>int*</code>, <code>float*</code>, or <code>double*</code> by taking the address of a local variable.</p>
 
 <p>Lastly, it is usually necessary to be informed when input signal values change.
 This is done by providing a function to be called whenever its value is modified
-by an incoming message.  It is passed in the <code>handler</code> parameter, with context
-information to be passed to that function during callback in <code>user_data</code>.</p>
+by an incoming message.  It is passed in the <code>handler</code> parameter, along with an
+<code>events</code> parameter specifying which types of events should trigger the handler –
+for input signals.</p>
 
-<p>An example of creating a "barebones" <code>int</code> scalar output signal with no unit,
-minimum, or maximum information:</p>
+<p>An example of creating a &quot;barebones&quot; <code>int</code> scalar output signal with no unit,
+minimum, or maximum information and no callback handler:</p>
 
-<pre>mapper_signal outA = mapper_device_add_output_signal(dev, "outA", 1,
-                                                     'i', 0, 0, 0);
-</pre>
+<pre>mpr_sig outA = mpr_sig_new(dev, MPR_DIR_OUT, &quot;outA&quot;,
+                           1, MPR_INT32, 0, 0, 0, 0, 0, 0);</pre>
 
 <p>An example of a <code>float</code> signal where some more information is provided:</p>
 
 <pre>float min = 0.0f;
 float max = 5.0f;
-mapper_signal s1 = mapper_device_add_output_signal(dev, "sensor1", 1, 'f',
-"V", &amp;min, &amp;max);
-</pre>
+mpr_sig s1 = mpr_sig_new(dev, MPR_DIR_OUT, &quot;sensor1&quot;, 1, MPR_FLT,
+                         &quot;V&quot;, &amp;min, &amp;max, 0, 0, 0);</pre>
 
 <p>So far we know how to create a device and to specify an output signal for it.
-To recap, let's review the code so far:</p>
+To recap, let&#39;s review the code so far:</p>
 
-<pre>mapper_device dev = mapper_device_new("my_device", 0, 0);
-mapper_signal s1 = mapper_device_add_output_signal(dev, "sensor1", 1, 'f',
-                                                   "V", &amp;min, &amp;max);
+<pre>mpr_dev dev = mpr_dev_new(&quot;my_device&quot;, 0, 0);
+mpr_sig s1 = mpr_sig_new(dev, MPR_DIR_OUT, &quot;sensor1&quot;, 1, MPR_FLT,
+                         &quot;V&quot;, &amp;min, &amp;max, 0, 0, 0);
 
 while (!done) {
-    mapper_device_poll(dev, 50);
+    mpr_dev_poll(dev, 50);
     ... do stuff ...
     ... update signals ...
 }
 
-mapper_device_free(dev);
-</pre>
+mpr_dev_free(dev);</pre>
 
-<p>Note that although you have a pointer to the mapper_signal structure (which was
-returned by <code>mapper_device_add_output_signal()</code>), its memory is "owned" by the
+<p>Note that although you have a pointer to the mpr_sig structure (which was
+returned by <code>mpr_sig_new()</code>), its memory is &quot;owned&quot; by the
 device.  In other words, you should not worry about freeing its memory - this
 will happen automatically when the device is destroyed.  It is possible to
-retrieve a device's inputs or outputs by name or by index at a later time using
-the functions <code>mapper_device_signal_by_&lt;name/index&gt;</code>.</p>
+retrieve a device&#39;s inputs or outputs by name or by index at a later time using
+the functions <code>mpr_dev_get_sigs()</code>.</p>
 
-<h3>Updating signals</h3>
+<h3 id="toc_8">Updating signals</h3>
 
 <p>We can imagine the above program getting sensor information in a loop.  It could
 be running on an network-enable ARM device and reading the ADC register
 directly, or it could be running on a computer and reading data from an Arduino
 over a USB serial port, or it could just be a mouse-controlled GUI slider.
-However it's getting the data, it must provide it to <em>libmapper</em> so that it will
+However it&#39;s getting the data, it must provide it to <em>libmapper</em> so that it will
 be sent to other devices if that signal is mapped.</p>
 
-<p>This is accomplished by the function <code>mapper_signal_update()</code>:</p>
+<p>This is accomplished by the function <code>mpr_sig_set_value()</code>:</p>
 
-<pre>void mapper_signal_update(mapper_signal sig, void *value,
-                          int count, mapper_timetag_t timetag);
-</pre>
+<pre>void mpr_sig_set_value(mpr_sig sig, mpr_id inst, int length,
+                       mpr_type type, void *value);</pre>
 
-<p>As you can see, a <code>void*</code> pointer must be provided.  This must point to a data
-structure identified by the signal's <code>length</code> and <code>type</code>.  In other words, if
-the signal is a 10-vector of <code>int</code>, then <code>value</code> should point to the first item
-in a C array of 10 <code>int</code>s.  If it is a scalar <code>float</code>, it should be provided
-with the address of a <code>float</code> variable. The <code>count</code> argument allows you to
-specify the number of value samples that are being updated - for now we will
-set this to 1.  Lastly the <code>timetag</code> argument allows you to specify a time
-associated with the signal update. If your value update was generated locally,
-or if your program does not have access to upstream timing information (e.g.,
-from a microcontroller sampling sensor values), you can use the macro
-<code>MAPPER_NOW</code> and libmapper will tag the update with the current time.</p>
+<p>As you can see, a <code>void*</code> pointer must be provided, which must point to a data
+structure matching the <code>length</code> and <code>type</code> arguments. This data structure is not
+required to match the length and type of the signal itself—libmapper will perform
+type coercion if necessary.</p>
 
-<p>To simplify things even further, a short-hand is provided for scalar signals of
-particular types:</p>
-
-<pre>void mapper_signal_update_int(mapper_signal sig, int value);
-void mapper_signal_update_float(mapper_signal sig, float value);
-</pre>
-
-<p>So in the "sensor 1" example, assuming in <code>do_stuff</code> we have some code which
-reads sensor 1's value into a float variable called <code>v1</code>, the loop becomes:</p>
+<p>So in the &quot;sensor 1&quot; example, assuming in <code>do_stuff()</code> we have some code which
+reads sensor 1&#39;s value into a float variable called <code>v1</code>, the loop becomes:</p>
 
 <pre>while (!done) {
-    mapper_device_poll(my_device, 50);
+    mpr_dev_poll(my_dev, 50);
 
     // call hypothetical user function that reads a sensor
     float v1 = do_stuff();
-    mapper_signal_update_float(sensor1, v1);
-}
-</pre>
+    mpr_sig_set_value(sensor1, 0, 1, MPR_FLT, &amp;v1);
+}</pre>
 
-<p>This is about all that is needed to expose sensor 1's value to the network as a
+<p>This is about all that is needed to expose sensor 1&#39;s value to the network as a
 mappable parameter.  The <em>libmapper</em> GUI can now map this value to a receiver,
 where it could control a synthesizer parameter or change the brightness of an
 LED, or whatever else you want to do.</p>
 
-<h3>Signal conditioning</h3>
+<h3 id="toc_9">Signal conditioning</h3>
 
 <p>Most synthesizers of course will not know what to do with the value of sensor1
 --it is an electrical property that has nothing to do with sound or music.  This
@@ -335,211 +293,185 @@ whatever mappings between signals as he wishes.</p>
 <p>As a developer, it is therefore your job to provide information that will be
 useful to the end user.</p>
 
-<p>For example, if sensor 1 is a position sensor, instead of publishing "voltage",
+<p>For example, if sensor 1 is a position sensor, instead of publishing &quot;voltage&quot;,
 you could convert it to centimeters or meters based on the known dimensions of
-the sensor, and publish a "sensor1/position" signal instead, providing the unit information as well.</p>
+the sensor, and publish a &quot;sensor1/position&quot; signal instead, providing the unit information as well.</p>
 
-<p>We call such signals "semantic", because they provide information with more
+<p>We call such signals &quot;semantic&quot;, because they provide information with more
 meaning than a relatively uninformative value based on the electrical properties
 of the sensing technqiue.  Some sensors can benefit from low-pass filtering or
 other measures to reduce noise.  Some sensors may need to be combined in order
 to derive physical meaning.  What you choose to expose as outputs of your device
 is entirely application-dependent.</p>
 
-<p>Best of all, you can publish both "sensor1/position" and "sensor1/voltage" if
+<p>Best of all, you can publish both &quot;sensor1/position&quot; and &quot;sensor1/voltage&quot; if
 desired, in order to expose both processed and raw data.  Keep in mind that
 these will not take up significant processing time, and <em>zero</em> network
 bandwidth, if they are not mapped.</p>
 
-<h3>Receiving signals</h3>
+<h3 id="toc_10">Receiving signals</h3>
 
 <p>Now that we know how to create a sender, it would be useful to also know how to
 receive signals, so that we can create a sender-receiver pair to test out the
 provided mapping functionality. The current value and timestamp for a signal can
-be retrieved at any time by calling <code>mapper_signal_value()</code>, however for
+be retrieved at any time by calling <code>mpr_sig_get_value()</code>, however for
 event-driven applications you may want to be informed of new values as they are
 received or generated.</p>
 
-<p>As mentioned above, the <code>mapper_device_add_input_signal()</code> function takes an
-optional <code>handler</code> and <code>user_data</code>.  This is a function that will be called
-whenever the value of that signal changes.  To create a receiver for a
-synthesizer parameter "pulse width" (given as a ratio between 0 and 1), specify
-a handler when calling <code>mapper_device_add_input_signal()</code>.  We'll imagine there
-is some C++ synthesizer implemented as a class <code>Synthesizer</code> which has functions
-<code>setPulseWidth()</code> which sets the pulse width in a thread-safe manner, and
-<code>startAudioInBackground()</code> which sets up the audio thread.</p>
+<p>As mentioned above, the <code>mpr_sig_new()</code> function takes an optional <code>handler</code> and
+<code>events</code>.  This is a function that will be called whenever the value of that
+signal changes or instances events occur.  To create a receiver for a
+synthesizer parameter &quot;pulse width&quot; (given as a ratio between 0 and 1), specify
+a handler when calling <code>mpr_sig_new()</code>.  We&#39;ll imagine there is some C++
+synthesizer implemented as a class <code>Synth</code> which has functions <code>setPulseWidth()</code>
+which sets the pulse width in a thread-safe manner, and <code>startAudioInBackground()</code>
+which sets up the audio thread.</p>
 
 <p>Create the handler function, which is fairly simple,</p>
 
-<pre>void pulsewidth_handler(mapper_signal sig, mapper_id instance, void *value,
-                        int count, mapper_timetag_t *tt) {
-    Synthesizer *s = (Synthesizer*) props-&gt;user_data;
+<pre>void pw_handler (mpr_sig sig, mpr_int_evt evt, mpr_id inst, int length,
+                 mpr_type type, void *value, mpr_time_t *time)
+{
+    if (!length || !value)
+        return;
+    Synth *s = (Synth*) mpr_obj_get_prop_ptr(sig, MPR_PROP_DATA, 0);
     s-&gt;setPulseWidth(*(float*)v);
-}
-</pre>
+}</pre>
 
-<p>First, the pointer to the <code>Synthesizer</code> instance is extracted from the
-<code>user_data</code> pointer, then it is dereferenced to set the pulse width according to
-the value pointed to by <code>v</code>.</p>
+<p>First, the pointer to the <code>Synth</code> instance is extracted from the <code>MPR_PROP_DATA</code>
+property, then it is dereferenced to set the pulse width according to the value
+pointed to by <code>v</code>.</p>
 
 <p>Then <code>main()</code> will look like,</p>
 
 <pre>void main()
 {
-    Synthesizer synth;
+    Synth synth;
     synth.startAudioInBackground();
 
-    float min = 0.0f;
-    float max = 1.0f;
+    float min_pw = 0.0f;
+    float max_pw = 1.0f;
 
-    mapper_device synth_dev = mapper_device_new("synth", 0, 0);
-    mapper_signal pw = mapper_device_add_input_signal(synth_dev, "pulsewidth",
-                                                      1, 'f', 0, &amp;min, &amp;max,
-                                                      pulsewidth_handler, &amp;synth);
+    mpr_dev synth_dev = mpr_dev_new(&quot;synth&quot;, 0);
+
+    mpr_sig pw = mpr_sig_new(synth_dev, MPR_DIR_IN, &quot;pulsewidth&quot;, 1, &#39;f&#39;, 0,
+                             &amp;min_pw, &amp;max_pw, 0, pulsewidth_handler,
+                             MPR_SIG_UPDATE);
+    mpr_obj_set_prop(pw, MPR_PROP_DATA, 0, 1, MPR_PTR, &amp;synth, 0);
 
     while (!done)
-        mapper_device_poll(synth_dev, 50);
+        mpr_dev_poll(synth_dev, 50);
 
-    mapper_device_free(synth_dev);
-}
-</pre>
+    mpr_dev_free(synth_dev);
+}</pre>
 
-<h2>Working with timetags</h2>
+<h2 id="toc_11">Working with timetags</h2>
 
-<p><em>libmapper</em> uses the <code>mapper_timetag_t</code> data structure to store
+<p><em>libmapper</em> uses the <code>mpr_time_t</code> data structure to store
 <a href="http://en.wikipedia.org/wiki/Network_Time_Protocol#NTP_timestamps">NTP timestamps</a>.
 For example, the handler function called when a signal update is received
 contains a <code>timetag</code> argument.  This argument indicates the time at which the
 source signal was <em>sampled</em> (in the case of sensor signals) or <em>generated</em> (in
 the case of sequenced or algorithimically-generated signals).</p>
 
-<p>When updating output signals, using the functions <code>mapper_signal_update_int()</code>
-or <code>mapper_signal_update_float()</code> will automatically label the outgoing signal
-update with the current time. In cases where the update should more properly be
-labeled with another time, this can be accomplished with the function
-<code>mapper_signal_update()</code>.  This timestamp should only be overridden if your
-program has access to a more accurate measurement of the real time associated
-with the signal update, for example if you are writing a driver for an outboard
-sensor system that provides the sampling time.  Otherwise the constant
-<code>MAPPER_NOW</code> can be used as the timetag argument to cause libmapper to provide
-the current time.</p>
+<p><em>libmapper</em> provides helper functions for getting the current device-time,
+setting the value of a <code>mpr_time</code> structure from other representations, and comparing or
+copying timetags.  Check the API documentation for more information.</p>
 
-<p><em>libmapper</em> also provides helper functions for getting the current device-time,
-setting the value of a <code>mapper_timetag_t</code> from other representations, and
-comparing or copying timetags.  Check the API documentation for more information.</p>
-
-<h2>Working with signal instances</h2>
+<h2 id="toc_12">Working with signal instances</h2>
 
 <p><em>libmapper</em> also provides support for signals with multiple <em>instances</em>, for
 example:</p>
 
 <ul>
-    <li>control parameters for polyphonic synthesizers;</li>
-    <li>touches tracked by a multitouch surface;</li>
-    <li>"blobs" identified by computer vision systems;</li>
-    <li>objects on a tabletop tangible user interface;</li>
-    <li><em>temporal</em> objects such as gestures or trajectories.</li>
+<li>control parameters for polyphonic synthesizers;</li>
+<li>touches tracked by a multitouch surface;</li>
+<li>&quot;blobs&quot; identified by computer vision systems;</li>
+<li>objects on a tabletop tangible user interface;</li>
+<li><em>temporal</em> objects such as gestures or trajectories.</li>
 </ul>
-
 
 <p>The important qualities of signal instances in <em>libmapper</em> are:</p>
 
 <ul>
-    <li><strong>instances are interchangeable</strong>: if there are semantics attached to a
-        specific instance it should be represented with separate signals instead.</li>
-    <li><strong>instances can be ephemeral</strong>: signal instances can be dynamically created
-        and destroyed. <em>libmapper</em> will ensure that linked devices share a common
-        understanding of the relatonships between instances when they are mapped.</li>
-    <li><strong>map once for all instances</strong>: one mapping connection serves to map all of
-        its instances.</li>
+<li><strong>instances are interchangeable</strong>: if there are semantics attached to a
+specific instance it should be represented with separate signals instead.</li>
+<li><strong>instances can be ephemeral</strong>: signal instances can be dynamically created
+and destroyed. <em>libmapper</em> will ensure that linked devices share a common
+understanding of the relatonships between instances when they are mapped.</li>
+<li><strong>map once for all instances</strong>: one mapping connection serves to map all of
+its instances.</li>
 </ul>
-
 
 <p>All signals possess one instance by default. If you would like to reserve more
 instances you can use:</p>
 
-<pre>mapper_signal_reserve_instances(mapper_signal sig, int num, mapper_id *ids,
-                                void **user_data);
-</pre>
+<pre>mpr_sig_reserve_inst(mpr_sig sig, int num, mpr_id *ids, void **data);</pre>
 
-<p>If the <code>ids</code> argument is null libmapper will automatically assign unique ids to
+<p>If the <code>ids</code> argument is null <em>libmapper</em> will automatically assign unique ids to
 the reserved instances.</p>
 
-<p>After reserving instances you can update a specific instance:</p>
+<p>After reserving instances you can update a specific instance using
+<code>mpr_sig_set_value()</code>.</p>
 
-<pre>mapper_signal_instance_update(mapper_signal sig, mapper_id instance,
-                              void *value, int count,
-                              mapper_timetag_t timetag);
-</pre>
+<p>The <code>instance</code> argument does not have to be considered as an array index - it
+can be any value that is convenient for labelling your instance. <em>libmapper</em>
+will internally create a map from your id label to one of the preallocated
+instance structures.</p>
 
-<p>All of the arguments except one should be familiar from the documentation of
-<code>mapper_signal_update()</code> presented earlier. The <code>instance</code> argument does not
-have to be considered as an array index - it can be any integer that is
-convenient for labelling your instance. <em>libmapper</em> will internally create a map
-from your id label to one of the preallocated instance structures.</p>
-
-<h3>Receiving instances</h3>
+<h3 id="toc_13">Receiving instances</h3>
 
 <p>You might have noticed earlier that the handler function called when a signal
-update is received has a argument called <code>instance</code>. Here is the function
+update is received has a argument called <code>inst</code>. Here is the function
 prototype again:</p>
 
-<pre>void mapper_signal_update_handler(mapper_signal sig, mapper_id instance,
-                                  const void *value, int count,
-                                  mapper_timetag_t *tt);
-</pre>
+<pre>void mpr_sig_handler(mpr_sig sig, mpr_inst_evt evt, mpr_id inst, int len,
+                     mpr_type type, const void *value, mpr_time time);</pre>
 
 <p>Under normal usage, this argument will have a value (0 &lt;= n &lt;= num_instances)
 and can be used as an array index. Remember that you will need to reserve
-instances for your input signal using <code>mapper_signal_reserve_instances()</code> if you
-want to receive instance updates.</p>
+instances for your input signal using <code>mpr_sig_reserve_inst()</code> if you want
+to receive instance updates.</p>
 
-<h3>Instance Stealing</h3>
+<h3 id="toc_14">Instance Stealing</h3>
 
 <p>For handling cases in which the sender signal has more instances than the
 receiver signal, the <em>instance allocation mode</em> can be set for an input signal
 to set an action to take in case all allocated instances are in use and a
-previously unseen instance id is received. Use the function:</p>
-
-<pre>void mapper_signal_set_instance_stealing_mode(mapper_signal sig,
-                                              mapper_instance_stealing_type mode);
-</pre>
+previously unseen instance id is received. Use the function <code>mpr_obj_set_prop()</code>.</p>
 
 <p>The argument <code>mode</code> can have one of the following values:</p>
 
 <ul>
-    <li><code>MAPPER_NO_STEALING</code> Default value, in which no stealing of instances will
-        occur;</li>
-    <li><code>MAPPER_STEAL_OLDEST</code> Release the oldest active instance and reallocate its
-        resources to the new instance;</li>
-    <li><code>MAPPER_STEAL_NEWEST</code> Release the newest active instance and reallocate its
-        resources to the new instance;</li>
+<li><code>MPR_STEAL_NONE</code> Default value, in which no stealing of instances will
+occur;</li>
+<li><code>MPR_STEAL_OLDEST</code> Release the oldest active instance and reallocate its
+resources to the new instance;</li>
+<li><code>MPR_STEAL_NEWEST</code> Release the newest active instance and reallocate its
+resources to the new instance;</li>
 </ul>
 
-
 <p>If you want to use another method for determining which active instance to
-release (e.g. the sound with the lowest volume), you can create an
-<code>instance_event_handler</code> for the signal and write the method yourself:</p>
+release (e.g. the sound with the lowest volume), you can create an handler
+for the signal and write the method yourself:</p>
 
-<pre>void my_handler(mapper_signal sig, mapper_id instance,
-                mapper_instance_event event, mapper_timetag_t *tt) {
+<pre>void my_handler(mpr_sig sig, mpr_int_evt evt, mpr_id inst, int len,
+                mpt_type type, const void *value, mpr_time time)
+{
     // hypothetical user code chooses which instance to release
-    mapper_id release_me = choose_instance_to_release(sig);
+    mpr_id release_me = choose_instance_to_release(sig);
 
-    mapper_signal_release_instance(sig, release_me, *tt);
+    mpr_sig_release_inst(sig, release_me);
 
     // now an instance is available
-}
-</pre>
+}</pre>
 
 <p>For this function to be called when instance stealing is necessary, we need to
-register it for <code>MAPPER_INSTANCE_OVERFLOW</code> events:</p>
+register it for <code>MPR_SIG_INST_OFLW</code> events:</p>
 
-<pre>mapper_signal_set_instance_event_callback(sig, my_handler,
-                                          MAPPER_INSTANCE_OVERFLOW);
-</pre>
+<pre>mpr_sig_set_cb(sig, my_handler, MPR_SIG_INST_OFLW);</pre>
 
-<h2>Publishing metadata</h2>
+<h2 id="toc_15">Publishing metadata</h2>
 
 <p>Things like device names, signal units, and ranges, are examples of metadata
 --information about the data you are exposing on the network.</p>
@@ -548,7 +480,7 @@ register it for <code>MAPPER_INSTANCE_OVERFLOW</code> events:</p>
 form of name-value pairs.  These are not interpreted by <em>libmapper</em> in any way,
 but can be retrieved over the network.  This can be used for instance to give a
 device X and Y information, or to perhaps give a signal some property like
-"reliability", or some category like "light", "motor", "shaker", etc.</p>
+&quot;reliability&quot;, or some category like &quot;light&quot;, &quot;motor&quot;, &quot;shaker&quot;, etc.</p>
 
 <p>Some GUI could then use this information to display information about the network
 in an intelligent manner.</p>
@@ -559,72 +491,51 @@ OSC-compatible type.  (So, numbers and strings, etc.)</p>
 
 <p>The property interface is through the functions,</p>
 
-<pre>void mapper_device_set_property(mapper_device dev, const char *property,
-                                int length, char type, void *value);
+<pre>void mpr_obj_set_prop(mpr_obj obj, mpr_prop prop, const char *key,
+                      int length, char type, void *value, int publish);
 
-void mapper_signal_set_property(mapper_signal sig, const char *property,
-                                int length, char type, void *value);
+mpr_prop mpr_obj_get_prop_by_idx(mpr_obj obj, mpr_prop prop, const char **key,
+                                 int *len, mpr_type *type, const void **val,
+                                 int *pub);
+mpr_prop mpr_obj_get_prop_by_key(mpr_obj obj, const char *key, int *len,
+                                 mpr_type *type, const void **val, int *pub);</pre>
 
-void mapper_link_set_property(mapper_link lnk, const char *property,
-                              int length, char type, void *value);
-
-void mapper_map_set_property(mapper_map map, const char *property,
-                             int length, char type, void *value);
-</pre>
-
-<p>The type of the <code>value</code> argument is specified by <code>type</code>: floats are <code>'f'</code>,
-32-bit integers are <code>'i'</code>, doubles are <code>'d'</code>, and strings are <code>'s'</code>.</p>
+<p>The type of the <code>value</code> argument is specified by <code>type</code>: floats are MPR<em>FLT,
+32-bit integers are MPR</em>INT32, doubles are MPR<em>DBL, and strings are MPR</em>STR.</p>
 
 <p>For example, to store a <code>float</code> indicating the X position of a device, you can
 call it like this:</p>
 
 <pre>float x = 12.5;
-mapper_device_set_property(my_device, "x", 'f', &amp;x);
+mpr_obj_set_prop(my_device, 0, &quot;x&quot;, 1, MPR_FLT, &amp;x, 1);
 
-char *sensingMethod = "resistive";
-mapper_signal_set_property(sensor1, "sensingMethod",
-                           's', sensingMethod);
-</pre>
+char *sensingMethod = &quot;resistive&quot;;
+mpr_obj_set_prop(sensor1, 0, &quot;sensingMethod&quot;, 1, MPR_STR, sensingMethod);</pre>
 
 <p>If the parent object (a device and a signal in this case) is <em>local</em> the property
 change takes place immediately. If the object is <em>remote</em> the property change is only
-staged and must be pushed out to the network using the functions <code>&lt;object_name&gt;_push()</code>:</p>
+staged and must be pushed out to the network using the functions <code>mpr_obj_push()</code>.</p>
 
-<pre>mapper_device_push(mapper_device dev);
-mapper_signal_push(mapper_signal sig);
-mapper_link_push(mapper_link lnk);
-mapper_map_push(mapper_map mpa);
-</pre>
+<h3 id="toc_16">Reserved keys</h3>
 
-<h3>Reserved keys</h3>
+<p>You can use any property name not already reserved by <em>libmapper</em>.</p>
 
-<p>You can use any property name not already reserved by libmapper.</p>
+<h4 id="toc_17">Reserved keys for devices</h4>
 
-<h4>Reserved keys for devices</h4>
+<p><code>data</code>, <code>id</code>, <code>is_local</code>, <code>lib_version</code>, <code>linked</code>, <code>name</code>, <code>num_maps_in</code>,
+<code>num_maps_out</code>, <code>num_sigs_in</code>, <code>num_sigs_out</code>, <code>ordinal</code>, <code>status</code>, <code>synced</code>,
+<code>version</code></p>
 
-<p><code>description</code>, <code>host</code>, <code>id</code>, <code>is_local</code>, <code>libversion</code>, <code>name</code>, <code>num_incoming_maps</code>,
-<code>num_outgoing_maps</code>, <code>num_inputs</code>, <code>num_outputs</code>, <code>port</code>, <code>synced</code>, <code>value</code>, <code>version</code>,
-<code>user_data</code></p>
+<h4 id="toc_18">Reserved keys for signals</h4>
 
-<h4>Reserved keys for signals</h4>
+<p><code>data</code>, <code>device</code>, <code>direction</code>, <code>id</code>, <code>is_local</code>, <code>jitter</code>, <code>length</code>, <code>max</code>, <code>maximum</code>,
+<code>min</code>, <code>minimum</code>, <code>name</code>, <code>num_inst</code>, <code>num_maps_in</code>, <code>num_maps_out</code>, <code>period</code>, <code>steal</code>,
+<code>type</code>, <code>unit</code>, <code>use_inst</code>, <code>version</code></p>
 
-<p><code>description</code>, <code>direction</code>, <code>id</code>, <code>is_local</code>, <code>length</code>, <code>max</code>, <code>maximum</code>, <code>min</code>,
-<code>minimum</code>, <code>name</code>, <code>num_incoming_maps</code>, <code>num_instances</code>, <code>num_outgoing_maps</code>, <code>rate</code>,
-<code>type</code>, <code>unit</code>, <code>user_data</code></p>
+<h4 id="toc_19">Reserved keys for maps</h4>
 
-<h4>Reserved keys for links</h4>
-
-<p><code>description</code>, <code>id</code>, <code>is_local</code>, <code>num_maps</code></p>
-
-<h4>Reserved keys for maps</h4>
-
-<p><code>description</code>, <code>expression</code>, <code>id</code>, <code>is_local</code>, <code>mode</code>, <code>muted</code>, <code>num_destinations</code>,
-<code>num_sources</code>, <code>process_location</code>, <code>ready</code>, <code>status</code></p>
-
-<h4>Reserved keys for map slots</h4>
-
-<p><code>bound_max</code>, <code>bound_min</code>, <code>calibrating</code>, <code>causes_update</code>, <code>direction</code>, <code>length</code>,
-<code>maximum</code>, <code>minimum</code>, <code>num_instances</code>, <code>use_as_instance</code>, <code>type</code></p>
+<p><code>data</code>, <code>expr</code>, <code>id</code>, <code>is_local</code>, <code>muted</code>, <code>num_sigs_in</code>, <code>process_loc</code>, <code>protocol</code>,
+<code>scope</code>, <code>status</code>, <code>use_inst</code>, <code>version</code></p>
 
 <!--end of exported tutorial-->
 
