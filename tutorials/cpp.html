@@ -71,11 +71,9 @@ specifying the name of the network interface to use.</p>
 
 <h3 id="toc_4">Polling the device</h3>
 
-<p>The device lifecycle looks like this, in terrible ASCII diagram art:</p>
+<p>The device lifecycle looks like this:</p>
 
-<pre>creation --&gt; poll --+--&gt; destruction
-              |     |
-              +--&lt;--+</pre>
+<p><img style="display:block;margin:auto;padding:0px;width:75%;;box-shadow:none;-moz-box-shadow:none;-webkit-box-shadow:none" src="./images/device_lifecyle.png"></p>
 
 <p>In other words, after a device is created, it must be continuously polled during
 its lifetime.</p>
@@ -149,10 +147,10 @@ output signals.  A signal requires a bit more information than a device, much of
 which is optional:</p>
 
 <ol>
-<li>the direction of the signal: either <code>MPR_DIR_IN</code> or <code>MPR_DIR_OUT</code></li>
+<li>the direction of the signal: either <code>Direction::IN</code> or <code>Direction::OUT</code></li>
 <li>a name for the signal (must be unique within a devices inputs or outputs)</li>
 <li>the signal&#39;s vector length</li>
-<li>the signal&#39;s data type, one of <code>MPR_INT32</code>, <code>MPR_FLT</code>, or <code>MPR_DBL</code></li>
+<li>the signal&#39;s data type, one of <code>Type::INT32</code>, <code>Type::FLOAT</code>, or <code>Type::DOUBLE</code></li>
 <li>the signal&#39;s unit (optional)</li>
 <li>the signal&#39;s minimum value (optional, type and length should match previous args)</li>
 <li>the signal&#39;s maximum value (optional, type and length should match previous args)</li>
@@ -163,20 +161,21 @@ which is optional:</p>
 
 <p>examples:</p>
 
-<pre>mapper::Signal input;
-input = dev.add_sig(MPR_DIR_IN, &quot;my_input&quot;, 1, MPR_FLT, &quot;m/s&quot;, 0, 0, 0, h,
-                    MPR_SIG_UPDATE);
+<pre>using namespace mapper;
+Signal input;
+input = dev.add_sig(Direction::IN, &quot;my_input&quot;, 1, Type::FLOAT,
+                    &quot;m/s&quot;).set_callback(h, Signal::Event::UPDATE);
 
 int min[4] = {1,2,3,4};
 int max[4] = {10,11,12,13};
-mapper::Signal output;
-output = dev.add_sig(MPR_DIR_OUT, &quot;my_output&quot;, 4, MPR_INT32, 0, min, max);</pre>
+Signal output;
+output = dev.add_sig(Direction::OUT, &quot;my_output&quot;, 4, Type::INT32, 0, min, max);</pre>
 
-<p>The only <em>required</em> parameters here are the signal &quot;length&quot;, its name, and data
-type.  Signals are assumed to be vectors of values, so for usual single-valued
-signals, a length of 1 should be specified.  Finally, supported types are
-currently <code>MPR_INT32</code>, <code>MPR_FLT</code>, or <code>MPR_DBL</code>, for <code>int</code>, <code>float</code>, or <code>double</code>
-values, respectively.</p>
+<p>The only <em>required</em> parameters here are the signal &quot;direction&quot; (IN or OUT),
+&quot;length&quot;, its name, and data type.  Signals are assumed to be vectors of values,
+so for usual single-valued signals, a length of 1 should be specified.  Finally,
+supported types are currently <code>Type::INT32</code>, <code>Type::FLOAT</code>, or <code>Type::DOUBLE</code>,
+for <code>int</code>, <code>float</code>, or <code>double</code> values, respectively.</p>
 
 <p>The other parameters are not strictly required, but the more information you
 provide, the more <em>libmapper</em> can do some things automatically.  For example, if
@@ -201,15 +200,16 @@ information to be passed to that function during callback in <code>user_data</co
 <p>An example of creating a &quot;barebones&quot; <code>int</code> scalar output signal with no unit,
 minimum, or maximum information:</p>
 
-<pre>mapper::Signal sig;
-sig = dev.add_sig(MPR_DIR_OUT, &quot;outA&quot;, 1, MPR_INT32);</pre>
+mapper::Signal sig;
+sig = dev.add_signal(mapper::Direction::OUT, &quot;outA&quot;, 1, mapper::Type::INT32);</pre>
 
 <p>An example of a <code>float</code> signal where some more information is provided:</p>
 
 <pre>float min = 0.0f;
 float max = 5.0f;
 mapper::Signal sig;
-sig = dev.add_sig(MPR_DIR_OUT, &quot;sensor1&quot;, 1, MPR_FLT, &quot;V&quot;, &amp;min, &amp;max);</pre>
+sig = dev.add_signal(mapper::Direction::OUT, &quot;sensor1&quot;, 1,
+                     mapper::Type::FLOAT, &quot;V&quot;, &amp;min, &amp;max);</pre>
 
 <p>So far we know how to create a device and to specify an output signal
 for it.  To recap, let&#39;s review the code so far:</p>
@@ -218,7 +218,8 @@ for it.  To recap, let&#39;s review the code so far:</p>
 mapper::Signal sig;
 float min = 0.0f;
 float max = 5.0f;
-sig = dev.add_sig(MPR_DIR_OUT, &quot;sensor1&quot;, 1, MPR_FLT, &quot;V&quot;, &amp;min, &amp;max);
+sig = dev.add_signal(mapper::Direction::OUT, &quot;sensor1&quot;, 1,
+                     mapper::Type::FLOAT, &quot;V&quot;, &amp;min, &amp;max);
 
 while (!done) {
     dev.poll(10);
@@ -226,13 +227,14 @@ while (!done) {
     ... update signals ...
 }</pre>
 
-<p>It is possible to retrieve a device&#39;s signals at a later time using the function <code>dev.signals()</code>. This function returns an object of type <code>mapper::Signal::List</code>
-which can be used to retrieve all of the signals belonging to a particular
-device:</p>
+<p>It is possible to retrieve a device&#39;s signals at a later time using the function
+<code>dev.signals()</code>. This function returns an object of type
+<code>mapper::List&lt;mapper::Signal&gt;</code> which can be used to retrieve all of the signals
+belonging to a particular device:</p>
 
-<pre>std::cout &lt;&lt; &quot;Signals belonging to &quot; &lt;&lt; dev.name() &lt;&lt; std::endl;
+<pre>std::cout &lt;&lt; &quot;Signals belonging to &quot; &lt;&lt; dev[Property::NAME] &lt;&lt; std::endl;
 
-mapper::Signal::List list = dev.signals(MPR_DIR_IN).begin();
+mapper::List&lt;mapper::Signal&gt; list = dev.signals(mapper::Direction::IN).begin();
 for (; list != list.end(); ++list) {
     std::cout &lt;&lt; &quot;signal: &quot; &lt;&lt; *list &lt;&lt; std::endl;
 }
@@ -251,10 +253,10 @@ However it&#39;s getting the data, it must provide it to <em>libmapper</em> so t
 be sent to other devices if that signal is mapped.</p>
 
 <p>This is accomplished by the function <code>set_value()</code>, which is overloaded to
-accept a wide variety of argument types (std::vector, std::array, etc.). Check
-the API documentation for more information. The data passed to set_value() is not
-required to match the length and type of the signal itself—libmapper will perform
-type coercion if necessary. More than one &#39;sample&#39; of signal update may be
+accept a wide variety of argument types (scalars, std::vector, std::array, etc.).
+Check the API documentation for more information. The data passed to set_value()
+is not required to match the length and type of the signal itself—libmapper will
+perform type coercion if necessary. More than one &#39;sample&#39; of signal update may be
 applied at once by e.g. updating a signal with length 5 using a 20-element
 array.</p>
 
@@ -314,23 +316,33 @@ be retrieved at any time by calling the function <code>value()</code> on your si
 object, however for event-driven applications you may want to be informed of new
 values as they are received or generated.</p>
 
-<p>As mentioned above, the <code>add_input_signal()</code> function takes an optional
-<code>handler</code> and <code>user_data</code>.  This is a function that will be called whenever the
-value of that signal changes.  To create a receiver for a synthesizer parameter
-&quot;pulse width&quot; (given as a ratio between 0 and 1), specify a handler when calling
-<code>add_input_signal()</code>.  We&#39;ll imagine there is some C++ synthesizer implemented
-as a class <code>Synthesizer</code> which has functions <code>setPulseWidth()</code> which sets the
-pulse width in a thread-safe manner, and <code>startAudioInBackground()</code> which sets
-up the audio thread.</p>
+<p>As mentioned above, the <code>add_signal()</code> function takes an optional <code>handler</code> and
+<code>user_data</code>.  This is a function that will be called whenever the value of that
+signal changes.  To create a receiver for a synthesizer parameter &quot;pulse width&quot;
+(given as a ratio between 0 and 1), specify a handler when calling <code>add_signal()</code>.
+We&#39;ll imagine there is some C++ synthesizer implemented as a class <code>Synthesizer</code>
+which has functions <code>setPulseWidth()</code> which sets the pulse width in a thread-safe
+manner, and <code>startAudioInBackground()</code> which sets up the audio thread.</p>
 
-<p>Create the handler function, which is fairly simple,</p>
+<p>Create the handler function, which is fairly simple as it has been overloaded to
+accept different scalar datatypes and other functionality. The full version of
+the handler is:</p>
 
-<pre>void pulsewidth_handler(mpr_sig sig, mpr_id instance,
-                        void *value, int count,
-                        mpr::Timetag tt)
+<pre>void handler(mapper::Signal signal, mapper::Signal::Event event,
+             mapper::Id instance, int length, mapper::Type type,
+             const void *value, mapper::Time time)
 {
-    Synthesizer *s = (Synthesizer*) sig.user_data();
-    s-&gt;setPulseWidth(*(float*)v);
+    ...
+}</pre>
+
+<p>Please refer to the API documentation for more detail on acceptable handler
+definitions.  For our example we will use a simpler handler since we know our
+signal type is scalar float:</p>
+
+<pre>void pulsewidth_handler(mapper::Signal signal, float value, mapper::Time time)
+{
+    Synthesizer *synth = (Synthesizer*) signal[mapper::Property::DATA];
+    synth-&gt;setPulseWidth(value);
 }</pre>
 
 <p>First, the pointer to the <code>Synthesizer</code> instance is extracted from the
@@ -350,8 +362,9 @@ the value pointed to by <code>v</code>.</p>
     mapper::Device dev(&quot;synth&quot;);
 
     mapper::Signal pulsewidth =
-        dev.add_sig(MPR_DIR_IN, &quot;pulsewidth&quot;, 1, MPR_FLT, 0, &amp;min_pw,
-                    &amp;max_pw, 0, pulsewidth_handler, MPR_SIG_UPDATE);
+        dev.add_signal(mapper::Direction::IN, &quot;pulsewidth&quot;, 1,
+                       mapper::Type::FLOAT, 0, &amp;min_pw, &amp;max_pw)
+           .set_callback(pulsewidth_handler);
 
     while (!done)
         dev.poll(50);
@@ -359,15 +372,15 @@ the value pointed to by <code>v</code>.</p>
 
 <h2 id="toc_10">Working with timetags</h2>
 
-<p><em>libmapper</em> uses the <code>Timetag</code> data structure to store
+<p><em>libmapper</em> uses the <code>Time</code> class to store
 <a href="http://en.wikipedia.org/wiki/Network_Time_Protocol#NTP_timestamps">NTP timestamps</a>.
 For example, the handler function called when a signal update is received
-contains a <code>timetag</code> argument.  This argument indicates the time at which the
+contains a <code>time</code> argument.  This argument indicates the time at which the
 source signal was <em>sampled</em> (in the case of sensor signals) or <em>generated</em> (in
 the case of sequenced or algorithimically-generated signals).</p>
 
 <p><em>libmapper</em> provides helper functions for getting the current device-time,
-setting the value of a <code>Timetag</code> from other representations, and comparing or
+setting the value of a <code>Time</code> instance from other representations, and comparing or
 copying timetags.  Check the API documentation for more information.</p>
 
 <h2 id="toc_11">Working with signal instances</h2>
@@ -399,32 +412,42 @@ signal&#39;s instances.</li>
 instances you can use:</p>
 
 <pre>sig.reserve_instances(int num)
-sig.reserve_instances(int num, mpr_id *ids)
-sig.reserve_instances(int num, mpr_id *ids, void **data)</pre>
+sig.reserve_instances(int num, mapper::Id *ids)
+sig.reserve_instances(int num, mapper::Id *ids, void **data)</pre>
 
 <p>After reserving instances you can update a specific instance, for example:</p>
 
-<pre>sig.instance(id).set_value(value)</pre>
+<pre>Signal::Instance si = sig.instance(id);
+si.set_value(value);
 
-<p>All of the arguments except one should be familiar from the documentation of
-<code>set_value()</code> presented earlier.  The <code>instance</code> argument does not have to be
-considered as an array index - it can be any integer that is convenient for
-labelling your instance. <em>libmapper</em> will internally create a map from your id
-label to one of the preallocated instance structures.</p>
+// or simply:
+sig.instance(id).set_value(value)</pre>
+
+<p>The <code>instance</code> argument is of type <code>mapper::Id</code> does not have to be considered as
+an array index - it can be any 64-bit vbalue that is convenient for labelling your
+instance. <em>libmapper</em> will internally create a map from your id label to one of the
+preallocated instance structures.</p>
 
 <h3 id="toc_12">Receiving instances</h3>
 
-<p>You might have noticed earlier that the handler function called when a signal
+<p>You might have noticed earlier that the full handler function called when a signal
 update is received has a argument called <code>instance</code>. Here is the function
 prototype again:</p>
 
-<pre>void mpr_sig_handler(mpr_sig sig, mpr_inst_evt evt, mpr_id inst,
-                     int len, mpr_type type, void *value, mpr_time tt);</pre>
+<pre>void handler(mapper::Signal signal, mapper::Signal::Event event,
+             mapper::Id instance, int len, mapper::Type type,
+             const void *value, mapper::Type time);</pre>
 
-<p>Under normal usage, this argument will have a value (0 &lt;= n &lt;= num_instances)
-and can be used as an array index. Remember that you will need to reserve
-instances for your input signal using <code>sig.reserve_instances()</code> if you want to
-receive instance updates.</p>
+<p>For convenience the handler is also available in a form with the signal instance
+pre-fetched:</p>
+
+<pre>void handler(mapper::Signal::Instance sigInst, mapper::Signal::Event event,
+             int len, mapper::Type type, const void *value, mapper::Type time);</pre>
+
+<p>Under normal usage, the <code>instance</code> argument in the first handler example will have
+a value (0 &lt;= n &lt;= num_instances) and can be used as an array index. Remember that
+you will need to reserve instances for your input signal when calling
+<code>Device::add_signal()</code> or using <code>sig.reserve_instances()</code> if you want to receive instance updates.</p>
 
 <h3 id="toc_13">Instance Stealing</h3>
 
@@ -433,34 +456,39 @@ receiver signal, the <em>instance allocation mode</em> can be set for an input s
 to set an action to take in case all allocated instances are in use and a
 previously unseen instance id is received. Use the function:</p>
 
-<pre>sig.set_prop(MPR_PROP_STEAL_MODE, mpr_steal_type type);</pre>
+<pre>sig.set_property(mapper::Property::STEAL_MODE, mapper::Map::Stealing type);</pre>
 
 <p>The argument <code>mode</code> can have one of the following values:</p>
 
 <ul>
-<li><code>MPR_STEAL_NONE</code> Default value, in which no stealing of instances will occur;</li>
-<li><code>MPR_STEAL_OLDEST</code> Release the oldest active instance and reallocate its
+<li><code>Stealing::NONE</code> Default value, in which no stealing of instances will occur;</li>
+<li><code>Stealing::OLDEST</code> Release the oldest active instance and reallocate its
 resources to the new instance;</li>
-<li><code>MPR_STEAL_NEWEST</code> Release the newest active instance and reallocate its
+<li><code>Stealing::NEWEST</code> Release the newest active instance and reallocate its
 resources to the new instance;</li>
 </ul>
 
 <p>If you want to use another method for determining which active instance to
-release (e.g. the sound with the lowest volume), you can create a <code>mpr_sig_handler</code> for the signal and write the method yourself:</p>
+release (e.g. the sound with the lowest volume), you can create a <code>handler</code> for
+the signal and write the method yourself:</p>
 
-<pre>void my_handler(mpr_sig sig, mpr_inst_evt evt, mpr_id inst, int len,
-                mpr_type type, const void *val, mpr_time tt)
+<pre>void my_handler(mapper::Signal signal, mapper::Signal::Event event,
+                mapper::Id instance, int len, mapper::Type type, const void *val,
+                mapper::Time time)
 {
-    // user code chooses which instance to release
-    mpr_id release_me = choose_instance_to_release(sig);
+    if (event == mapper::Signal::Event::OFLW) {
+        // user code chooses which instance to release
+        mapper::Id release_me = choose_instance_to_release(sig);
 
-    sig.instance(release_me).release(tt);
+        sig.instance(release_me).release(tt);
+        return;
+    }
 }</pre>
 
 <p>For this function to be called when instance stealing is necessary, we need to
-register it for <code>IN_OVERFLOW</code> events:</p>
+register it for <code>Signal::Event::OFLW</code> events:</p>
 
-<pre>sig.set_cb(my_handler, MPR_INST_OFLW);</pre>
+<pre>sig.set_callback(my_handler, Signal::Event::UPDATE | Signal::Event::OFLW);</pre>
 
 <h2 id="toc_14">Publishing metadata</h2>
 
@@ -480,18 +508,35 @@ network in an intelligent manner.</p>
 idea to represent it by adding such properties, which can be of any
 OSC-compatible type.  (So, numbers and strings, etc.)</p>
 
-<p>The property interface is through the functions,</p>
+<p>The property can be set using the functions below, using either a name (C string
+or std::string) or a value from the <code>Property</code> enum if available. The getter and
+setter functions are also overloaded with the subscript operator.</p>
 
-<pre>void &lt;object&gt;.set_prop(&lt;name&gt;, &lt;value&gt;);</pre>
+<pre>void &lt;object&gt;.set_property(&lt;name&gt;, &lt;value&gt;);
+void &lt;object&gt;.set_property(Property, &lt;value&gt;);
+
+// or
+&lt;object&gt;[&lt;name&gt;] = &lt;value&gt;;
+&lt;object&gt;[Property] = &lt;value&gt;;</pre>
 
 <p>The <code>&lt;value&gt;</code> arguments can be a scalar, array or std::vector of type <code>int</code>,
-<code>float</code>, <code>double</code>, or <code>char*</code>.</p>
+<code>float</code>, <code>double</code>, <code>char*</code>, or <code>void*</code>.</p>
 
 <p>For example, to store a <code>float</code> indicating the X position of a device, you can
 call it like this:</p>
 
-<pre>dev.set_prop(&quot;x&quot;, 12.5f);
-sig.set_prop(&quot;sensingMethod&quot;, &quot;resistive&quot;);</pre>
+<pre>dev.set_property(&quot;x&quot;, 12.5f);
+sig.set_property(&quot;sensingMethod&quot;, &quot;resistive&quot;);</pre>
+
+<p>Retrieving a property is also quite simple, returning a PropVal object that can be
+cast to the appropriate type.</p>
+
+<pre>&lt;type&gt; var = obj.property(&lt;name&gt;);
+&lt;type&gt; var = obj.property(Property);
+
+// or
+&lt;type&gt; var = obj[&lt;name&gt;];
+&lt;type&gt; var = obj[Property];</pre>
 
 <h3 id="toc_15">Reserved keys</h3>
 
