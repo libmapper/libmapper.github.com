@@ -36,26 +36,26 @@
 
 <h2 id="toc_1">Overview of the C++ API</h2>
 
-<p>If you take a look at the API documentation, there is a section called
-&quot;modules&quot;.  This is divided into the following sections:</p>
+<p>If you take a look at the <a href="../api/index.html">API documentation</a>, there is
+a section called &quot;modules&quot;.  This is divided into the following sections:</p>
 
 <ul>
-<li><a href="../html/classmapper_1_1Graph.html">Graphs</a></li>
-<li><a href="../html/classmapper_1_1Device.html">Devices</a></li>
-<li><a href="../html/classmapper_1_1Signal.html">Signals</a></li>
-<li><a href="../html/classmapper_1_1Map.html">Maps</a></li>
-<li><a href="../html/classmapper_1_1List.html">Lists</a></li>
+<li><a href="../api/2.0a/classmapper_1_1Graph.html">Graphs</a></li>
+<li><a href="../api/2.0a/classmapper_1_1Device.html">Devices</a></li>
+<li><a href="../api/2.0a/classmapper_1_1Signal.html">Signals</a></li>
+<li><a href="../api/2.0a/classmapper_1_1Map.html">Maps</a></li>
+<li><a href="../api/2.0a/classmapper_1_1List.html">Lists</a></li>
 </ul>
 
-<p>For this tutorial, the only sections to pay attention to are <strong>Devices</strong> and <strong>Signals</strong>. <strong>Graphs</strong>, <strong>Maps</strong> and <strong>Slots</strong> are mostly used when building
+<p>For this tutorial, the only sections to pay attention to are <strong>Devices</strong> and <strong>Signals</strong>. <strong>Graphs</strong>, and <strong>Maps</strong> are mostly used when building
 user interfaces for designing mapping configurations.</p>
 
 <h2 id="toc_2">Devices</h2>
 
 <h3 id="toc_3">Creating a device</h3>
 
-<p>To create a <em>libmapper</em> device, it is necessary to provide a few parameters the
-constructor, which is overloaded to accept either arguments of either
+<p>To create a <em>libmapper</em> device, it is necessary to provide a <code>name</code> to the
+constructor, which is overloaded to accept arguments of either
 <code>const char*</code> or C++ <code>std::string</code>:</p>
 
 <pre>mapper::Device dev(const char *name, mapper.Graph graph = 0);
@@ -147,7 +147,7 @@ output signals.  A signal requires a bit more information than a device, much of
 which is optional:</p>
 
 <ol>
-<li>the direction of the signal: either <code>Direction::IN</code> or <code>Direction::OUT</code></li>
+<li>the direction of the signal: either <code>Direction::INCOMING</code> or <code>Direction::OUTGOING</code></li>
 <li>a name for the signal (must be unique within a devices inputs or outputs)</li>
 <li>the signal&#39;s vector length</li>
 <li>the signal&#39;s data type, one of <code>Type::INT32</code>, <code>Type::FLOAT</code>, or <code>Type::DOUBLE</code></li>
@@ -155,21 +155,19 @@ which is optional:</p>
 <li>the signal&#39;s minimum value (optional, type and length should match previous args)</li>
 <li>the signal&#39;s maximum value (optional, type and length should match previous args)</li>
 <li>the signal&#39;s instance count (pass <code>NULL</code> for singleton signals)</li>
-<li>a function to be called when the signal is updated (optional)</li>
-<li>flags indicating which events should trigger a call to the function</li>
 </ol>
 
 <p>examples:</p>
 
 <pre>using namespace mapper;
 Signal input;
-input = dev.add_sig(Direction::IN, &quot;my_input&quot;, 1, Type::FLOAT,
+input = dev.add_sig(Direction::INCOMING, &quot;my_input&quot;, 1, Type::FLOAT,
                     &quot;m/s&quot;).set_callback(h, Signal::Event::UPDATE);
 
 int min[4] = {1,2,3,4};
 int max[4] = {10,11,12,13};
 Signal output;
-output = dev.add_sig(Direction::OUT, &quot;my_output&quot;, 4, Type::INT32, 0, min, max);</pre>
+output = dev.add_sig(Direction::OUTGOING, &quot;my_output&quot;, 4, Type::INT32, 0, min, max);</pre>
 
 <p>The only <em>required</em> parameters here are the signal &quot;direction&quot; (IN or OUT),
 &quot;length&quot;, its name, and data type.  Signals are assumed to be vectors of values,
@@ -194,21 +192,20 @@ values should correspond in type.  So you should pass in a <code>int*</code>, <c
 
 <p>Lastly, it is usually necessary to be informed when input signal values change.
 This is done by providing a function to be called whenever its value is modified
-by an incoming message.  It is passed in the <code>handler</code> parameter, with context
-information to be passed to that function during callback in <code>user_data</code>.</p>
+by an incoming message.  It is passed in the <code>handler</code> parameter.</p>
 
 <p>An example of creating a &quot;barebones&quot; <code>int</code> scalar output signal with no unit,
 minimum, or maximum information:</p>
 
-mapper::Signal sig;
-sig = dev.add_signal(mapper::Direction::OUT, &quot;outA&quot;, 1, mapper::Type::INT32);</pre>
+<pre>mapper::Signal sig;
+sig = dev.add_signal(mapper::Direction::OUTGOING, &quot;outA&quot;, 1, mapper::Type::INT32);</pre>
 
 <p>An example of a <code>float</code> signal where some more information is provided:</p>
 
 <pre>float min = 0.0f;
 float max = 5.0f;
 mapper::Signal sig;
-sig = dev.add_signal(mapper::Direction::OUT, &quot;sensor1&quot;, 1,
+sig = dev.add_signal(mapper::Direction::OUTGOING, &quot;sensor1&quot;, 1,
                      mapper::Type::FLOAT, &quot;V&quot;, &amp;min, &amp;max);</pre>
 
 <p>So far we know how to create a device and to specify an output signal
@@ -218,7 +215,7 @@ for it.  To recap, let&#39;s review the code so far:</p>
 mapper::Signal sig;
 float min = 0.0f;
 float max = 5.0f;
-sig = dev.add_signal(mapper::Direction::OUT, &quot;sensor1&quot;, 1,
+sig = dev.add_signal(mapper::Direction::OUTGOING, &quot;sensor1&quot;, 1,
                      mapper::Type::FLOAT, &quot;V&quot;, &amp;min, &amp;max);
 
 while (!done) {
@@ -234,7 +231,7 @@ belonging to a particular device:</p>
 
 <pre>std::cout &lt;&lt; &quot;Signals belonging to &quot; &lt;&lt; dev[Property::NAME] &lt;&lt; std::endl;
 
-mapper::List&lt;mapper::Signal&gt; list = dev.signals(mapper::Direction::IN).begin();
+mapper::List&lt;mapper::Signal&gt; list = dev.signals(mapper::Direction::INCOMING).begin();
 for (; list != list.end(); ++list) {
     std::cout &lt;&lt; &quot;signal: &quot; &lt;&lt; *list &lt;&lt; std::endl;
 }
@@ -268,7 +265,7 @@ reads sensor 1&#39;s value into a float variable called <code>v1</code>, the loo
 
     // call a hypothetical user function that reads a sensor
     float v1 = do_stuff();
-    sensor1.set_value(v1);
+    sig.set_value(v1);
 }</pre>
 
 <p>This is about all that is needed to expose sensor 1&#39;s value to the network as a
@@ -316,8 +313,8 @@ be retrieved at any time by calling the function <code>value()</code> on your si
 object, however for event-driven applications you may want to be informed of new
 values as they are received or generated.</p>
 
-<p>As mentioned above, the <code>add_signal()</code> function takes an optional <code>handler</code> and
-<code>user_data</code>.  This is a function that will be called whenever the value of that
+<p>As mentioned above, the <code>add_signal()</code> function takes an optional <code>handler</code>
+argument.  This is a function that will be called whenever the value of that
 signal changes.  To create a receiver for a synthesizer parameter &quot;pulse width&quot;
 (given as a ratio between 0 and 1), specify a handler when calling <code>add_signal()</code>.
 We&#39;ll imagine there is some C++ synthesizer implemented as a class <code>Synthesizer</code>
@@ -341,13 +338,13 @@ signal type is scalar float:</p>
 
 <pre>void pulsewidth_handler(mapper::Signal signal, float value, mapper::Time time)
 {
-    Synthesizer *synth = (Synthesizer*) signal[mapper::Property::DATA];
+    Synthesizer *synth = (Synthesizer*)(void*)signal[&quot;synthptr&quot;];
     synth-&gt;setPulseWidth(value);
 }</pre>
 
-<p>First, the pointer to the <code>Synthesizer</code> instance is extracted from the
-<code>user_data</code> pointer, then it is dereferenced to set the pulse width according to
-the value pointed to by <code>v</code>.</p>
+<p>First, the pointer to the <code>Synthesizer</code> instance is extracted from the stored
+<code>synthptr</code> property, then it is dereferenced to set the pulse width according to
+the value pointed to by <code>value</code>.</p>
 
 <p>Then <code>main()</code> will look like,</p>
 
@@ -362,8 +359,9 @@ the value pointed to by <code>v</code>.</p>
     mapper::Device dev(&quot;synth&quot;);
 
     mapper::Signal pulsewidth =
-        dev.add_signal(mapper::Direction::IN, &quot;pulsewidth&quot;, 1,
+        dev.add_signal(mapper::Direction::INCOMING, &quot;pulsewidth&quot;, 1,
                        mapper::Type::FLOAT, 0, &amp;min_pw, &amp;max_pw)
+           .set_property(&quot;synthptr&quot;, &amp;synth)
            .set_callback(pulsewidth_handler);
 
     while (!done)
@@ -421,7 +419,7 @@ sig.reserve_instances(int num, mapper::Id *ids, void **data)</pre>
 si.set_value(value);
 
 // or simply:
-sig.instance(id).set_value(value)</pre>
+sig.instance(id).set_value(value);</pre>
 
 <p>The <code>instance</code> argument is of type <code>mapper::Id</code> does not have to be considered as
 an array index - it can be any 64-bit vbalue that is convenient for labelling your
@@ -480,7 +478,7 @@ the signal and write the method yourself:</p>
         // user code chooses which instance to release
         mapper::Id release_me = choose_instance_to_release(sig);
 
-        sig.instance(release_me).release(tt);
+        sig.instance(release_me).release();
         return;
     }
 }</pre>
@@ -542,26 +540,25 @@ cast to the appropriate type.</p>
 
 <p>You can use any property name not already reserved by <em>libmapper</em>.</p>
 
-<h4 id="toc_16">Reserved keys for devices</h4>
+<h4 id="toc_16">Reserved keys for all objects</h4>
 
-<p><code>data</code>, <code>id</code>, <code>is_local</code>, <code>lib_version</code>, <code>linked</code>, <code>name</code>, <code>num_maps_in</code>,
-<code>num_maps_out</code>, <code>num_sigs_in</code>, <code>num_sigs_out</code>, <code>ordinal</code>, <code>status</code>, <code>synced</code>,
-<code>version</code></p>
+<p><code>data</code>, <code>id</code>, <code>is_local</code>, <code>lib_version</code>, <code>version</code></p>
 
-<h4 id="toc_17">Reserved keys for signals</h4>
+<h4 id="toc_17">Additional reserved keys for devices</h4>
 
-<p><code>data</code>, <code>device</code>, <code>direction</code>, <code>id</code>, <code>is_local</code>, <code>jitter</code>, <code>length</code>, <code>max</code>, <code>maximum</code>,
-<code>min</code>, <code>minimum</code>, <code>name</code>, <code>num_inst</code>, <code>num_maps_in</code>, <code>num_maps_out</code>, <code>period</code>, <code>steal</code>,
-<code>type</code>, <code>unit</code>, <code>use_inst</code>, <code>version</code></p>
+<p><code>linked</code>, <code>name</code>, <code>num_maps_in</code>, <code>num_maps_out</code>, <code>num_sigs_in</code>, <code>num_sigs_out</code>,
+<code>ordinal</code>, <code>status</code>, <code>synced</code></p>
 
-<h4 id="toc_18">Reserved keys for maps</h4>
+<h4 id="toc_18">Additional reserved keys for signals</h4>
 
-<p><code>data</code>, <code>expr</code>, <code>id</code>, <code>is_local</code>, <code>muted</code>, <code>num_sigs_in</code>, <code>process_loc</code>, <code>protocol</code>,
-<code>scope</code>, <code>status</code>, <code>version</code></p>
+<p><code>device</code>, <code>direction</code>, <code>jitter</code>, <code>length</code>, <code>max</code>, <code>maximum</code>, <code>min</code>, <code>minimum</code>,
+<code>name</code>, <code>num_inst</code>, <code>num_maps_in</code>, <code>num_maps_out</code>, <code>period</code>, <code>steal</code>, <code>type</code>,
+<code>unit</code>, <code>use_inst</code></p>
 
-<h4 id="toc_19">Reserved keys for map slots</h4>
+<h4 id="toc_19">Additional reserved keys for maps</h4>
 
-<p><code>calib</code>, <code>max</code>, <code>maximum</code>, <code>min</code>, <code>minimum</code>, <code>num_inst</code>, <code>use_inst</code></p>
+<p><code>expr</code>, <code>muted</code>, <code>num_sigs_in</code>, <code>process_loc</code>, <code>protocol</code>, <code>scope</code>, <code>status</code>,
+<code>use_inst</code></p>
 
 <!--end of exported tutorial-->
 
