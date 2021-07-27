@@ -19,7 +19,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">libmapper
-   &#160;<span id="projectnumber">v2.0a-112-gb9f20072</span>
+   &#160;<span id="projectnumber">v2.0a-219-ge974f3bd</span>
    </div>
   </td>
  </tr>
@@ -64,6 +64,8 @@ Inheritance diagram for mapper::Object:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a42e4f83b2d16bbc087ffe17fa54ff901"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmapper_1_1Object.html#a42e4f83b2d16bbc087ffe17fa54ff901">operator bool</a> () const</td></tr>
+<tr class="separator:a42e4f83b2d16bbc087ffe17fa54ff901"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe1ed5d8a67226a92c7dea25ad9ccc4d"><td class="memItemLeft" align="right" valign="top">Type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmapper_1_1Object.html#afe1ed5d8a67226a92c7dea25ad9ccc4d">type</a> () const</td></tr>
 <tr class="separator:afe1ed5d8a67226a92c7dea25ad9ccc4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62c4395f0ed0a1990e2c0466fdffc562"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmapper_1_1Graph.html">Graph</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmapper_1_1Object.html#a62c4395f0ed0a1990e2c0466fdffc562">graph</a> () const</td></tr>
@@ -146,11 +148,40 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a42e4f83b2d16bbc087ffe17fa54ff901"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42e4f83b2d16bbc087ffe17fa54ff901">&#9670;&nbsp;</a></span>operator bool()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">mapper::Object::operator bool </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Cast to a boolean value based on whether the underlying C object exists. </p><dl class="section return"><dt>Returns</dt><dd>True if object exists, otherwise false. </dd></dl>
+
+</div>
+</div>
 <a id="a48300911b616c17386b21a9b6090704d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a48300911b616c17386b21a9b6090704d">&#9670;&nbsp;</a></span>property() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">PropVal mapper::Object::property </td>
@@ -160,6 +191,11 @@ Public Member Functions</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Retrieve a Property by name. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -176,6 +212,9 @@ Public Member Functions</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">PropVal mapper::Object::property </td>
@@ -185,6 +224,11 @@ Public Member Functions</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Retrieve a Property by index. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -192,14 +236,7 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The retrieved Property.</dd></dl>
-<p>Retrieve a PropVal by index. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">prop</td><td>The index or symbolic identifier of the PropVal to retrieve. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The retrieved PropVal. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The retrieved Property. </dd></dl>
 
 </div>
 </div>
@@ -304,6 +341,9 @@ Public Member Functions</h2></td></tr>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename... Values&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classmapper_1_1Object.html">Object</a> &amp; mapper::Object::set_property </td>
@@ -313,6 +353,11 @@ template&lt;typename... Values&gt; </div>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Set arbitrary properties for an <a class="el" href="classmapper_1_1Object.html">Object</a>. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -353,7 +398,7 @@ template&lt;typename... Values&gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Apr 17 2021 21:24:11 for libmapper by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Tue Jul 27 2021 14:47:39 for libmapper by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>
