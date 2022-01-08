@@ -36,14 +36,12 @@
 
 <p>Since <em>libmapper</em> uses GNU autoconf, getting started with the library is the
 same as any other library on Linux; use <code>./configure</code> and then <code>make</code> to compile
-it.  You&#39;ll need <code>swig</code> available if you want to compile the Python bindings.
-On Mac OS X, we provide a precompiled Framework bundle for 32- and 64-bit Intel
-platforms, so using it with XCode should be a matter of including it in your
-project.</p>
+it.  There is a file named <code>libmapper.py</code> in the directory <code>/bindings/python/</code>
+that you will need to copy into your project.</p>
 
 <p>Once you have libmapper installed, it can be imported into your program:</p>
 
-<pre>import mapper</pre>
+<div><pre><code class="language-python">import libmapper as mpr</code></pre></div>
 
 <h2 id="toc_1">Overview of the API organization</h2>
 
@@ -57,7 +55,7 @@ project.</p>
 </ul>
 
 <p>For this tutorial, the only sections to pay attention to are <strong>Devices</strong> and
-<strong>Signals</strong>. <strong>Graphs</strong>, <strong>Maps</strong> and <strong>Slots</strong> are mostly used when building
+<strong>Signals</strong>. <strong>Graphs</strong> and <strong>Maps</strong> are mostly used when building
 user interfaces for designing mapping configurations.</p>
 
 <h2 id="toc_2">Devices</h2>
@@ -75,15 +73,13 @@ parameters, such as specifying the name of the network interface to use.</p>
 
 <p>An example of creating a device:</p>
 
-<pre>dev = mapper.device(&quot;my_device&quot;)</pre>
+<div><pre><code class="language-python">dev = mpr.Device(&quot;my_device&quot;)</code></pre></div>
 
 <h2 id="toc_4">Polling the device</h2>
 
-<p>The device lifecycle looks like this, in terrible ASCII diagram art:</p>
+<p>The device lifecycle looks like this:</p>
 
-<pre>creation --&gt; poll --+--&gt; destruction
-              |     |
-              +--&lt;--+</pre>
+<p><img style="display:block;margin:auto;padding:0px;width:75%" src="./images/device_lifecycle.png"></p>
 
 <p>In other words, after a device is created, it must be continuously polled during
 its lifetime.</p>
@@ -100,11 +96,11 @@ your application to behave.  It takes a number of milliseconds during which it
 should do some work, or 0 if it should check for any immediate actions and then
 return without waiting:</p>
 
-<pre>dev.poll(block_ms)</pre>
+<div><pre><code class="language-python">dev.poll(block_ms)</code></pre></div>
 
 <p>An example of calling it with non-blocking behaviour:</p>
 
-<pre>dev.poll(0)</pre>
+<div><pre><code class="language-python">dev.poll(0)</code></pre></div>
 
 <p>If your polling is in the middle of a processing function or in response to a
 GUI event for example, non-blocking behaviour is desired.  On the other hand if
@@ -159,7 +155,7 @@ which is optional:</p>
 <ul>
 <li>a name for the signal (must be unique within a devices inputs or outputs)</li>
 <li>the signal&#39;s vector length</li>
-<li>the signal&#39;s data type: <code>mapper.INT32</code>, <code>mapper.FLT</code>, <code>mapper.DBL</code></li>
+<li>the signal&#39;s data type: <code>mpr.Type.INT32</code>, <code>mpr.Type.FLOAT</code>, <code>mpr.Type.DOUBLE</code></li>
 <li>the signal&#39;s unit (optional)</li>
 <li>the signal&#39;s minimum value (optional)</li>
 <li>the signal&#39;s maximum value (optional)</li>
@@ -173,14 +169,16 @@ which is optional:</p>
 
 <p>examples:</p>
 
-<pre>sig_in = dev.add_signal(mapper.DIR_IN, &quot;my_input&quot;, 1, mpr.FLT, &quot;m/s&quot;, -10, 10, h)
+<div><pre><code class="language-python">sig_in = dev.add_signal(mpr.Direction.INCOMING, &quot;my_input&quot;, 1,
+                        mpr.Type.FLOAT, &quot;m/s&quot;, -10, 10, h)
 
-sig_out = dev.add_signal(mapper.DIR_OUT, &quot;my_output&quot;, 4, mpr.INT32, None, 0, 1000)</pre>
+sig_out = dev.add_signal(mpr.Direction.OUTGOING, &quot;my_output&quot;, 4,
+                         mpr.Type.INT32, None, 0, 1000)</code></pre></div>
 
 <p>The only <em>required</em> parameters here are the signal &quot;length&quot;, its name, and data
 type.  Signals are assumed to be vectors of values, so for usual single-valued
 signals, a length of 1 should be specified.  Finally, supported types are
-currently &#39;i&#39; or &#39;f&#39; for <code>int</code> or <code>float</code> values, respectively.</p>
+currently <code>INT32</code>, <code>FLOAT</code>, or <code>DOUBLE</code>.</p>
 
 <p>The other parameters are not strictly required, but the more information you
 provide, the more <em>libmapper</em> can do some things automatically.  For example, if
@@ -199,28 +197,31 @@ by an incoming message.  It is passed in the <code>handler</code> parameter.</p>
 <p>An example of creating a &quot;barebones&quot; <code>int</code> scalar output signal with no unit,
 minimum, or maximum information:</p>
 
-<pre>outA = dev.add_signal(mapper.DIR_OUT, &quot;outA&quot;, 1, mapper.INT32, None, None, None)</pre>
+<div><pre><code class="language-python">outA = dev.add_signal(mpr.Direction.OUTGOING, &quot;outA&quot;, 1, mpr.Type.INT32,
+                      None, None, None)</code></pre></div>
 
 <p>or omitting some arguments:</p>
 
-<pre>outA = dev.add_signal(mapper.DIR_OUT, &quot;outA&quot;, 1, mapper.INT32)</pre>
+<div><pre><code class="language-python">outA = dev.add_signal(mpr.Direction.OUTGOING, &quot;outA&quot;, 1, mpr.Type.INT32)</code></pre></div>
 
 <p>An example of a <code>float</code> signal where some more information is provided:</p>
 
-<pre>sensor1 = dev.add_signal(mpr.DIR_OUT, &quot;sensor1&quot;, 1, mpr.FLT, &quot;V&quot;, 0.0, 5.0)</pre>
+<div><pre><code class="language-python">sensor1 = dev.add_signal(mpr.Direction.OUTGOING, &quot;sensor1&quot;, 1, mpr.Type.FLOAT,
+                         &quot;V&quot;, 0.0, 5.0)</code></pre></div>
 
 <p>So far we know how to create a device and to specify an output signal for it.
 To recap, let&#39;s review the code so far:</p>
 
-<pre>import mapper as mpr
+<div><pre><code class="language-python">import libmapper as mpr
 
-dev = mapper.device(&quot;test_sender&quot;)
-sensor1 = dev.add_signal(mpr.DIR_OUT, &quot;sensor1&quot;, 1, mpr.FLT, &quot;V&quot;, 0.0, 5.0)
+dev = mpr.Device(&quot;test_sender&quot;)
+sensor1 = dev.add_signal(mpr.Direction.OUTGOING, &quot;sensor1&quot;, 1, mpr.Type.FLOAT,
+                         &quot;V&quot;, 0.0, 5.0)
 
 while 1:
     dev.poll(50)
-    ... do stuff ...
-    ... update signals ...</pre>
+    # ... do stuff ...
+    # ... update signals ...</code></pre></div>
 
 <p>It is possible to retrieve a device&#39;s inputs or outputs by name or by index at a
 later time using the functions <code>get_signal_by_&lt;name/index&gt;</code>.</p>
@@ -236,16 +237,16 @@ be sent to other devices if that signal is mapped.</p>
 
 <p>This is accomplished by the <code>set_value</code> function:</p>
 
-<pre>&lt;sig&gt;.set_value(value)</pre>
+<div><pre><code class="language-python">&lt;sig&gt;.set_value(value)</code></pre></div>
 
 <p>So in the &quot;sensor 1 voltage&quot; example, assuming in <code>do_stuff()</code> we have some code
 which reads sensor 1&#39;s value into a float variable called <code>v1</code>, the loop
 becomes:</p>
 
-<pre>while 1:
+<div><pre><code class="language-python">while 1:
     dev.poll(50)
     v1 = do_stuff()
-    sensor1.set_value(v1)</pre>
+    sensor1.set_value(v1)</code></pre></div>
 
 <p>This is about all that is needed to expose sensor 1&#39;s voltage to the network as
 a mappable parameter.  The <em>libmapper</em> GUI can now be used to create a mapping
@@ -305,70 +306,74 @@ one parameter: the frequency of the sine.</p>
 
 <p>We need to create a handler function for libmapper to update the pyo synth:</p>
 
-<pre>def frequency_handler(sig, id, val, timetag):
+<div><pre><code class="language-python">def frequency_handler(sig, event, inst, val, time):
     try:
-        sine.setFreq(val)
+        if event == mpr.Signal.Event.UPDATE:
+            sine.setFreq(val)
     except:
         print(&#39;exception&#39;)
-        print(sig, val)</pre>
+        print(sig, val)</code></pre></div>
 
 <p>Then our program will look like this:</p>
 
-<pre>from pyo import *
-import mapper
+<div><pre><code class="language-python">from pyo import *
+import libmapper as mpr
 
 # Some pyo stuff
 synth = Server().boot().start()
 sine = Sine(freq=200, mul=0.5).out()
 
-def freq_handler(sig, id, val, timetag):
+def freq_handler(sig, event, id, val, timetag):
     try:
-        sine.setFreq(val)
+        if event == mpr.Signal.Event.UPDATE:
+            sine.setFreq(val)
     except:
         print(&#39;exception&#39;)
         print(sig, val)
 
-dev = mapper.device(&#39;pyo_example&#39;)
-dev.add_signal(mpr.DIR_IN, &#39;frequency&#39;, 1, mpr.FLT, &#39;Hz&#39;, 20, 2000, freq_handler)
+dev = mpr.Device(&#39;pyo_example&#39;)
+dev.add_signal(mpr.Direction.INCOMING, &#39;frequency&#39;, 1, mpr.Type.FLOAT,
+               &#39;Hz&#39;, 20, 2000, freq_handler)
 
 while True:
     dev.poll( 100 )
 
-synth.stop()</pre>
+synth.stop()</code></pre></div>
 
 <p>Alternately, we can simplify our code by using a <a href="https://docs.python.org/3/tutorial/controlflow.html#lambda-expressions">lambda expression</a> instead of a
 separate handler:</p>
 
-<pre>from pyo import *
-import mapper as mpr
+<div><pre><code class="language-python">from pyo import *
+import libmapper as mpr
 
 # Some pyo stuff
 synth = Server().boot().start()
 sine = Sine(freq=200, mul=0.5).out()
 
-dev = mapper.device(&#39;pyo_example&#39;)
-dev.add_signal(mpr.DIR_IN, &#39;frequency&#39;, 1, mpr.FLT, &quot;Hz&quot;, 20, 2000,
-              lambda s, i, f, t: sine.setFreq(f))
+dev = mpr.Device(&#39;pyo_example&#39;)
+dev.add_signal(mpr.Direction.INCOMING, &#39;frequency&#39;, 1, mpr.Type.FLOAT, &quot;Hz&quot;,
+               20, 2000, lambda s, e, i, f, t: sine.setFreq(f),
+               mpr.Signal.Event.UPDATE)
 
 while True:
     dev.poll(100)
 
-synth.stop()</pre>
+synth.stop()</code></pre></div>
 
 <h2 id="toc_10">Working with timetags</h2>
 
 <p><em>libmapper</em> uses the <code>mpr_time_t</code> data structure internally to store
 <a href="http://en.wikipedia.org/wiki/Network_Time_Protocol#NTP_timestamps">NTP timestamps</a>,
-but this value is represented using the <code>timetag</code> type in the python bindings.
+but this value is represented using the <code>Time</code> class in the python bindings.
 For example, the handler function called when a signal update is received
-contains a <code>timetag</code> argument.  This argument indicates the time at which the
+contains a <code>time</code> argument.  This argument indicates the time at which the
 source signal was <em>sampled</em> (in the case of sensor signals) or <em>generated</em> (in
 the case of sequenced or algorithimically-generated signals).</p>
 
-<p>Creating a new <code>timetag</code> without arguments causes it to be initialized with the
+<p>Creating a new <code>Time</code> without arguments causes it to be initialized with the
 current system time:</p>
 
-<pre>now = mapper.timetag()</pre>
+<div><pre><code class="language-python">now = mpr.Time()</code></pre></div>
 
 <h2 id="toc_11">Working with signal instances</h2>
 
@@ -397,17 +402,16 @@ understanding of the relatonships between instances when they are mapped.</li>
 <p>All signals possess one instance by default. If you would like to reserve more
 instances you can use:</p>
 
-<pre>&lt;sig&gt;.reserve_instances(num)</pre>
+<div><pre><code class="language-python">&lt;sig&gt;.reserve_instances(num)</code></pre></div>
 
 <p>After reserving instances you can update a specific instance:</p>
 
-<pre>&lt;sig&gt;.set_value(id, value)</pre>
+<div><pre><code class="language-python">&lt;sig&gt;.instance(id).set_value(value)</code></pre></div>
 
-<p>All of the arguments except one should be familiar from the documentation of
-<code>set_value()</code> presented earlier.  The <code>instance_id</code> argument does not have to be
-considered as an array index - it can be any integer that is convenient for
-labelling your instance.  <em>libmapper</em> will internally create a map from your id
-label to one of the preallocated instance structures.</p>
+<p>The <code>id</code> argument does not have to be considered as an array index - it can be
+any integer that is convenient for labelling your instance.  <em>libmapper</em> will
+internally create a map from your id label to one of the preallocated instance
+structures.</p>
 
 <h3 id="toc_12">Receiving instances</h3>
 
@@ -415,7 +419,7 @@ label to one of the preallocated instance structures.</p>
 update is received has a argument called <code>id</code>. Here is the function prototype
 again:</p>
 
-<pre>def frequency_handler(signal, id, value, timetag):</pre>
+<div><pre><code class="language-python">def frequency_handler(signal, event, id, value, time):</code></pre></div>
 
 <p>Under normal usage, the <code>id</code> argument will have a value (0 &lt;= n &lt;=
 num_instances) and can be used as an array index. Remember that you will need to
@@ -429,33 +433,37 @@ receiver signal, the <em>instance allocation mode</em> can be set for an input s
 to set an action to take in case all allocated instances are in use and a
 previously unseen instance id is received. Use the function:</p>
 
-<pre>&lt;sig&gt;.set_instance_stealing_mode(mode);</pre>
+<div><pre><code class="language-python">&lt;sig&gt;.set_property(mpr.Property.STEALING, mode);</code></pre></div>
 
 <p>The argument <code>mode</code> can have one of the following values:</p>
 
 <ul>
-<li><code>mapper.STEAL_NONE</code> Default value, in which no stealing of instances will
+<li><code>mpr.STEALING.NONE</code> Default value, in which no stealing of instances will
 occur;</li>
-<li><code>mapper.STEAL_OLDEST</code> Release the oldest active instance and reallocate its
+<li><code>mpr.STEALING.OLDEST</code> Release the oldest active instance and reallocate its
 resources to the new instance;</li>
-<li><code>mapper.STEAL_NEWEST</code> Release the newest active instance and reallocate its
+<li><code>mpr.STEALING.NEWEST</code> Release the newest active instance and reallocate its
 resources to the new instance;</li>
 </ul>
 
 <p>If you want to use another method for determining which active instance to
-release (e.g. the sound with the lowest volume), you can create an
-<code>instance_event_handler</code> for the signal and write the method yourself:</p>
+release (e.g. the sound with the lowest volume), you can subscribe to &quot;instance
+overflow&quot; events and insert your own logic in the signal callback handler:</p>
 
-<pre>def my_handler(sig, id, event, timetag):
-    # user code chooses which instance to release
-    id = choose_instance_to_release(sig)
+<div><pre><code class="language-python">import random
 
-    sig.release_instance(id)</pre>
+def my_handler(sig, event, id, event, timetag):
+    if event == mpr.Signal.Event.INST_OFLW:
+        # user code chooses which instance to release, in this case randomly
+        id = random.randint(0, sig.num_instances())
+
+        # release the chosen instance
+        sig.instance(id).release()</code></pre></div>
 
 <p>For this function to be called when instance stealing is necessary, we need to
-register it for <code>mapper.SIG_INST_OFLW</code> events:</p>
+register it for <code>mpr.Signal.Event.INST_OFLW</code> events:</p>
 
-<pre>&lt;sig&gt;.set_cb(my_handler, mapper.SIG_UPDATE | mapper.SIG_INST_OFLW)</pre>
+<div><pre><code class="language-python">&lt;sig&gt;.set_cb(my_handler, mpr.Signal.Event.UPDATE | mpr.Signal.Event.INST_OFLW)</code></pre></div>
 
 <h2 id="toc_14">Publishing metadata</h2>
 
@@ -477,19 +485,20 @@ OSC-compatible type.  (So, numbers and strings, etc.)</p>
 
 <p>The property interface is through the functions,</p>
 
-<pre>&lt;object&gt;.set_property(key, value)</pre>
+<div><pre><code class="language-python">&lt;object&gt;.set_property(key, value)</code></pre></div>
 
-<p>where the value can any OSC-compatible type. This function can be called for
-devices or signals.</p>
+<p>where the <code>key</code> can be either a member of the Property enum class or a string
+specifying the name of the property, and the value can any OSC-compatible type.
+This function can be called for devices or signals.</p>
 
 <p>For example, to store a <code>float</code> indicating the X position of a device <code>dev</code>, you
 can call it like this:</p>
 
-<pre>dev.set_property(&quot;x&quot;, 12.5)</pre>
+<div><pre><code class="language-python">dev.set_property(&quot;x&quot;, 12.5)</code></pre></div>
 
 <p>To specify a string property of a signal:</p>
 
-<pre>sig.set_property(&quot;sensingMethod&quot;, &quot;resistive&quot;)</pre>
+<div><pre><code class="language-python">sig.set_property(&quot;sensingMethod&quot;, &quot;resistive&quot;)</code></pre></div>
 
 <h3 id="toc_15">Reserved keys</h3>
 
@@ -503,14 +512,14 @@ can call it like this:</p>
 
 <h4 id="toc_17">Reserved keys for signals</h4>
 
-<p><code>data</code>, <code>device</code>, <code>direction</code>, <code>id</code>, <code>is_local</code>, <code>jitter</code>, <code>length</code>, <code>max</code>, <code>maximum</code>,
-<code>min</code>, <code>minimum</code>, <code>name</code>, <code>num_inst</code>, <code>num_maps_in</code>, <code>num_maps_out</code>, <code>period</code>, <code>steal</code>,
-<code>type</code>, <code>unit</code>, <code>use_inst</code>, <code>version</code></p>
+<p><code>data</code>, <code>device</code>, <code>direction</code>, <code>id</code>, <code>is_local</code>, <code>jitter</code>, <code>length</code>, <code>max</code>,
+<code>maximum</code>, <code>min</code>, <code>minimum</code>, <code>name</code>, <code>num_inst</code>, <code>num_maps_in</code>, <code>num_maps_out</code>,
+<code>period</code>, <code>steal</code>, <code>type</code>, <code>unit</code>, <code>use_inst</code>, <code>version</code></p>
 
 <h4 id="toc_18">Reserved keys for maps</h4>
 
-<p><code>data</code>, <code>expr</code>, <code>id</code>, <code>is_local</code>, <code>muted</code>, <code>num_sigs_in</code>, <code>process_loc</code>, <code>protocol</code>,
-<code>scope</code>, <code>status</code>, <code>use_inst</code>, <code>version</code></p>
+<p><code>data</code>, <code>expr</code>, <code>id</code>, <code>is_local</code>, <code>muted</code>, <code>num_sigs_in</code>, <code>process_loc</code>,
+<code>protocol</code>, <code>scope</code>, <code>status</code>, <code>use_inst</code>, <code>version</code></p>
 
 <!--end of exported tutorial-->
 
