@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>libmapper: a library for connecting things</title>
-
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
 
@@ -21,9 +21,9 @@
 
         <h2>Downloads</h2>
 
-        <p>The current version of libmapper is version 2.0a, and can be downloaded here.
+        <p>The current version of libmapper is version 2.3, and the library and its related tools can be downloaded using the links below.
           <strong>We recommend that
-          you build the library from source.</strong>
+          you build the library from source by following the <a href="https://github.com/libmapper/libmapper/blob/main/doc/how_to_compile_and_run.md">instructions for your platform</a>.</strong>
           It is licensed with the
           <a href="http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html">
           LGPL v2.1 or later</a>. The full list of files, including any previous
@@ -36,42 +36,22 @@
           </tr>
           <tr>
             <td>Linux / Mac OSX / Windows</td>
-            <td width="33%"><a href="http://github.com/libmapper/libmapper">Github</a> | <a href="https://github.com/libmapper/libmapper/archive/v2.0a.tar.gz">.tar</a></td>
+            <td width="33%"><a href="https://github.com/libmapper/libmapper/releases">Github</a> | <a href="https://github.com/libmapper/libmapper/releases/download/2.3/libmapper-2.3.tar.gz">.tar.gz</a></td>
           </tr>
           <tr>
-            <th colspan="2">Binaries</th>
+            <th colspan="2">Bindings</th>
           </tr>
           <tr>
-            <td>Examples, Framework* (Mac OSX, x86 architectures) <br />
-              <sub>*To use <strong>mapper.framework</strong> in XCode: Drag and drop into project under
-              Frameworks, add to a new “Copy Files” build phase, and add to Runpath
-              Search Paths ”@loader_path/../Frameworks” in the project's linker
-              properties.</sub></td>
-            <td>
-            </td>
+            <td>Python 3* (Windows/MacOS/Linux) <br />
+              <sub>*Includes statically-linked libmapper and liblo, installable with pip.</sub></td>
+            <td><a href="https://pypi.org/project/libmapper/">PyPI project</a>: pip install libmapper</td>
           </tr>
           <tr>
-            <td>DLL* (Windows, 32-bit x86 architecture) <br />
-              <sub>*Provides Visual C++-compatible .lib and MingW-compatiple .a link
-              libraries. Python and Java bindings for Windows are not included, but
-              will be forthcoming in the next release. This is the first release
-              supporting Microsoft Windows; please report any difficulties. Includes
-              <code>liblo-7.dll</code>and necessary header files compiled from a recent
-              checkout of <a href="http://liblo.sf.net/">liblo</a>'s repository.</sub></td>
-            <td></td>
+            <th colspan="2">Mapping Interfaces</th>
           </tr>
           <tr>
-            <td>Python 2.6* (Windows, 32-bit x86 architecture) <br />
-              <sub>*Includes statically-linked libmapper and liblo. Copy <code<site-packages</code>
-              contents into your Python 2.6 path.</sub></td>
-            <td></td>
-          </tr>
-          <tr>
-            <th colspan="2">Session Managers</th>
-          </tr>
-          <tr>
-            <td>webMapper (browser-based GUI)</td>
-            <td><a href="http://github.com/libmapper/webmapper">Github</a> | <a href="https://github.com/libmapper/webmapper/releases/download/20190305/WebMapper-20190305.zip">OSX Binary</a></td>
+            <td>webmapper (browser-based GUI)</td>
+            <td><a href="http://github.com/libmapper/webmapper">Github</a> <br /> <a href="">TODO Mac OSX installer</a> <br /> <a href="">TODO Windows installer .msi</a></td>
           </tr>
           <tr>
             <td>umapper (Linux, Mac OSX)</td>
@@ -84,9 +64,9 @@
             <td>Source</td>
             <td><a href="https://github.com/libmapper/mapper-max-pd">Github</a>
           <tr>
-            <td>MaxMSP & Pure Data binaries (Mac OSX) - x86 and x64</td>
+            <td>MaxMSP & Pure Data binaries (Mac OSX/Windows) - x86 and x64</td>
             <td>
-              <a href="https://github.com/libmapper/mapper-max-pd/releases/download/20190305/mapper-osx-max-pd-20190305.zip">OSX Binary</a>
+              <a href="https://github.com/libmapper/mapper-max-pd/releases/download/20190305/mapper-osx-max-pd-20190305.zip">OSX Binary</a> | <a href="">TODO Windows Binary</a>
               </td>
           </tr>
         </table>
