@@ -21,9 +21,10 @@
         <h2>Tutorials</h2>
         <!-- the tabs -->
         <ul class="tabs">
-          <li><a href="introduction.html">Introduction</a></li>
+          <li><a href="introduction.html">Intro</a></li>
           <li><a href="c.html">C</a></li>
           <li><a href="cpp.html">C++</a></li>
+          <li><a href="csharp.html">C#</a></li>
           <li><a href="python.html">Python</a></li>
           <li><a href="java.html">Java</a></li>
           <li class="selected"><a>Max</a></li>
@@ -287,36 +288,38 @@ could instantiate your object like this:</p>
 
 <p>You can use any property name not already reserved by libmapper.</p>
 
-<h4>Reserved keys for devices</h4>
+<table>
+<thead>
+<tr>
+<th>Object</th>
+<th>Reserved keys</th>
+</tr>
+</thead>
 
-<p><code>description</code>, <code>host</code>, <code>id</code>, <code>is_local</code>, <code>libversion</code>, <code>name</code>,
-<code>num_incoming_maps</code>, <code>num_outgoing_maps</code>, <code>num_inputs</code>, <code>num_outputs</code>, <code>port</code>,
-<code>synced</code>, <code>value</code>, <code>version</code>, <code>user_data</code></p>
-
-<h4>Reserved keys for signals</h4>
-
-<p><code>description</code>, <code>direction</code>, <code>id</code>, <code>is_local</code>, <code>length</code>, <code>max</code>, <code>maximum</code>, <code>min</code>,
-<code>minimum</code>, <code>name</code>, <code>num_incoming_maps</code>, <code>num_instances</code>, <code>num_outgoing_maps</code>,
-<code>rate</code>, <code>type</code>, <code>unit</code>, <code>user_data</code></p>
-
-<h4>Reserved keys for links</h4>
-
-<p><code>description</code>, <code>id</code>, <code>is_local</code>, <code>num_maps</code></p>
-
-<h4>Reserved keys for maps</h4>
-
-<p><code>description</code>, <code>expression</code>, <code>id</code>, <code>is_local</code>, <code>mode</code>, <code>muted</code>,
-<code>num_destinations</code>, <code>num_sources</code>, <code>process_location</code>, <code>ready</code>, <code>status</code></p>
-
-<h4>Reserved keys for map slots</h4>
-
-<p><code>bound_max</code>, <code>bound_min</code>, <code>calibrating</code>, <code>causes_update</code>, <code>direction</code>, <code>length</code>,
-<code>maximum</code>, <code>minimum</code>, <code>num_instances</code>, <code>use_as_instance</code>, <code>type</code></p>
+<tbody>
+<tr>
+<td>All</td>
+<td><code>data</code>, <code>description</code>, <code>id</code>, <code>is_local</code>, <code>name</code>, <code>status</code>, <code>version</code></td>
+</tr>
+<tr>
+<td>Device</td>
+<td><code>host</code>, <code>libversion</code>, <code>num_maps</code>, <code>num_maps_in</code>, <code>num_maps_out</code>, <code>num_sigs_in</code>, <code>num_sigs_out</code>, <code>ordinal</code>, <code>port</code>, <code>signal</code>, <code>synced</code></td>
+</tr>
+<tr>
+<td>Signal</td>
+<td><code>device</code>, <code>direction</code>, <code>ephemeral</code>, <code>jitter</code>, <code>length</code>, <code>max</code>, <code>maximum</code>, <code>min</code>, <code>minimum</code>, <code>num_inst</code>, <code>num_maps</code>, <code>num_maps_in</code>, <code>num_maps_out</code>, <code>period</code>, <code>rate</code>, <code>steal</code>, <code>type</code>, <code>unit</code></td>
+</tr>
+<tr>
+<td>Maps</td>
+<td><code>bundle</code>, <code>expr</code>, <code>muted</code>, <code>num_destinations</code>, <code>num_sources</code>, <code>process_loc</code>, <code>protocol</code>, <code>scope</code>, <code>signal</code>, <code>slot</code>, <code>use_inst</code></td>
+</tr>
+</tbody>
+</table>
 
 <!--end of exported tutorial-->
 
       </section>
-    </div>    
+    </div>
   </body>
   <script>
       window.onload = function() {

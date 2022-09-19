@@ -1,0 +1,521 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>libmapper: a library for connecting things</title>
+
+    <link rel="stylesheet" href="../stylesheets/styles.css">
+    <script src="../javascripts/jquery.tools.min.js"></script>
+    <script type="text/javascript" src="../javascripts/jquery-3.5.1.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <div id="header">
+      </div>
+      <section>
+
+        <h2>Tutorials</h2>
+        <!-- the tabs -->
+        <ul class="tabs">
+          <li><a href="introduction.html">Intro</a></li>
+          <li><a href="c.html">C</a></li>
+          <li><a href="cpp.html">C++</a></li>
+          <li class="selected"><a href="csharp.html">C#</a></li>
+          <li><a href="python.html">Python</a></li>
+          <li><a href="java.html">Java</a></li>
+          <li><a href="maxmsp.html">Max</a></li>
+          <li><a href="puredata.html">Pd</a></li>
+        </ul>
+
+<!--start of exported tutorial here-->
+
+<h1 id="toc_0">Getting started with libmapper and C#</h1>
+
+<p>Once you have libmapper installed, it can be imported into your program:</p>
+
+<pre>using Mapper;</pre>
+
+<h2 id="toc_1">Overview of the C# API</h2>
+
+<p>There are four top-level objects in the <em>libmapper</em> API :</p>
+
+<p>
+<ul>
+<li>Graphs</li>
+<li>Devices</li>
+<li>Signals</li>
+<li>Maps</li>
+</ul>
+</p>
+
+<p>For this tutorial, the only sections to pay attention to are <strong>Devices</strong> and <strong>Signals</strong>. <strong>Graphs</strong> and <strong>Maps</strong> are mostly used when building
+user interfaces for designing mapping configurations.</p>
+
+<h2 id="toc_2">Devices</h2>
+
+<h3 id="toc_3">Creating a device</h3>
+
+<p>To create a <em>libmapper</em> device, it is necessary to provide a device name to the
+constructor.  There is an initialization period after a device is created where
+a unique ordinal is chosen to append to the device name.  This allows multiple
+devices with the same name to exist on the network.</p>
+
+<p>A second optional parameter of the constructor is a Graph object.  It is not
+necessary to provide this, but can be used to specify different networking
+parameters, such as specifying the name of the network interface to use.</p>
+
+<p>An example of creating a device:</p>
+
+<pre>Device dev = new Device(&quot;myDevice&quot;);</pre>
+
+<h3 id="toc_4">Polling the device</h3>
+
+<p>The device lifecycle looks like this:</p>
+
+<p><img style="display:block;margin:auto;padding:0px;width:75%;;box-shadow:none;-moz-box-shadow:none;-webkit-box-shadow:none" src="./images/device_lifecycle.png"></p>
+
+<p>In other words, after a device is created, it must be continuously polled during
+its lifetime.</p>
+
+<p>The polling is necessary for several reasons: to respond to requests on the
+admin bus; to check for incoming signals; to update outgoing signals.  Therefore
+even a device that does not have signals must be polled.  The user program must
+organize to have a timer or idle handler which can poll the device often enough.
+The polling interval is not extremely sensitive, but should be 100 ms or less.
+The faster it is polled, the faster it can handle incoming and outgoing signals.</p>
+
+<p>The <code>poll()</code> function can be blocking or non-blocking, depending on how you want
+your application to behave.  It takes an optional number of milliseconds during
+which it should do some work before returning:</p>
+
+<pre>int dev.Poll(int blockMs);</pre>
+
+<p>An example of calling it with non-blocking behaviour:</p>
+
+<div>dev.Poll();</pre>
+
+<p>If your polling is in the middle of a processing function or in response to a
+GUI event for example, non-blocking behaviour is desired.  On the other hand if
+you put it in the middle of a loop which reads incoming data at intervals or
+steps through a simulation for example, you can use <code>poll()</code> as your &quot;sleep&quot;
+function, so that it will react to network activity while waiting.</p>
+
+<p>It returns the number of messages handled, so optionally you could continue to
+call it until there are no more messages waiting.  Of course, you should be
+careful doing that without limiting the time it will loop for, since if the
+incoming stream is fast enough you might never get anything else done!</p>
+
+<p>Note that an important difference between blocking and non-blocking polling is
+that during the blocking period, messages will be handled immediately as they
+are received.  On the other hand, if you use your own sleep, messages will be
+queued up until you can call poll(); stated differently, it will
+&quot;time-quantize&quot; the message handling. This is not necessarily bad, but you
+should be aware of this effect.</p>
+
+<p>Since there is a delay before the device is completely initialized, it is
+sometimes useful to be able to determine this using <code>getIsReady()</code>.  Only when
+<code>dev.getIsReady()</code> returns non-zero is it valid to use the device&#39;s name.</p>
+
+<h2 id="toc_5">Signals</h2>
+
+<p>Now that we know how to create a device, poll it, and free it, we only need to
+know how to add signals in order to give our program some input/output
+functionality.  While libmapper enables arbitrary connections between <em>any</em>
+declared signals, we still find it helpful to distinguish between two type of
+signals: <code>Incoming</code> and <code>Outgoing</code>.</p>
+
+<ul>
+<li><code>Outgoing</code> signals are <em>sources</em> of data, updated locally by their parent
+device</li>
+<li><code>Incoming</code> signals are <em>consumers</em> of data and are <strong>not</strong> generally updated
+locally by their parent device.</li>
+</ul>
+
+<p>This can become a bit confusing, since the &quot;reverb&quot; parameter of a sound
+synthesizer might be updated locally through user interaction with a GUI,
+however the normal use of this signal is as a <em>destination</em> for control data
+streams so it should be defined as an <code>Incoming</code> signal.  Note that this
+distinction is to help with GUI organization and user-understanding –
+<em>libmapper</em> enables connections from <code>Incoming</code> signals and to <code>Outgoing</code> signals if
+desired.</p>
+
+<h3 id="toc_6">Creating a signal</h3>
+
+<p>We&#39;ll start with creating a &quot;sender&quot;, so we will first talk about how to update
+output signals.  A signal requires a bit more information than a device, much of
+which is optional:</p>
+
+<ol>
+<li>the direction of the signal: either <code>Direction.Outgoing</code> or <code>Direction.Incoming</code></li>
+<li>a name for the signal (must be unique within a devices inputs or outputs)</li>
+<li>the signal&#39;s vector length</li>
+<li>the signal&#39;s data type, one of <code>Type.Int32</code>, <code>Type.Float</code>, or <code>Type.Double</code></li>
+<li>the signal&#39;s unit (optional)</li>
+<li>the signal&#39;s instance count (omit for singleton signals)</li>
+</ol>
+
+<p>examples:</p>
+
+<pre>Signal input = dev.AddSignal(Direction.Incoming, &quot;myInput&quot;, 1,
+                             Type.Float, &quot;m/s&quot;);
+
+int min[4] = {1,2,3,4};
+int max[4] = {10,11,12,13};
+Signal output = dev.AddSignal(Direction.Outgoing, &quot;myOutput&quot;, 4,
+                              Type.Int32, 0, min, max);</pre>
+
+<p>The only <em>required</em> parameters here are the signal &quot;length&quot;, its name, and data
+type.  Signals are assumed to be vectors of values, so for usual single-valued
+signals, a length of 1 should be specified.  Finally, supported types are
+currently <code>Type.Int32</code>, <code>Type.Float</code>, or <code>Type.Double</code>, for <code>int</code>, <code>float</code>, or <code>double</code> values, respectively.</p>
+
+<p>The more information you provide describing your signal, the more <em>libmapper</em>
+can do some things automatically.  For example, if <code>min</code> and <code>max</code> are
+provided, it will be possible to create linear-scaled connections very quickly.
+If <code>unit</code> is provided, <em>libmapper</em> will be able to similarly figure out a linear
+scaling based on unit conversion (from centimeters to inches for example).
+Currently automatic unit-based scaling is not a supported feature, but will be
+added in the future.  You can take advantage of this future development by
+simply providing unit information whenever it is available.  It is also helpful
+documentation for users.</p>
+
+<pre>int[] min = {1,2,3,4}, max = {10,11,12,13};
+Signal outsig = dev.AddSignal(Direction.Outgoing, &quot;outsig&quot;, 1, Type.Float)
+                   .SetProperty(Property.Min, min)
+                   .SetProperty(Property.Max, max);</pre>
+
+<p>Lastly, for <code>Incoming</code> signals it is usually necessary to be informed when the
+signal values change. This is done by providing a function to be called whenever
+its value is modified by an incoming message.  It is specified using the Signal method `SetCallback().</p>
+
+<p>An example of creating a &quot;barebones&quot; <code>int</code> scalar output signal with no unit,
+minimum, or maximum information:</p>
+
+<pre>Signal sig = dev.AddSignal(Direction.Outgoing, &quot;outA&quot;, 1, Type.Int32);</pre>
+
+<p>An example of a <code>float</code> signal where some more information is provided:</p>
+
+<pre>float min = 0.0f;
+float max = 5.0f;
+Signal sig;
+sig = dev.AddSignal(Direction.Outgoing, &quot;sensor1&quot;, 1, Type.Float, &quot;V&quot;)
+         .SetProperty(Property.Min, min)
+         .SetProperty(Property.Max, max);</pre>
+
+<p>So far we know how to create a device and to specify an output signal
+for it.  To recap, let&#39;s review the code so far:</p>
+
+<pre>using Mapper;
+public class Tutorial
+{
+    Device dev(&quot;testSender&quot;);
+    Signal sig = dev.AddSignal(Direction.Outgoing, &quot;sensor1&quot;, 1, Type.Float, &quot;V&quot;)
+                    .SetProperty(Property.Min, 0.0)
+                    .SetProperty(Property.Max, 5.0);
+
+    while (true) {
+        dev.Poll(10);
+        ... do stuff ...
+        ... update signals ...
+    }
+}</pre>
+
+<p>It is possible to retrieve a device&#39;s signals at a later time using the function <code>dev.GetSignals()</code>. This function returns an object of type <code>Mapper.List&lt;Mapper.Signal&gt;</code>
+which can be used to retrieve all of the signals belonging to a particular
+device:</p>
+
+<pre>Console.WriteLine(&quot;Signals belonging to &quot; + dev);
+
+List&lt;Signal&gt; list = dev.GetSignals(Direction.Incoming);
+foreach (Signal s in list) {
+    Console.WriteLine(&quot;signal: &quot; + s);
+}</pre>
+
+<h3 id="toc_7">Updating signals</h3>
+
+<p>We can imagine the above program getting sensor information in a loop.  It could
+be running on an network-enable ARM device and reading the ADC register
+directly, or it could be running on a computer and reading data from an Arduino
+over a USB serial port, or it could just be a mouse-controlled GUI slider.
+However it&#39;s getting the data, it must provide it to <em>libmapper</em> so that it will
+be sent to other devices if that signal is mapped.</p>
+
+<p>This is accomplished by the function <code>SetValue()</code>, which is overloaded to
+accept a wide variety of argument types (scalars and arrays of int, float, or
+double). Check the API documentation for more information. The data passed to <code>SetValue()</code> is not
+required to match the length and type of the signal itself—libmapper will perform type coercion if necessary.</p>
+
+<p>So in the &quot;sensor1&quot; example, assuming in <code>DoStuff()</code> we have some code which
+reads sensor 1&#39;s value into a float variable called <code>v1</code>, the loop becomes:</p>
+
+<pre>while (true) {
+    dev.Poll(50);
+
+    // call a hypothetical user function that reads a sensor
+    float v1 = DoStuff();
+    sig.SetValue(v1);
+}</pre>
+
+<p>This is about all that is needed to expose sensor 1&#39;s value to the network as a
+mappable parameter.  The <em>libmapper</em> GUI can now map this value to a receiver,
+where it could control a synthesizer parameter or change the brightness of an
+LED, or whatever else you want to do.</p>
+
+<h3 id="toc_8">Signal conditioning</h3>
+
+<p>Most synthesizers of course will not know what to do with the value of sensor1—it is an electrical property that has nothing to do with sound or music.  This
+is where <em>libmapper</em> really becomes useful.</p>
+
+<p>Scaling or other signal conditioning can be taken care of <em>before</em> exposing the
+signal, or it can be performed as part of the mapping.  Since the end user can
+demand any mathematical operation be performed on the signal, they can perform
+whatever mappings between signals as they wish.</p>
+
+<p>As a developer, it is therefore your job to provide information that will be
+useful to the end user.</p>
+
+<p>For example, if sensor1 is a position sensor, instead of publishing &quot;voltage&quot;,
+you could convert it to centimeters or meters based on the known dimensions of
+the sensor, and publish a &quot;/sensor1/position&quot; signal instead, providing the unit
+information as well.</p>
+
+<p>We call such signals &quot;semantic&quot;, because they provide information with more
+meaning than a relatively uninformative value based on the electrical properties
+of the sensing technqiue.  Some sensors can benefit from low-pass filtering or
+other measures to reduce noise.  Some sensors may need to be combined in order
+to derive physical meaning.  What you choose to expose as outputs of your device
+is entirely application-dependent.</p>
+
+<p>You can even publish both &quot;/sensor1/position&quot; and &quot;/sensor1/voltage&quot; if desired,
+in order to expose both processed and raw data.  Keep in mind that these will
+not take up significant processing time, and <em>zero</em> network bandwidth, if they
+are not mapped.</p>
+
+<h3 id="toc_9">Receiving signals</h3>
+
+<p>Now that we know how to create a sender, it would be useful to also know how to
+receive signals, so that we can create a sender-receiver pair to test out the
+provided mapping functionality. The current value and timestamp for a signal can
+be retrieved at any time by calling the function <code>value()</code> on your signal
+object, however for event-driven applications you may want to be informed of new
+values as they are received or generated.</p>
+
+<p>As mentioned above, the <code>SetCallback()</code> function can be used to specify a function that will be called whenever the value of that signal changes.
+To create a receiver for a synthesizer parameter
+&quot;pulse width&quot; (given as a ratio between 0 and 1).  We&#39;ll imagine there is some C# synthesizer implemented
+as a class <code>Synthesizer</code> which has functions <code>SetPulseWidth()</code> which sets the
+pulse width in a thread-safe manner, and <code>StartAudioInBackground()</code> which sets
+up the audio thread.</p>
+
+<p>Create the handler function, which is fairly simple,</p>
+
+<pre>private static void PulseWidthHandler(Signal s, Signal.Event e, float f, Time t)
+{
+    synth.SetPulseWidth(f);
+}</pre>
+
+<p>Then <code>Main()</code> will look like,</p>
+
+<pre>public static void Main(string[] args)
+{
+    synth = new Synthesizer();
+    synth.StartAudioInBackground();
+
+    Device dev = new Device(&quot;synth&quot;);
+
+    Signal pulseWidth = dev.AddSignal(Direction.Incoming, &quot;pulsewidth&quot;,
+                                      1, Type.Float).
+                           .SetProperty(Property.Min, 0.0)
+                           .SetProperty(Property.Max, 1.0);
+                           .SetCallback((Action&lt;Signal, Signal.Event, float, Time&gt;)pulseWidthHandler, Signal.Event.Update);
+
+    while (!done)
+        dev.poll(50);
+}</pre>
+
+<h2 id="toc_10">Working with timetags</h2>
+
+<p><em>libmapper</em> uses the <code>Time</code> class to store
+<a href="http://en.wikipedia.org/wiki/Network_Time_Protocol#NTP_timestamps">NTP timestamps</a>.
+For example, the handler function called when a signal update is received
+contains a <code>time</code> argument.  This argument indicates the time at which the
+source signal was <em>sampled</em> (in the case of sensor signals) or <em>generated</em> (in
+the case of sequenced or algorithimically-generated signals).</p>
+
+<p><em>libmapper</em> provides helper functions for getting the current device-time,
+setting the value of a <code>Timetag</code> from other representations, and comparing or
+copying timetags.  Check the API documentation for more information.</p>
+
+<h2 id="toc_11">Working with signal instances</h2>
+
+<p><em>libmapper</em> also provides support for signals with multiple <em>instances</em>, for
+example:</p>
+
+<ul>
+<li>control parameters for polyphonic synthesizers;</li>
+<li>touches tracked by a multitouch surface;</li>
+<li>&quot;blobs&quot; identified by computer vision systems;</li>
+<li>objects on a tabletop tangible user interface;</li>
+<li><em>temporal</em> objects such as gestures or trajectories.</li>
+</ul>
+
+<p>The important qualities of signal instances in <em>libmapper</em> are:</p>
+
+<ul>
+<li><strong>instances are interchangeable</strong>: if there are semantics attached to a
+specific instance it should be represented with separate signals instead.</li>
+<li><strong>instances can be ephemeral</strong>: signal instances can be dynamically created
+and destroyed. <em>libmapper</em> will ensure that linked devices share a common
+understanding of the relatonships between instances when they are mapped.</li>
+<li><strong>map once for all instances</strong>: one mapping connection serves to map all of a
+signal&#39;s instances.</li>
+</ul>
+
+<p>All signals possess one instance by default. If you would like to reserve more
+instances you can use:</p>
+
+<div><pre><code class="language-cpp">sig.ReserveInstances(int num)</code></pre></div>
+
+<p>After reserving instances you can update a specific instance, for example:</p>
+
+<div><pre><code class="language-cpp">Signal.Instance i = sig.GetInstance(id);
+i.SetValue(value);
+
+// or more simply
+sig.GetInstance(id).SetValue(value)</code></pre></div>
+
+<p>All of the arguments except one should be familiar from the documentation of
+<code>SetValue()</code> presented earlier.  The <code>id</code> argument does not have to be
+considered as an array index - it can be any integer that is convenient for
+labelling your instance. <em>libmapper</em> will internally create a map from your id
+label to one of the preallocated instance structures.</p>
+
+<h3 id="toc_12">Receiving instances</h3>
+
+<p>For instanced signals it is necessary to modify our callback function slightly:</p>
+
+<pre>void Handler(Signal.Instance inst, Signal.Event evt, float f, Time time)
+{
+    ...
+}</pre>
+
+<p>The inner class <code>Signal.Instance</code> can be updated and read using the same functions as its parent. Remember – if you want to receive instance updates
+that you will need to reserve instances for your input signal using the
+<code>numInstances</code> argument in the signal constructor or by calling
+<code>sig.ReserveInstances()</code>.</p>
+
+<h3 id="toc_13">Instance Stealing</h3>
+
+<p>For handling cases in which the sender signal has more instances than the
+receiver signal, the <em>instance allocation mode</em> can be set for an input signal
+to set an action to take in case all allocated instances are in use and a
+previously unseen instance id is received. Use the function:</p>
+
+<pre>sig.SetProperty(Property.Stealing, mode);</pre>
+
+<p>The argument <code>mode</code> can have one of the following values:</p>
+
+<ul>
+<li><code>Stealing.None</code> Default value, in which no stealing of instances will occur;</li>
+<li><code>Stealing.Oldest</code> Release the oldest active instance and reallocate its
+resources to the new instance;</li>
+<li><code>Stealing.Newest</code> Release the newest active instance and reallocate its
+resources to the new instance;</li>
+</ul>
+
+<p>If you want to use another method for determining which active instance to
+release (e.g. the sound with the lowest volume), you can create a handler for the signal and write the method yourself:</p>
+
+<pre>void MyHandler(Signal.Instance s, Signal.Event e, Float f, Time t)
+{
+    if (e == Signal.Event.Overflow) {
+        // user code chooses which instance to release
+        UInt64 releaseMe = ChooseInstanceToRelease(sig);
+
+        sig.GetInstance(releaseMe).Release();
+    }
+}</pre>
+
+<p>For this function to be called when instance stealing is necessary, we need to
+register it for <code>Signal.Event.Overflow</code> events:</p>
+
+<pre>sig.SetCallback(MyHandler, Signal.Event.Update | Signal.Event.Overflow);</pre>
+
+<h2 id="toc_14">Publishing metadata</h2>
+
+<p>Things like device names, signal units, and ranges, are examples of metadata
+--information about the data you are exposing on the network.</p>
+
+<p><em>libmapper</em> also provides the ability to specify arbitrary extra metadata in the
+form of name-value pairs.  These are not interpreted by <em>libmapper</em> in any way,
+but can be retrieved over the network.  This can be used for instance to give a
+device X and Y information, or to perhaps give a signal some property like
+&quot;reliability&quot;, or some category like &quot;light&quot;, &quot;motor&quot;, &quot;shaker&quot;, etc.</p>
+
+<p>Some GUI could then use this information to display information about the
+network in an intelligent manner.</p>
+
+<p>Any time there may be extra knowledge about a signal or device, it is a good
+idea to represent it by adding such properties, which can be of any
+OSC-compatible type.  (So, numbers and strings, etc.)</p>
+
+<p>The property interface is through the functions,</p>
+
+<pre>void &lt;object&gt;.SetProperty(&lt;name&gt;, &lt;value&gt;);</pre>
+
+<p>The <code>&lt;value&gt;</code> arguments can be a scalar, or array of type <code>int</code>,
+<code>float</code>, <code>double</code>, or <code>string</code>.</p>
+
+<p>For example, to store a <code>float</code> indicating the position of a device, you can
+call it like this:</p>
+
+<pre>dev.SetProperty(&quot;position&quot;, [12.5, 5.6, 0.0]);
+sig.SetProperty(&quot;sensingMethod&quot;, &quot;resistive&quot;);</pre>
+
+<h3 id="toc_15">Reserved keys</h3>
+
+<p>You can use any property name not already reserved by <em>libmapper</em>.</p>
+
+<table>
+<thead>
+<tr>
+<th>Object</th>
+<th>Reserved keys</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>All</td>
+<td><code>data</code>, <code>description</code>, <code>id</code>, <code>is_local</code>, <code>name</code>, <code>status</code>, <code>version</code></td>
+</tr>
+<tr>
+<td>Device</td>
+<td><code>host</code>, <code>libversion</code>, <code>num_maps</code>, <code>num_maps_in</code>, <code>num_maps_out</code>, <code>num_sigs_in</code>, <code>num_sigs_out</code>, <code>ordinal</code>, <code>port</code>, <code>signal</code>, <code>synced</code></td>
+</tr>
+<tr>
+<td>Signal</td>
+<td><code>device</code>, <code>direction</code>, <code>ephemeral</code>, <code>jitter</code>, <code>length</code>, <code>max</code>, <code>maximum</code>, <code>min</code>, <code>minimum</code>, <code>num_inst</code>, <code>num_maps</code>, <code>num_maps_in</code>, <code>num_maps_out</code>, <code>period</code>, <code>rate</code>, <code>steal</code>, <code>type</code>, <code>unit</code></td>
+</tr>
+<tr>
+<td>Maps</td>
+<td><code>bundle</code>, <code>expr</code>, <code>muted</code>, <code>num_destinations</code>, <code>num_sources</code>, <code>process_loc</code>, <code>protocol</code>, <code>scope</code>, <code>signal</code>, <code>slot</code>, <code>use_inst</code></td>
+</tr>
+</tbody>
+</table>
+
+<!--end of exported tutorial-->
+
+      </section>
+    </div>
+  </body>
+  <script>
+      window.onload = function() {
+          $("#header").load("./sidebar.html");
+      };
+  </script>
+</html>

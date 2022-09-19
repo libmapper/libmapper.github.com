@@ -21,9 +21,10 @@
         <h2>Tutorials</h2>
         <!-- the tabs -->
         <ul class="tabs">
-          <li><a href="introduction.html">Introduction</a></li>
+          <li><a href="introduction.html">Intro</a></li>
           <li><a href="c.html">C</a></li>
           <li class="selected"><a href="cpp.html">C++</a></li>
+          <li><a href="csharp.html">C#</a></li>
           <li><a href="python.html">Python</a></li>
           <li><a href="java.html">Java</a></li>
           <li><a href="maxmsp.html">Max</a></li>
@@ -73,7 +74,7 @@ specifying the name of the network interface to use.</p>
 
 <p>The device lifecycle looks like this:</p>
 
-<p><img style="display:block;margin:auto;padding:0px;width:75%;;box-shadow:none;-moz-box-shadow:none;-webkit-box-shadow:none" src="./images/device_lifecyle.png"></p>
+<p><img style="display:block;margin:auto;padding:0px;width:75%;;box-shadow:none;-moz-box-shadow:none;-webkit-box-shadow:none" src="./images/device_lifecycle.png"></p>
 
 <p>In other words, after a device is created, it must be continuously polled during
 its lifetime.</p>
@@ -540,25 +541,33 @@ cast to the appropriate type.</p>
 
 <p>You can use any property name not already reserved by <em>libmapper</em>.</p>
 
-<h4 id="toc_16">Reserved keys for all objects</h4>
+<table>
+<thead>
+<tr>
+<th>Object</th>
+<th>Reserved keys</th>
+</tr>
+</thead>
 
-<p><code>data</code>, <code>id</code>, <code>is_local</code>, <code>lib_version</code>, <code>version</code></p>
-
-<h4 id="toc_17">Additional reserved keys for devices</h4>
-
-<p><code>linked</code>, <code>name</code>, <code>num_maps_in</code>, <code>num_maps_out</code>, <code>num_sigs_in</code>, <code>num_sigs_out</code>,
-<code>ordinal</code>, <code>status</code>, <code>synced</code></p>
-
-<h4 id="toc_18">Additional reserved keys for signals</h4>
-
-<p><code>device</code>, <code>direction</code>, <code>jitter</code>, <code>length</code>, <code>max</code>, <code>maximum</code>, <code>min</code>, <code>minimum</code>,
-<code>name</code>, <code>num_inst</code>, <code>num_maps_in</code>, <code>num_maps_out</code>, <code>period</code>, <code>steal</code>, <code>type</code>,
-<code>unit</code>, <code>use_inst</code></p>
-
-<h4 id="toc_19">Additional reserved keys for maps</h4>
-
-<p><code>expr</code>, <code>muted</code>, <code>num_sigs_in</code>, <code>process_loc</code>, <code>protocol</code>, <code>scope</code>, <code>status</code>,
-<code>use_inst</code></p>
+<tbody>
+<tr>
+<td>All</td>
+<td><code>data</code>, <code>description</code>, <code>id</code>, <code>is_local</code>, <code>name</code>, <code>status</code>, <code>version</code></td>
+</tr>
+<tr>
+<td>Device</td>
+<td><code>host</code>, <code>libversion</code>, <code>num_maps</code>, <code>num_maps_in</code>, <code>num_maps_out</code>, <code>num_sigs_in</code>, <code>num_sigs_out</code>, <code>ordinal</code>, <code>port</code>, <code>signal</code>, <code>synced</code></td>
+</tr>
+<tr>
+<td>Signal</td>
+<td><code>device</code>, <code>direction</code>, <code>ephemeral</code>, <code>jitter</code>, <code>length</code>, <code>max</code>, <code>maximum</code>, <code>min</code>, <code>minimum</code>, <code>num_inst</code>, <code>num_maps</code>, <code>num_maps_in</code>, <code>num_maps_out</code>, <code>period</code>, <code>rate</code>, <code>steal</code>, <code>type</code>, <code>unit</code></td>
+</tr>
+<tr>
+<td>Maps</td>
+<td><code>bundle</code>, <code>expr</code>, <code>muted</code>, <code>num_destinations</code>, <code>num_sources</code>, <code>process_loc</code>, <code>protocol</code>, <code>scope</code>, <code>signal</code>, <code>slot</code>, <code>use_inst</code></td>
+</tr>
+</tbody>
+</table>
 
 <!--end of exported tutorial-->
 
