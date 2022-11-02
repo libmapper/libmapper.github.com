@@ -18,26 +18,54 @@
       <div id="header">
       </div>
       <section>
+        <h2>What is libmapper?</h2>
+        <p>libmapper is an open-source, cross-platform software library for declaring data signals
+           on a shared network and enabling arbitrary connections to be made between them.
+           libmapper creates a distributed mapping system/network, with no central points of
+           failure, the potential for tight collaboration and easy parallelization of media
+           synthesis. The main focus of libmapper development is to provide tools for creating and
+           using systems for interactive control of media synthesis.</p>
 
 		<h2>Motivation</h2>
-		<p>Open Sound Control (OSC) has been adopted by the academic and experimental-music communities for interactive media programming due to its flexibility in representing control data, strong semantics/human-readability, precise time-tagging, etc. Unfortunately, different projects utilizing OSC are rarely protocol-compatible. Many proposals have been made for creating standardized address-spaces/schemas to enable intercommunication, but we believe this is the wrong approach since it destroys the most powerful and useful aspect of OSC – the flexibility it allows for each user/designer/programmer to represent control signals and structures according to their specific needs or desires.</p>
-		<p>libmapper takes a different approach: instead of enforcing preset schemas we provide simple, distributed discovery and description; instead of address standardization we provide automatic translation; instead of normalization we provide automatic scaling... but that’s not all!</p>
-		<p>In addition to the flexibility of data-representation provided by Open Sound Control, libmapper provides:</p>
+		<p>Open Sound Control (OSC) has been adopted by the academic and experimental-music
+           communities for interactive media programming due to its flexibility in representing
+           control data, strong semantics/human-readability, precise time-tagging, etc.
+           Unfortunately, different projects utilizing OSC are rarely protocol-compatible. Many
+           proposals have been made for creating standardized address-spaces/schemas to enable
+           intercommunication, but we believe this is the wrong approach since it destroys the most
+           powerful and useful aspect of OSC – the flexibility it allows for each
+           user/designer/programmer to represent control signals and structures according to their
+           specific needs or desires.</p>
+
+		<p>libmapper takes a different approach: instead of enforcing preset schemas we provide
+           simple, distributed discovery and description; instead of address standardization we
+           provide automatic translation; instead of normalization we provide automatic scaling...
+           but that’s not all!</p>
+
+		<p>In addition to the flexibility of data-representation provided by Open Sound Control,
+           libmapper provides:</p>
 
         <ul>
           <li>automatic negotiation for resources (e.g. ports, unique names)</li>
           <li>automatic peer discovery</li>
-          <li>a semantic abstraction of the networking layer (make connections between devices and signals by name rather than having to manually set namespaces/IP addresses/ports</li>
+          <li>a semantic abstraction of the networking layer (make connections between devices and
+              signals by name rather than having to manually set namespaces/IP addresses/ports</li>
           <li>description, including extensible properties as key-value pairs</li>
           <li>automatic translation of OSC addresses between peers</li>
           <li>automatic type coercion &amp; linear scaling between peers</li>
           <li>arbitrary signal processing within connections, including FIR and IIR filtering</li>
-          <li>remote connection management for persistence, automatic recovery, session management, saving and loading mapping configurations</li>
-          <li>the ability to query or stream the current value of remote destinations, enabling the use of supervised machine learning techniques for mapping</li>
-          <li>a powerful abstraction of signal “instances”, supporting arbitrary interconnection of polyphonic media synthesizers, multitouch interfaces, tangible interfaces, computer-vision blob-tracking algorithms, etc</li>
+          <li>remote connection management for persistence, automatic recovery, session management,
+              saving and loading mapping configurations</li>
+          <li>the ability to query or stream the current value of remote destinations, enabling the
+              use of supervised machine learning techniques for mapping</li>
+          <li>a powerful abstraction of signal “instances”, supporting arbitrary interconnection of
+              polyphonic media synthesizers, multitouch interfaces, tangible interfaces,
+              computer-vision blob-tracking algorithms, etc.</li>
         </ul>
 
-        <p>libmapper creates a distributed mapping system/network, with no central points of failure, the potential for tight collaboration and easy parallelization of media synthesis.</p>
+        <p>libmapper creates a distributed mapping system/network, with no central points of
+           failure, the potential for tight collaboration and easy parallelization of media
+           synthesis.</p>
 
       </section>
     </div>
