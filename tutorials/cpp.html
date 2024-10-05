@@ -37,10 +37,9 @@
 
 <h2 id="toc_1">Overview of the C++ API</h2>
 
-<p>If you take a look at the <a href="../api/index.html">API documentation</a>, there is
-a section called &quot;modules&quot;.  This is divided into the following sections:</p>
+<p>If you take a look at the <a href="http://libmapper.github.io/api/index.html">API documentation</a>, there is a section called &quot;modules&quot;.
+This is divided into the following sections:</p>
 
-<p>
 <ul>
 <li><a href="http://libmapper.github.io/api/classmapper_1_1Graph.html">Graphs</a></li>
 <li><a href="http://libmapper.github.io/api/classmapper_1_1Device.html">Devices</a></li>
@@ -48,10 +47,9 @@ a section called &quot;modules&quot;.  This is divided into the following sectio
 <li><a href="http://libmapper.github.io/api/classmapper_1_1Map.html">Maps</a></li>
 <li><a href="http://libmapper.github.io/api/classmapper_1_1List.html">Lists</a></li>
 </ul>
-</p>
 
-<p>For this tutorial, the only sections to pay attention to are <strong>Devices</strong> and <strong>Signals</strong>. <strong>Graphs</strong>, and <strong>Maps</strong> are mostly used when building
-user interfaces for designing mapping configurations.</p>
+<p>For this tutorial, the only sections to pay attention to are <strong>Devices</strong> and <strong>Signals</strong>.
+<strong>Graphs</strong>, and <strong>Maps</strong> are mostly used when building user interfaces for designing mapping configurations.</p>
 
 <h2 id="toc_2">Devices</h2>
 
@@ -64,9 +62,8 @@ constructor, which is overloaded to accept arguments of either
 <pre>mapper::Device dev(const char *name, mapper.Graph graph = 0);
 mapper::Device dev(std::string name, mapper.Graph graph = 0);</pre>
 
-<p>In regular usage only the first argument is needed. The optional <code>Graph</code>
-argument can be used to specify different networking parameters, such as
-specifying the name of the network interface to use.</p>
+<p>In regular usage only the first argument is needed.
+The optional <code>Graph</code> argument can be used to specify different networking parameters, such as specifying the name of the network interface to use.</p>
 
 <p>An example of creating a device:</p>
 
@@ -76,21 +73,19 @@ specifying the name of the network interface to use.</p>
 
 <p>The device lifecycle looks like this:</p>
 
-<p><img style="display:block;margin:auto;padding:0px;width:75%;;box-shadow:none;-moz-box-shadow:none;-webkit-box-shadow:none" src="./images/device_lifecycle.png"></p>
+<p><img style="display:block;margin:auto;padding:0px;width:75%" src="./images/device_lifecycle.png"></p>
 
 <p>In other words, after a device is created, it must be continuously polled during
 its lifetime.</p>
 
-<p>The polling is necessary for several reasons: to respond to requests on the
-admin bus; to check for incoming signals; to update outgoing signals.  Therefore
-even a device that does not have signals must be polled.  The user program must
-organize to have a timer or idle handler which can poll the device often enough.
+<p>The polling is necessary for several reasons: to respond to requests on the admin bus; to check for incoming signals; to update outgoing signals.
+Therefore even a device that does not have signals must be polled.
+The user program must organize to have a timer or idle handler which can poll the device often enough.
 The polling interval is not extremely sensitive, but should be 100 ms or less.
 The faster it is polled, the faster it can handle incoming and outgoing signals.</p>
 
-<p>The <code>poll()</code> function can be blocking or non-blocking, depending on how you want
-your application to behave.  It takes an optional number of milliseconds during
-which it should do some work before returning:</p>
+<p>The <code>poll()</code> function can be blocking or non-blocking, depending on how you want your application to behave.
+It takes an optional number of milliseconds during which it should do some work before returning:</p>
 
 <pre>int dev.poll(int block_ms);</pre>
 
@@ -98,56 +93,43 @@ which it should do some work before returning:</p>
 
 <pre>dev.poll();</pre>
 
-<p>If your polling is in the middle of a processing function or in response to a
-GUI event for example, non-blocking behaviour is desired.  On the other hand if
-you put it in the middle of a loop which reads incoming data at intervals or
-steps through a simulation for example, you can use <code>poll()</code> as your &quot;sleep&quot;
-function, so that it will react to network activity while waiting.</p>
+<p>If your polling is in the middle of a processing function or in response to a GUI event for example, non-blocking behaviour is desired.
+On the other hand if you put it in the middle of a loop which reads incoming data at intervals or steps through a simulation for example, you can use <code>poll()</code> as your &quot;sleep&quot; function, so that it will react to network activity while waiting.</p>
 
-<p>It returns the number of messages handled, so optionally you could continue to
-call it until there are no more messages waiting.  Of course, you should be
-careful doing that without limiting the time it will loop for, since if the
-incoming stream is fast enough you might never get anything else done!</p>
+<p>It returns the number of messages handled, so optionally you could continue to call it until there are no more messages waiting.
+The same effect can be acheived by passing a negative value for the <code>block_ms</code> argument.
+Of course, you should be careful doing that without limiting the time it will loop for, since if the incoming stream is fast enough you might never get anything else done!</p>
 
-<p>Note that an important difference between blocking and non-blocking polling is
-that during the blocking period, messages will be handled immediately as they
-are received.  On the other hand, if you use your own sleep, messages will be
-queued up until you can call poll(); stated differently, it will
-&quot;time-quantize&quot; the message handling. This is not necessarily bad, but you
-should be aware of this effect.</p>
+<p>Note that an important difference between blocking and non-blocking polling is that during the blocking period, messages will be handled immediately as they are received.
+On the other hand, if you use your own sleep, messages will be queued up until you can call poll(); stated differently, it will &quot;time-quantize&quot; the message handling.
+This is not necessarily bad, but you should be aware of this effect.</p>
 
-<p>Since there is a delay before the device is completely initialized, it is
-sometimes useful to be able to determine this using <code>ready()</code>.  Only when
-<code>dev.ready()</code> returns non-zero is it valid to use the device&#39;s name.</p>
+<p>If your code has updated signal values and will not be calling <code>poll()</code> immediately, you may wish to call the function <code>update_maps()</code>.
+This will immediately cause any outgoing maps to be processed and send their updates to the destination signal.</p>
 
-<h2 id="toc_5">Signals</h2>
+<h3 id="toc_5">Initialization</h3>
 
-<p>Now that we know how to create a device, poll it, and free it, we only need to
-know how to add signals in order to give our program some input/output
-functionality.  While libmapper enables arbitrary connections between <em>any</em>
-declared signals, we still find it helpful to distinguish between two type of
-signals: <code>inputs</code> and <code>outputs</code>. </p>
+<p>Since there is a delay before the device is completely initialized, it is sometimes useful to be able to determine this using <code>ready()</code>.
+Only when <code>dev.ready()</code> returns non-zero is it valid to use the device&#39;s name.</p>
+
+<h2 id="toc_6">Signals</h2>
+
+<p>Now that we know how to create a device, poll it, and free it, we only need to know how to add signals in order to give our program some input/output functionality.
+While libmapper enables arbitrary connections between <em>any</em> declared signals, we still find it helpful to distinguish between two type of
+signals: <code>inputs</code> and <code>outputs</code>.</p>
 
 <ul>
-<li><code>outputs</code> signals are <em>sources</em> of data, updated locally by their parent
-device</li>
-<li><code>inputs</code> signals are <em>consumers</em> of data and are <strong>not</strong> generally updated
-locally by their parent device.</li>
+<li><code>outputs</code> signals are <em>sources</em> of data, updated locally by their parent device</li>
+<li><code>inputs</code> signals are <em>consumers</em> of data and are <strong>not</strong> generally updated locally by their parent device.</li>
 </ul>
 
-<p>This can become a bit confusing, since the &quot;reverb&quot; parameter of a sound
-synthesizer might be updated locally through user interaction with a GUI,
-however the normal use of this signal is as a <em>destination</em> for control data
-streams so it should be defined as an <code>input</code> signal.  Note that this
-distinction is to help with GUI organization and user-understanding –
-<em>libmapper</em> enables connections from input signals and to output signals if
-desired.</p>
+<p>This can become a bit confusing, since the &quot;reverb&quot; parameter of a sound synthesizer might be updated locally through user interaction with a GUI, however the normal use of this signal is as a <em>destination</em> for control data streams so it should be defined as an <code>input</code> signal.
+Note that this distinction is to help with GUI organization and user-understanding – <em>libmapper</em> enables connections from input signals and to output signals if desired.</p>
 
-<h3 id="toc_6">Creating a signal</h3>
+<h3 id="toc_7">Creating a signal</h3>
 
-<p>We&#39;ll start with creating a &quot;sender&quot;, so we will first talk about how to update
-output signals.  A signal requires a bit more information than a device, much of
-which is optional:</p>
+<p>We&#39;ll start with creating a &quot;sender&quot;, so we will first talk about how to update output signals.
+A signal requires a bit more information than a device, much of which is optional:</p>
 
 <ol>
 <li>the direction of the signal: either <code>Direction::INCOMING</code> or <code>Direction::OUTGOING</code></li>
@@ -172,33 +154,26 @@ int max[4] = {10,11,12,13};
 Signal output;
 output = dev.add_sig(Direction::OUTGOING, &quot;my_output&quot;, 4, Type::INT32, 0, min, max);</pre>
 
-<p>The only <em>required</em> parameters here are the signal &quot;direction&quot; (IN or OUT),
-&quot;length&quot;, its name, and data type.  Signals are assumed to be vectors of values,
-so for usual single-valued signals, a length of 1 should be specified.  Finally,
-supported types are currently <code>Type::INT32</code>, <code>Type::FLOAT</code>, or <code>Type::DOUBLE</code>,
-for <code>int</code>, <code>float</code>, or <code>double</code> values, respectively.</p>
+<p>The only <em>required</em> parameters here are the signal &quot;direction&quot; (IN or OUT), &quot;length&quot;, its name, and data type.
+Signals are assumed to be vectors of values, so for usual single-valued signals, a length of 1 should be specified.
+Finally, supported types are currently <code>Type::INT32</code>, <code>Type::FLOAT</code>, or <code>Type::DOUBLE</code>, for <code>int</code>, <code>float</code>, or <code>double</code> values, respectively.</p>
 
-<p>The other parameters are not strictly required, but the more information you
-provide, the more <em>libmapper</em> can do some things automatically.  For example, if
-<code>minimum</code> and <code>maximum</code> are provided, it will be possible to create
-linear-scaled connections very quickly.  If <code>unit</code> is provided, <em>libmapper</em> will
-be able to similarly figure out a linear scaling based on unit conversion (from
-centimeters to inches for example). Currently automatic unit-based scaling is
-not a supported feature, but will be added in the future.  You can take
-advantage of this future development by simply providing unit information
-whenever it is available.  It is also helpful documentation for users.</p>
+<p>The other parameters are not strictly required, but the more information you provide, the more <em>libmapper</em> can do some things automatically.
+For example, if <code>minimum</code> and <code>maximum</code> are provided, it will be possible to create linear-scaled connections very quickly.
+If <code>unit</code> is provided, <em>libmapper</em> will be able to similarly figure out a linear scaling based on unit conversion (from centimeters to inches for example).
+Currently automatic unit-based scaling is not a supported feature, but will be added in the future.
+You can take advantage of this future development by simply providing unit information whenever it is available.
+It is also helpful documentation for users.</p>
 
-<p>Notice that optional values are provided as <code>void*</code> pointers.  This is because a
-signal can either be <code>int</code>, <code>float</code> or <code>double</code>, and your maximum and minimum
-values should correspond in type.  So you should pass in a <code>int*</code>, <code>float*</code> or
-<code>double*</code> by taking the address of a local variable.</p>
+<p>Notice that optional values are provided as <code>void*</code> pointers.
+This is because a signal can either be <code>int</code>, <code>float</code> or <code>double</code>, and your maximum and minimum values should correspond in type.
+So you should pass in a <code>int*</code>, <code>float*</code> or <code>double*</code> by taking the address of a local variable.</p>
 
 <p>Lastly, it is usually necessary to be informed when input signal values change.
-This is done by providing a function to be called whenever its value is modified
-by an incoming message.  It is passed in the <code>handler</code> parameter.</p>
+This is done by providing a function to be called whenever its value is modified by an incoming message.
+It is passed in the <code>handler</code> parameter.</p>
 
-<p>An example of creating a &quot;barebones&quot; <code>int</code> scalar output signal with no unit,
-minimum, or maximum information:</p>
+<p>An example of creating a &quot;barebones&quot; <code>int</code> scalar output signal with no unit, minimum, or maximum information:</p>
 
 <pre>mapper::Signal sig;
 sig = dev.add_signal(mapper::Direction::OUTGOING, &quot;outA&quot;, 1, mapper::Type::INT32);</pre>
@@ -212,7 +187,8 @@ sig = dev.add_signal(mapper::Direction::OUTGOING, &quot;sensor1&quot;, 1,
                      mapper::Type::FLOAT, &quot;V&quot;, &amp;min, &amp;max);</pre>
 
 <p>So far we know how to create a device and to specify an output signal
-for it.  To recap, let&#39;s review the code so far:</p>
+for it.
+To recap, let&#39;s review the code so far:</p>
 
 <pre>mapper::Device dev(&quot;test_sender&quot;);
 mapper::Signal sig;
@@ -227,10 +203,8 @@ while (!done) {
     ... update signals ...
 }</pre>
 
-<p>It is possible to retrieve a device&#39;s signals at a later time using the function
-<code>dev.signals()</code>. This function returns an object of type
-<code>mapper::List&lt;mapper::Signal&gt;</code> which can be used to retrieve all of the signals
-belonging to a particular device:</p>
+<p>It is possible to retrieve a device&#39;s signals at a later time using the function <code>dev.signals()</code>.
+This function returns an object of type <code>mapper::List&lt;mapper::Signal&gt;</code> which can be used to retrieve all of the signals belonging to a particular device:</p>
 
 <pre>std::cout &lt;&lt; &quot;Signals belonging to &quot; &lt;&lt; dev[Property::NAME] &lt;&lt; std::endl;
 
@@ -243,25 +217,17 @@ for (; list != list.end(); ++list) {
 for (mapper::Signal sig : dev.signals())
     std::cout &lt;&lt; &quot;signal: &quot; &lt;&lt; sig &lt;&lt; std::endl;</pre>
 
-<h3 id="toc_7">Updating signals</h3>
+<h3 id="toc_8">Updating signals</h3>
 
-<p>We can imagine the above program getting sensor information in a loop.  It could
-be running on an network-enable ARM device and reading the ADC register
-directly, or it could be running on a computer and reading data from an Arduino
-over a USB serial port, or it could just be a mouse-controlled GUI slider.
-However it&#39;s getting the data, it must provide it to <em>libmapper</em> so that it will
-be sent to other devices if that signal is mapped.</p>
+<p>We can imagine the above program getting sensor information in a loop.
+It could be running on an network-enable ARM device and reading the ADC register directly, or it could be running on a computer and reading data from an Arduino over a USB serial port, or it could just be a mouse-controlled GUI slider.
+However it&#39;s getting the data, it must provide it to <em>libmapper</em> so that it will be sent to other devices if that signal is mapped.</p>
 
-<p>This is accomplished by the function <code>set_value()</code>, which is overloaded to
-accept a wide variety of argument types (scalars, std::vector, std::array, etc.).
-Check the API documentation for more information. The data passed to set_value()
-is not required to match the length and type of the signal itself—libmapper will
-perform type coercion if necessary. More than one &#39;sample&#39; of signal update may be
-applied at once by e.g. updating a signal with length 5 using a 20-element
-array.</p>
+<p>This is accomplished by the function <code>set_value()</code>, which is overloaded to accept a wide variety of argument types (scalars, std::vector, std::array, etc.).
+Check the API documentation for more information.
+The data passed to <code>set_value()</code> is not required to match the length and type of the signal itself—libmapper will perform type coercion if necessary.</p>
 
-<p>So in the &quot;sensor 1&quot; example, assuming in <code>do_stuff()</code> we have some code which
-reads sensor 1&#39;s value into a float variable called <code>v1</code>, the loop becomes:</p>
+<p>So in the &quot;sensor 1&quot; example, assuming in <code>do_stuff()</code> we have some code which reads sensor 1&#39;s value into a float variable called <code>v1</code>, the loop becomes:</p>
 
 <pre>while (!done) {
     dev.poll(50);
@@ -271,62 +237,42 @@ reads sensor 1&#39;s value into a float variable called <code>v1</code>, the loo
     sig.set_value(v1);
 }</pre>
 
-<p>This is about all that is needed to expose sensor 1&#39;s value to the network as a
-mappable parameter.  The <em>libmapper</em> GUI can now map this value to a receiver,
-where it could control a synthesizer parameter or change the brightness of an
+<p>This is about all that is needed to expose sensor 1&#39;s value to the network as a mappable parameter.
+The <em>libmapper</em> GUI can now map this value to a receiver, where it could control a synthesizer parameter or change the brightness of an
 LED, or whatever else you want to do.</p>
 
-<h3 id="toc_8">Signal conditioning</h3>
+<h3 id="toc_9">Signal conditioning</h3>
 
-<p>Most synthesizers of course will not know what to do with the value of sensor1
---it is an electrical property that has nothing to do with sound or music.  This
-is where <em>libmapper</em> really becomes useful.</p>
+<p>Most synthesizers of course will not know what to do with the value of sensor1--it is an electrical property that has nothing to do with sound or music.
+This is where <em>libmapper</em> really becomes useful.</p>
 
-<p>Scaling or other signal conditioning can be taken care of <em>before</em> exposing the
-signal, or it can be performed as part of the mapping.  Since the end user can
-demand any mathematical operation be performed on the signal, he can perform
-whatever mappings between signals as he wishes.</p>
+<p>Scaling or other signal conditioning can be taken care of <em>before</em> exposing the signal, or it can be performed as part of the mapping.
+Since the end user can demand any mathematical operation be performed on the signal, they can perform whatever mappings between signals as they wish.</p>
 
-<p>As a developer, it is therefore your job to provide information that will be
-useful to the end user.</p>
+<p>As a developer, it is therefore your job to provide information that will be useful to the end user.</p>
 
-<p>For example, if sensor 1 is a position sensor, instead of publishing &quot;voltage&quot;,
-you could convert it to centimeters or meters based on the known dimensions of
-the sensor, and publish a &quot;/sensor1/position&quot; signal instead, providing the unit
-information as well.</p>
+<p>For example, if sensor 1 is a position sensor, instead of publishing &quot;voltage&quot;, you could convert it to centimeters or meters based on the known dimensions of the sensor, and publish a &quot;/sensor1/position&quot; signal instead, providing the unit information as well.</p>
 
-<p>We call such signals &quot;semantic&quot;, because they provide information with more
-meaning than a relatively uninformative value based on the electrical properties
-of the sensing technqiue.  Some sensors can benefit from low-pass filtering or
-other measures to reduce noise.  Some sensors may need to be combined in order
-to derive physical meaning.  What you choose to expose as outputs of your device
-is entirely application-dependent.</p>
+<p>We call such signals &quot;semantic&quot;, because they provide information with more meaning than a relatively uninformative value based on the electrical properties of the sensing technique.
+Some sensors can benefit from low-pass filtering or other measures to reduce noise.
+Some sensors may need to be combined in order to derive physical meaning.
+What you choose to expose as outputs of your device is entirely application-dependent.</p>
 
-<p>You can even publish both &quot;/sensor1/position&quot; and &quot;/sensor1/voltage&quot; if desired,
-in order to expose both processed and raw data.  Keep in mind that these will
-not take up significant processing time, and <em>zero</em> network bandwidth, if they
-are not mapped.</p>
+<p>You can even publish both &quot;/sensor1/position&quot; and &quot;/sensor1/voltage&quot; if desired, in order to expose both processed and raw data.
+Keep in mind that these will not take up significant processing time, and <em>zero</em> network bandwidth, if they are not mapped.</p>
 
-<h3 id="toc_9">Receiving signals</h3>
+<h3 id="toc_10">Receiving signals</h3>
 
-<p>Now that we know how to create a sender, it would be useful to also know how to
-receive signals, so that we can create a sender-receiver pair to test out the
-provided mapping functionality. The current value and timestamp for a signal can
-be retrieved at any time by calling the function <code>value()</code> on your signal
-object, however for event-driven applications you may want to be informed of new
-values as they are received or generated.</p>
+<p>Now that we know how to create a sender, it would be useful to also know how to receive signals, so that we can create a sender-receiver pair to test out the provided mapping functionality.
+The current value and timestamp for a signal can be retrieved at any time by calling the function <code>value()</code> on your signal object, however for event-driven applications you may want to be informed of new values as they are received or generated.</p>
 
-<p>As mentioned above, the <code>add_signal()</code> function takes an optional <code>handler</code>
-argument.  This is a function that will be called whenever the value of that
-signal changes.  To create a receiver for a synthesizer parameter &quot;pulse width&quot;
-(given as a ratio between 0 and 1), specify a handler when calling <code>add_signal()</code>.
-We&#39;ll imagine there is some C++ synthesizer implemented as a class <code>Synthesizer</code>
-which has functions <code>setPulseWidth()</code> which sets the pulse width in a thread-safe
-manner, and <code>startAudioInBackground()</code> which sets up the audio thread.</p>
+<p>As mentioned above, the <code>add_signal()</code> function takes an optional <code>handler</code> argument.
+This is a function that will be called whenever the value of that signal changes.
+To create a receiver for a synthesizer parameter &quot;pulse width&quot; (given as a ratio between 0 and 1), specify a handler when calling <code>add_signal()</code>.
+We&#39;ll imagine there is some C++ synthesizer implemented as a class <code>Synthesizer</code> which has functions <code>setPulseWidth()</code> which sets the pulse width in a thread-safe manner, and <code>startAudioInBackground()</code> which sets up the audio thread.</p>
 
-<p>Create the handler function, which is fairly simple as it has been overloaded to
-accept different scalar datatypes and other functionality. The full version of
-the handler is:</p>
+<p>Create the handler function, which is fairly simple as it has been overloaded to accept different scalar datatypes and other functionality.
+The full version of the handler is:</p>
 
 <pre>void handler(mapper::Signal signal, mapper::Signal::Event event,
              mapper::Id instance, int length, mapper::Type type,
@@ -335,9 +281,8 @@ the handler is:</p>
     ...
 }</pre>
 
-<p>Please refer to the API documentation for more detail on acceptable handler
-definitions.  For our example we will use a simpler handler since we know our
-signal type is scalar float:</p>
+<p>Please refer to the API documentation for more detail on acceptable handler definitions.
+For our example we will use a simpler handler since we know our signal type is scalar float:</p>
 
 <pre>void pulsewidth_handler(mapper::Signal signal, float value, mapper::Time time)
 {
@@ -345,9 +290,7 @@ signal type is scalar float:</p>
     synth-&gt;setPulseWidth(value);
 }</pre>
 
-<p>First, the pointer to the <code>Synthesizer</code> instance is extracted from the stored
-<code>synthptr</code> property, then it is dereferenced to set the pulse width according to
-the value pointed to by <code>value</code>.</p>
+<p>First, the pointer to the <code>Synthesizer</code> instance is extracted from the stored <code>synthptr</code> property, then it is dereferenced to set the pulse width according to the value pointed to by <code>value</code>.</p>
 
 <p>Then <code>main()</code> will look like,</p>
 
@@ -364,30 +307,26 @@ the value pointed to by <code>value</code>.</p>
     mapper::Signal pulsewidth =
         dev.add_signal(mapper::Direction::INCOMING, &quot;pulsewidth&quot;, 1,
                        mapper::Type::FLOAT, 0, &amp;min_pw, &amp;max_pw)
-           .set_property(&quot;synthptr&quot;, &amp;synth)
+           .set_local_property(&quot;synthptr&quot;, &amp;synth)
            .set_callback(pulsewidth_handler);
 
     while (!done)
         dev.poll(50);
 }</pre>
 
-<h2 id="toc_10">Working with timetags</h2>
+<h2 id="toc_11">Working with timetags</h2>
 
 <p><em>libmapper</em> uses the <code>Time</code> class to store
 <a href="http://en.wikipedia.org/wiki/Network_Time_Protocol#NTP_timestamps">NTP timestamps</a>.
-For example, the handler function called when a signal update is received
-contains a <code>time</code> argument.  This argument indicates the time at which the
-source signal was <em>sampled</em> (in the case of sensor signals) or <em>generated</em> (in
-the case of sequenced or algorithimically-generated signals).</p>
+For example, the handler function called when a signal update is received contains a <code>time</code> argument.
+This argument indicates the time at which the source signal was <em>sampled</em> (in the case of sensor signals) or <em>generated</em> (in the case of sequenced or algorithimically-generated signals).</p>
 
-<p><em>libmapper</em> provides helper functions for getting the current device-time,
-setting the value of a <code>Time</code> instance from other representations, and comparing or
-copying timetags.  Check the API documentation for more information.</p>
+<p><em>libmapper</em> provides helper functions for getting the current device-time, setting the value of a <code>Time</code> instance from other representations, and comparing or copying timetags.
+Check the API documentation for more information.</p>
 
-<h2 id="toc_11">Working with signal instances</h2>
+<h2 id="toc_12">Working with signal instances</h2>
 
-<p><em>libmapper</em> also provides support for signals with multiple <em>instances</em>, for
-example:</p>
+<p><em>libmapper</em> also provides support for signals with multiple <em>instances</em>, for example:</p>
 
 <ul>
 <li>control parameters for polyphonic synthesizers;</li>
@@ -400,78 +339,69 @@ example:</p>
 <p>The important qualities of signal instances in <em>libmapper</em> are:</p>
 
 <ul>
-<li><strong>instances are interchangeable</strong>: if there are semantics attached to a
-specific instance it should be represented with separate signals instead.</li>
-<li><strong>instances can be ephemeral</strong>: signal instances can be dynamically created
-and destroyed. <em>libmapper</em> will ensure that linked devices share a common
-understanding of the relatonships between instances when they are mapped.</li>
-<li><strong>map once for all instances</strong>: one mapping connection serves to map all of a
-signal&#39;s instances.</li>
+<li><strong>instances are interchangeable</strong>: if there are semantics attached to a specific instance it should be represented with separate signals instead.</li>
+<li><strong>instances can be ephemeral</strong>: signal instances can be dynamically created and destroyed.
+<em>libmapper</em> will ensure that linked devices share a common understanding of the relatonships between instances when they are mapped.</li>
+<li><strong>map once for all instances</strong>: one mapping connection serves to map all of a signal&#39;s instances.</li>
 </ul>
 
-<p>All signals possess one instance by default. If you would like to reserve more
-instances you can use:</p>
+<p>All signals possess one instance by default.
+If you would like to reserve more instances you can use:</p>
 
-<pre>sig.reserve_instances(int num)
-sig.reserve_instances(int num, mapper::Id *ids)
-sig.reserve_instances(int num, mapper::Id *ids, void **data)</pre>
+<pre>Signal&amp; reserve_instance();
+Signal&amp; reserve_instance(mapper::Id *ids);
+Signal&amp; reserve_instance(mapper::Id *ids, void **data);
+
+Signal&amp; reserve_instances(int num);
+Signal&amp; reserve_instances(int num, mapper::Id *ids);
+Signal&amp; reserve_instances(int num, mapper::Id *ids, void **data);</pre>
 
 <p>After reserving instances you can update a specific instance, for example:</p>
 
-<pre>Signal::Instance si = sig.instance(id);
+<pre>sig.reserve_instance();
+
+Signal::Instance si = sig.instance(0);
 si.set_value(value);
 
 // or simply:
-sig.instance(id).set_value(value);</pre>
+sig.instance(0).set_value(value);</pre>
 
-<p>The <code>instance</code> argument is of type <code>mapper::Id</code> does not have to be considered as
-an array index - it can be any 64-bit vbalue that is convenient for labelling your
-instance. <em>libmapper</em> will internally create a map from your id label to one of the
-preallocated instance structures.</p>
+<p>The <code>instance</code> argument is of type <code>mapper::Id</code> does not have to be considered as an array index - it can be any 64-bit vbalue that is convenient for labelling your instance.
+<em>libmapper</em> will internally create a map from your id label to one of the preallocated instance structures.</p>
 
-<h3 id="toc_12">Receiving instances</h3>
+<h3 id="toc_13">Receiving instances</h3>
 
-<p>You might have noticed earlier that the full handler function called when a signal
-update is received has a argument called <code>instance</code>. Here is the function
-prototype again:</p>
+<p>You might have noticed earlier that the full handler function called when a signal update is received has a argument called <code>instance</code>.
+Here is the function prototype again:</p>
 
 <pre>void handler(mapper::Signal signal, mapper::Signal::Event event,
              mapper::Id instance, int len, mapper::Type type,
              const void *value, mapper::Type time);</pre>
 
-<p>For convenience the handler is also available in a form with the signal instance
-pre-fetched:</p>
+<p>For convenience the handler is also available in a form with the signal instance pre-fetched:</p>
 
 <pre>void handler(mapper::Signal::Instance sigInst, mapper::Signal::Event event,
              int len, mapper::Type type, const void *value, mapper::Type time);</pre>
 
-<p>Under normal usage, the <code>instance</code> argument in the first handler example will have
-a value (0 &lt;= n &lt;= num_instances) and can be used as an array index. Remember that
-you will need to reserve instances for your input signal when calling
-<code>Device::add_signal()</code> or using <code>sig.reserve_instances()</code> if you want to receive instance updates.</p>
+<p>Under normal usage, the <code>instance</code> argument in the first handler example will have a value (0 &lt;= n &lt;= num_instances) and can be used as an array index.
+Remember that you will need to reserve instances for your input signal when calling <code>Device::add_signal()</code> or using <code>sig.reserve_instances()</code> if you want to receive instance updates.</p>
 
-<h3 id="toc_13">Instance Stealing</h3>
+<h3 id="toc_14">Instance Stealing</h3>
 
-<p>For handling cases in which the sender signal has more instances than the
-receiver signal, the <em>instance allocation mode</em> can be set for an input signal
-to set an action to take in case all allocated instances are in use and a
-previously unseen instance id is received. Use the function:</p>
+<p>For handling cases in which the sender signal has more instances than the receiver signal, the <em>instance allocation mode</em> can be set for an input signal to set an action to take in case all allocated instances are in use and a previously unseen instance id is received.
+Use the function:</p>
 
-<pre>sig.set_property(mapper::Property::STEAL_MODE, mapper::Map::Stealing type);</pre>
+<pre>sig.set_property(mapper::Property::STEALING, mapper::Signal::Stealing type);</pre>
 
 <p>The argument <code>mode</code> can have one of the following values:</p>
 
 <ul>
 <li><code>Stealing::NONE</code> Default value, in which no stealing of instances will occur;</li>
-<li><code>Stealing::OLDEST</code> Release the oldest active instance and reallocate its
-resources to the new instance;</li>
-<li><code>Stealing::NEWEST</code> Release the newest active instance and reallocate its
-resources to the new instance;</li>
+<li><code>Stealing::OLDEST</code> Release the oldest active instance and reallocate its resources to the new instance;</li>
+<li><code>Stealing::NEWEST</code> Release the newest active instance and reallocate its resources to the new instance;</li>
 </ul>
 
-<p>If you want to use another method for determining which active instance to
-release (e.g. the sound with the lowest volume), you can create a <code>handler</code> for
-the signal and write the method yourself:</p>
+<p>If you want to use another method for determining which active instance to release (e.g. the sound with the lowest volume), you can create a <code>handler</code> for the signal and write the method yourself:</p>
 
 <pre>void my_handler(mapper::Signal signal, mapper::Signal::Event event,
                 mapper::Id instance, int len, mapper::Type type, const void *val,
@@ -486,32 +416,24 @@ the signal and write the method yourself:</p>
     }
 }</pre>
 
-<p>For this function to be called when instance stealing is necessary, we need to
-register it for <code>Signal::Event::OFLW</code> events:</p>
+<p>For this function to be called when instance stealing is necessary, we need to register it for <code>Signal::Event::OFLW</code> events:</p>
 
 <pre>sig.set_callback(my_handler, Signal::Event::UPDATE | Signal::Event::OFLW);</pre>
 
-<h2 id="toc_14">Publishing metadata</h2>
+<h2 id="toc_15">Publishing metadata</h2>
 
-<p>Things like device names, signal units, and ranges, are examples of metadata
---information about the data you are exposing on the network.</p>
+<p>Things like device names, signal units, and ranges, are examples of metadata--information about the data you are exposing on the network.</p>
 
-<p><em>libmapper</em> also provides the ability to specify arbitrary extra metadata in the
-form of name-value pairs.  These are not interpreted by <em>libmapper</em> in any way,
-but can be retrieved over the network.  This can be used for instance to give a
-device X and Y information, or to perhaps give a signal some property like
-&quot;reliability&quot;, or some category like &quot;light&quot;, &quot;motor&quot;, &quot;shaker&quot;, etc.</p>
+<p><em>libmapper</em> also provides the ability to specify arbitrary extra metadata in the form of name-value pairs.
+These are not interpreted by <em>libmapper</em> in any way, but can be retrieved over the network.
+This can be used for instance to give a device X and Y information, or to perhaps give a signal some property like &quot;reliability&quot;, or some category like &quot;light&quot;, &quot;motor&quot;, &quot;shaker&quot;, etc.</p>
 
-<p>Some GUI could then use this information to display information about the
-network in an intelligent manner.</p>
+<p>Some GUI could then use this information to display information about the network in an intelligent manner.</p>
 
-<p>Any time there may be extra knowledge about a signal or device, it is a good
-idea to represent it by adding such properties, which can be of any
-OSC-compatible type.  (So, numbers and strings, etc.)</p>
+<p>Any time there may be extra knowledge about a signal or device, it is a good idea to represent it by adding such properties, which can be of any OSC-compatible type.  (So, numbers and strings, etc.)</p>
 
-<p>The property can be set using the functions below, using either a name (C string
-or std::string) or a value from the <code>Property</code> enum if available. The getter and
-setter functions are also overloaded with the subscript operator.</p>
+<p>The property can be set using the functions below, using either a name (C string or std::string) or a value from the <code>Property</code> enum if available.
+The getter and setter functions are also overloaded with the subscript operator.</p>
 
 <pre>void &lt;object&gt;.set_property(&lt;name&gt;, &lt;value&gt;);
 void &lt;object&gt;.set_property(Property, &lt;value&gt;);
@@ -520,17 +442,19 @@ void &lt;object&gt;.set_property(Property, &lt;value&gt;);
 &lt;object&gt;[&lt;name&gt;] = &lt;value&gt;;
 &lt;object&gt;[Property] = &lt;value&gt;;</pre>
 
-<p>The <code>&lt;value&gt;</code> arguments can be a scalar, array or std::vector of type <code>int</code>,
-<code>float</code>, <code>double</code>, <code>char*</code>, or <code>void*</code>.</p>
+<p>It is also possible to declare properties that are only available locally, i.e. they will not be synchronized with the distributed graph.</p>
 
-<p>For example, to store a <code>float</code> indicating the X position of a device, you can
-call it like this:</p>
+<pre>void &lt;object&gt;.set_local_property(&lt;name&gt;, &lt;value&gt;);
+void &lt;object&gt;.set_local_property(Property, &lt;value&gt;);</pre>
+
+<p>The <code>&lt;value&gt;</code> arguments can be a scalar, array or std::vector of type <code>int</code>, <code>float</code>, <code>double</code>, <code>char*</code>, or <code>void*</code>.</p>
+
+<p>For example, to store a public (available to the graph) <code>float</code> property indicating the X position of a device <code>dev</code>, you can call it like this:</p>
 
 <pre>dev.set_property(&quot;x&quot;, 12.5f);
 sig.set_property(&quot;sensingMethod&quot;, &quot;resistive&quot;);</pre>
 
-<p>Retrieving a property is also quite simple, returning a PropVal object that can be
-cast to the appropriate type.</p>
+<p>Retrieving a property is also quite simple, returning a <code>PropVal</code> object that can be cast to the appropriate type.</p>
 
 <pre>&lt;type&gt; var = obj.property(&lt;name&gt;);
 &lt;type&gt; var = obj.property(Property);
@@ -539,7 +463,7 @@ cast to the appropriate type.</p>
 &lt;type&gt; var = obj[&lt;name&gt;];
 &lt;type&gt; var = obj[Property];</pre>
 
-<h3 id="toc_15">Reserved keys</h3>
+<h3 id="toc_16">Reserved keys</h3>
 
 <p>You can use any property name not already reserved by <em>libmapper</em>.</p>
 
@@ -570,6 +494,7 @@ cast to the appropriate type.</p>
 </tr>
 </tbody>
 </table>
+
 
 <!--end of exported tutorial-->
 

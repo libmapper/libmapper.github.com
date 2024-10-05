@@ -35,10 +35,14 @@
 
 <h1 id="toc_0">Getting started with libmapper and Java</h1>
 
-<p>Since <em>libmapper</em> uses GNU autoconf, getting started with the library is the
-same as any other library on Linux; use <code>./configure</code> and then <code>make</code> to compile
-it.  You&#39;ll need the <code>Java Developer Kit (JDK)</code>  available if you want to
+<p>Since <em>libmapper</em> uses GNU autoconf, getting started with the library is the same as any other library on Linux; use <code>./configure</code> and then <code>make</code> to compile it.
+You&#39;ll need the <code>Java Developer Kit (JDK)</code> available if you want to
 compile the Java bindings.</p>
+
+<p>When compiling the Java bindings on MacOS, you will probably need to pass the JDK path explicitly to autogen/configure.
+For example on one of our machines we use:</p>
+
+<pre>./autogen.sh --with-jdk-path=/Library/Java/JavaVirtualMachines/openjdk18/Contents/Home/</pre>
 
 <p>Once you have <em>libmapper</em> installed, it can be imported into your program:</p>
 
@@ -48,7 +52,6 @@ compile the Java bindings.</p>
 
 <p>The <em>libmapper</em> API is is divided into the following sections:</p>
 
-<p>
 <ul>
 <li>Graphs</li>
 <li>Devices</li>
@@ -56,24 +59,21 @@ compile the Java bindings.</p>
 <li>Maps</li>
 <li>Lists</li>
 </ul>
-</p>
 
-<p>For this tutorial, the only sections to pay attention to are <strong>Devices</strong> and
-<strong>Signals</strong>. The other sections are mostly used when building user interfaces for
-designing mapping configurations.</p>
+<p>For this tutorial, the only sections to pay attention to are <strong>Devices</strong> and <strong>Signals</strong>.
+The other sections are mostly used when building user interfaces for
+designing mapping configurations (session managers).</p>
 
 <h2 id="toc_2">Devices</h2>
 
 <h3 id="toc_3">Creating a device</h3>
 
-<p>To create a <em>libmapper</em> device, it is necessary to provide a device name to the
-constructor.  There is a brief initialization period after a device is created
-during which a unique ordinal is chosen to append to the device name.  This
-allows multiple devices with the same name to exist on the network.</p>
+<p>To create a <em>libmapper</em> device, it is necessary to provide a device name to the constructor.
+There is a brief initialization period after a device is created during which a unique ordinal is chosen to append to the device name.
+This allows multiple devices with the same name to exist on the network.</p>
 
-<p>A second optional parameter of the constructor is a <code>Graph</code> object.  It is not
-necessary to provide this, but can be used to specify different networking
-parameters, such as specifying the name of the network interface to use.</p>
+<p>A second optional parameter of the constructor is a <code>Graph</code> object.
+It is not necessary to provide this, but can be used to specify different networking parameters, such as specifying the name of the network interface to use.</p>
 
 <p>An example of creating a device:</p>
 
@@ -83,22 +83,18 @@ parameters, such as specifying the name of the network interface to use.</p>
 
 <p>The device lifecycle looks like this:</p>
 
-<p><img style="display:block;margin:auto;padding:0px;width:75%;;box-shadow:none;-moz-box-shadow:none;-webkit-box-shadow:none" src="./images/device_lifecycle.png"></p>
+<p><img style="display:block;margin:auto;padding:0px;width:75%" src="./images/device_lifecycle.png"></p>
 
-<p>In other words, after a device is created, it must be continuously polled during
-its lifetime.</p>
+<p>In other words, after a device is created, it must be continuously polled during its lifetime.</p>
 
-<p>The polling is necessary for several reasons: to respond to administrative
-messages; to check for incoming signals.  Therefore even a device that does not
-have signals must be polled.  The user program must organize to have a timer or
-idle handler which can poll the device often enough.  The polling interval is
-not extremely sensitive, but should be 100 ms or less.  The more often it is
-polled, the faster it can handle incoming and outgoing signals.</p>
+<p>The polling is necessary for several reasons: to respond to administrative messages; to check for incoming signals.
+Therefore even a device that does not have signals must be polled.
+The user program must organize to have a timer or idle handler which can poll the device often enough.
+The polling interval is not extremely sensitive, but should be 100 ms or less.
+The more often it is polled, the faster it can handle incoming and outgoing signals.</p>
 
-<p>The <code>poll()</code> function can be blocking or non-blocking, depending on how you want
-your application to behave.  It takes a number of milliseconds during which it
-should do some work, or 0 if it should check for any immediate actions and then
-return without waiting:</p>
+<p>The <code>poll()</code> function can be blocking or non-blocking, depending on how you want your application to behave.
+It takes a number of milliseconds during which it should do some work, or 0 if it should check for any immediate actions and then return without waiting:</p>
 
 <pre>dev.poll(int block_ms);</pre>
 
@@ -106,56 +102,42 @@ return without waiting:</p>
 
 <pre>dev.poll(0);</pre>
 
-<p>If your polling is in the middle of a processing function or in response to a
-GUI event for example, non-blocking behaviour is desired.  On the other hand if
-you put it in the middle of a loop which reads incoming data at intervals or
-steps through a simulation for example, you can use <code>poll()</code> as your &quot;sleep&quot;
-function, so that it will react to network activity while waiting.</p>
+<p>If your polling is in the middle of a processing function or in response to a GUI event for example, non-blocking behaviour is desired.
+On the other hand if you put it in the middle of a loop which reads incoming data at intervals or steps through a simulation for example, you can use <code>poll()</code> as your &quot;sleep&quot; function, so that it will react to network activity while waiting.</p>
 
-<p>It returns the number of messages handled, so optionally you could continue to
-call it until there are no more messages waiting.  Of course, you should be
-careful doing that without limiting the time it will loop for, since if the
-incoming stream is fast enough you might never get anything else done!</p>
+<p>It returns the number of messages handled, so optionally you could continue to call it until there are no more messages waiting.
+The same effect can be acheived by passing a negative value for the <code>block_ms</code> argument.
+Of course, you should be careful doing that without limiting the time it will loop for, since if the incoming stream is fast enough you might never get anything else done!</p>
 
-<p>Note that an important difference between blocking and non-blocking polling is
-that during the blocking period, messages will be handled immediately as they
-are received.  On the other hand, if you use your own sleep, messages will be
-queued up until you can call <code>poll()</code>; stated differently, it will
-&quot;time-quantize&quot; the message handling.  This is not necessarily bad, but you
-should be aware of this effect.</p>
+<p>Note that an important difference between blocking and non-blocking polling is that during the blocking period, messages will be handled immediately as they are received.
+On the other hand, if you use your own sleep, messages will be queued up until you can call <code>poll()</code>; stated differently, it will &quot;time-quantize&quot; the message handling.
+This is not necessarily bad, but you should be aware of this effect.</p>
 
-<p>Since there is a delay before the device is completely initialized, it is
-sometimes useful to be able to determine this using <code>ready()</code>.  Only when
-<code>ready()</code> returns non-zero is it valid to use the device&#39;s name.</p>
+<p>If your code has updated signal values and will not be calling <code>poll()</code> immediately, you may wish to call the function <code>updateMaps()</code>.
+This will immediately cause any outgoing maps to be processed and send their updates to the destination signal.</p>
 
-<h2 id="toc_5">Signals</h2>
+<h3 id="toc_5">Initialization</h3>
 
-<p>Now that we know how to create a device and poll it, we only need to know how to
-add signals in order to give our program some input/output functionality.  While
-libmapper enables arbitrary connections between <em>any</em> declared signals, we still
-find it helpful to distinguish between two type of signals: <code>inputs</code> and
-<code>outputs</code>. </p>
+<p>Since there is a delay before the device is completely initialized, it is sometimes useful to be able to determine this using <code>ready()</code>.
+Only when <code>ready()</code> returns non-zero is it valid to use the device&#39;s name.</p>
+
+<h2 id="toc_6">Signals</h2>
+
+<p>Now that we know how to create a device and poll it, we only need to know how to add signals in order to give our program some input/output functionality.
+While libmapper enables arbitrary connections between <em>any</em> declared signals, we still find it helpful to distinguish between two type of signals: <code>inputs</code> and <code>outputs</code>.</p>
 
 <ul>
-<li><code>outputs</code> signals are <em>sources</em> of data, updated locally by their parent
-device</li>
-<li><code>inputs</code> signals are <em>consumers</em> of data and are <strong>not</strong> generally updated
-locally by their parent device.</li>
+<li><code>outputs</code> signals are <em>sources</em> of data, updated locally by their parent device</li>
+<li><code>inputs</code> signals are <em>consumers</em> of data and are <strong>not</strong> generally updated locally by their parent device.</li>
 </ul>
 
-<p>This can become a bit confusing, since the &quot;reverb&quot; parameter of a sound
-synthesizer might be updated locally through user interaction with a GUI,
-however the normal use of this signal is as a <em>destination</em> for control data
-streams so it should be defined as an <code>input</code> signal.  Note that this
-distinction is to help with GUI organization and user-understanding –
-<em>libmapper</em> enables connections from input signals and to output signals if
-desired.</p>
+<p>This can become a bit confusing, since the &quot;reverb&quot; parameter of a sound synthesizer might be updated locally through user interaction with a GUI, however the normal use of this signal is as a <em>destination</em> for control data streams so it should be defined as an <code>input</code> signal.
+Note that this distinction is to help with GUI organization and user-understanding – <em>libmapper</em> enables connections from input signals and to output signals if desired.</p>
 
-<h3 id="toc_6">Creating a signal</h3>
+<h3 id="toc_7">Creating a signal</h3>
 
-<p>We&#39;ll start with creating a &quot;sender&quot;, so we will first talk about how to update
-output signals.  A signal requires a bit more information than a device, much of
-which is optional:</p>
+<p>We&#39;ll start with creating a &quot;sender&quot;, so we will first talk about how to update output signals.
+A signal requires a bit more information than a device, much of which is optional:</p>
 
 <ul>
 <li>a name for the signal (must be unique within a device&#39;s inputs or outputs)</li>
@@ -185,27 +167,22 @@ which is optional:</p>
 Signal out = dev.addSignal(Direction.OUTGOING, &quot;my_output&quot;, 4, Type.INT32, null,
                            0, 1000, null, null);</pre>
 
-<p>The only <em>required</em> parameters here are the signal &quot;length&quot;, its name, and data
-type.  Signals are assumed to be vectors of values, so for usual single-valued
-signals, a length of 1 should be specified.  Finally, supported types are
-currently &#39;i&#39;, &#39;f&#39; or &#39;d&#39; for <code>int</code>, <code>float</code> or <code>double</code> values, respectively.</p>
+<p>The only <em>required</em> parameters here are the signal &quot;length&quot;, its name, and data type.
+Signals are assumed to be vectors of values, so for usual single-valued signals, a length of 1 should be specified.
+Finally, supported types are currently <code>INT32</code>, <code>FLOAT</code> or <code>DOUBLE</code> for <code>int</code>, <code>float</code> or <code>double</code> values, respectively.</p>
 
-<p>The other parameters are not strictly required, but the more information you
-provide, the more <em>libmapper</em> can do some things automatically.  For example, if
-the <code>minimum</code> and <code>maximum</code> properties are provided, it will be possible to
-create linear-scaled connections very quickly. If <code>unit</code> is provided, <em>libmapper</em>
-will be able to similarly figure out a linear scaling based on unit conversion
-(centimeters to inches for example).  Currently automatic unit-based scaling is
-not a supported feature, but will be added in the future.  You can take
-advantage of this future development by simply providing unit information
-whenever it is available.  It is also helpful documentation for users.</p>
+<p>The other parameters are not strictly required, but the more information you provide, the more <em>libmapper</em> can do some things automatically.
+For example, if the <code>minimum</code> and <code>maximum</code> properties are provided, it will be possible to create linear-scaled connections very quickly.
+If <code>unit</code> is provided, <em>libmapper</em> will be able to similarly figure out a linear scaling based on unit conversion (centimeters to inches for example).
+Currently automatic unit-based scaling is not a supported feature, but will be added in the future.
+You can take advantage of this future development by simply providing unit information whenever it is available.
+It is also helpful documentation for users.</p>
 
 <p>Lastly, it is usually necessary to be informed when input signal values change.
-This is done by providing a function to be called whenever its value is modified
-by an incoming message.  It is passed in the <code>UpdateListener</code> parameter.</p>
+This is done by providing a function to be called whenever its value is modified by an incoming message.
+It is passed in the <code>Listener</code> parameter.</p>
 
-<p>An example of creating a &quot;barebones&quot; integer scalar output signal with no unit,
-minimum, or maximum information:</p>
+<p>An example of creating a &quot;barebones&quot; integer scalar output signal with no unit, minimum, or maximum information:</p>
 
 <pre>Signal outA = dev.addSignal(Direction.OUTGOING, &quot;outA&quot;, 1, &#39;i&#39;, null, null, null);</pre>
 
@@ -235,87 +212,64 @@ class test {
 <p>It is possible to retrieve a device&#39;s inputs or outputs at a later time using
 the functions <code>inputs()</code> and <code>outputs()</code>.</p>
 
-<h3 id="toc_7">Updating signals</h3>
+<h3 id="toc_8">Updating signals</h3>
 
-<p>We can imagine the above program getting sensor information in a loop.  It could
-be running on an network-enabled ARM device and reading the ADC register
-directly, or it could be running on a computer and reading data from an Arduino
-over a USB serial port, or it could just be a mouse-controlled GUI slider.
-However it&#39;s getting the data, it must provide it to <em>libmapper</em> so that it will
-be sent to other devices if that signal is mapped.</p>
+<p>We can imagine the above program getting sensor information in a loop.
+It could be running on an network-enabled ARM device and reading the ADC register directly, or it could be running on a computer and reading data from an Arduino over a USB serial port, or it could just be a mouse-controlled GUI slider.
+However it&#39;s getting the data, it must provide it to <em>libmapper</em> so that it will be sent to other devices if that signal is mapped.</p>
 
-<p>This is accomplished by the <code>update()</code> function:</p>
+<p>This is accomplished by the <code>setValue()</code> function:</p>
 
-<pre>&lt;sig&gt;.update(&lt;value&gt;)</pre>
+<pre>&lt;sig&gt;.setValue(&lt;value&gt;)</pre>
 
-<p>So in the &quot;sensor 1&quot; example, assuming we have some code which reads sensor 1&#39;s
-value into a float variable called <code>v1</code>, the loop becomes:</p>
+<p>So in the &quot;sensor 1&quot; example, assuming we have some code which reads sensor 1&#39;s value into a float variable called <code>v1</code>, the loop becomes:</p>
 
 <pre>while (1) {
     dev.poll(50);
 
     // call a hypothetical function that reads a sensor
     v1 = read_sensor_1();
-    sensor1.update(v1);
+    sensor1.setValue(v1);
 }</pre>
 
-<p>This is about all that is needed to expose sensor 1&#39;s value to the network as a
-mappable parameter.  The <em>libmapper</em> GUI can now be used to create a mapping
-between this value and a receiver, where it could control a synthesizer
-parameter or change the brightness of an LED, or whatever else you want to do.</p>
+<p>This is about all that is needed to expose sensor 1&#39;s value to the network as a mappable parameter.
+The <em>libmapper</em> GUI can now be used to create a mapping between this value and a receiver, where it could control a synthesizer parameter or change the brightness of an LED, or whatever else you want to do.</p>
 
-<h3 id="toc_8">Signal conditioning</h3>
+<h3 id="toc_9">Signal conditioning</h3>
 
-<p>Most synthesizers of course will not know what to do with the value of sensor1
--- it is an electrical property that has nothing to do with sound or music.
+<p>Most synthesizers of course will not know what to do with the value of sensor1 -- it is an electrical property that has nothing to do with sound or music.
 This is where <em>libmapper</em> really becomes useful.</p>
 
-<p>Scaling or other signal conditioning can be taken care of <em>before</em> exposing the
-signal, or it can be performed as part of the mapping.  Since end users can
-demand any mathematical operation be performed on the signal, they can perform
-whatever mappings between signals they wish.</p>
+<p>Scaling or other signal conditioning can be taken care of <em>before</em> exposing the signal, or it can be performed as part of the mapping.
+Since end users can demand any mathematical operation be performed on the signal, they can perform whatever mappings between signals they wish.</p>
 
-<p>As a developer, it is therefore your job to provide information that will be
-useful to the end user.</p>
+<p>As a developer, it is therefore your job to provide information that will be useful to the end user.</p>
 
-<p>For example, if sensor 1 is a position sensor, instead of publishing &quot;voltage&quot;,
-you could convert it to centimeters or meters based on the known dimensions of
-the sensor, and publish a &quot;/sensor1/position&quot; signal instead, providing the unit
-information as well.</p>
+<p>For example, if sensor 1 is a position sensor, instead of publishing &quot;voltage&quot;, you could convert it to centimeters or meters based on the known dimensions of the sensor, and publish a &quot;/sensor1/position&quot; signal instead, providing the unit information as well.</p>
 
-<p>We call such signals &quot;semantic&quot;, because they provide information with more
-meaning than a relatively uninformative value based on the electrical properties
-of the sensing technique.  Some sensors can benefit from low-pass filtering or
-other measures to reduce noise.  Some sensor data may need to be combined in
-order to derive physical meaning.  What you choose to expose as outputs of your
-device is entirely application-dependent.</p>
+<p>We call such signals &quot;semantic&quot;, because they provide information with more meaning than a relatively uninformative value based on the electrical properties of the sensing technique.
+Some sensors can benefit from low-pass filtering or other measures to reduce noise.
+Some sensor data may need to be combined in order to derive physical meaning.
+What you choose to expose as outputs of your device is entirely application-dependent.</p>
 
-<p>You can even publish both &quot;/sensor1/position&quot; and &quot;/sensor1/voltage&quot; if desired,
-in order to expose both processed and raw data.  Keep in mind that these will
-not take up significant processing time, and <em>zero</em> network bandwidth, if they
-are not mapped.</p>
+<p>You can even publish both &quot;/sensor1/position&quot; and &quot;/sensor1/voltage&quot; if desired, in order to expose both processed and raw data.
+Keep in mind that these will not take up significant processing time, and <em>zero</em> network bandwidth, if they are not mapped.</p>
 
-<h3 id="toc_9">Receiving signals</h3>
+<h3 id="toc_10">Receiving signals</h3>
 
-<p>Now that we know how to create a sender, it would be useful to also know how to
-receive signals, so that we can create a sender-receiver pair to test out the
-provided mapping functionality.</p>
+<p>Now that we know how to create a sender, it would be useful to also know how to receive signals, so that we can create a sender-receiver pair to test out the provided mapping functionality.</p>
 
-<p>As mentioned above, the <code>addInputSignal()</code> function takes an optional
-<code>UpdateListener</code>.  This is a function that will be called whenever the value of
-that signal changes.  To create a receiver for a synthesizer parameter &quot;pulse
-width&quot; (given as a ratio between 0 and 1), specify a handler when calling
-<code>addInputSignal()</code>.  We&#39;ll imagine there is some Java synthesizer implemented as
-a class <code>Synthesizer</code> which has functions <code>setPulseWidth()</code> which sets the pulse
-width in a thread-safe manner, and <code>startAudioInBackground()</code> which sets up the
-audio thread.</p>
+<p>As mentioned above, the <code>addSignal()</code> function takes an optional <code>Listener</code>.
+This is a function that will be called whenever the value of that signal changes.
+To create a receiver for a synthesizer parameter &quot;pulse width&quot; (given as a ratio between 0 and 1), specify a handler when calling <code>addSignal()</code>.
+We&#39;ll imagine there is some Java synthesizer implemented as a class <code>Synthesizer</code> which has functions <code>setPulseWidth()</code> which sets the pulse width in a thread-safe manner, and <code>startAudioInBackground()</code> which sets up the audio thread.</p>
 
 <p>We need to create a handler function for <em>libmapper</em> to update the synth:</p>
 
-<pre>UpdateListener freqHandler = new UpdateListener() {
-    public void onUpdate(Signal sig, float[] value, TimeTag tt) {
-        setPulseWidth(value);
-    }};</pre>
+<pre>mapper.signal.Listener freqHandler = new mapper.signal.Listener() {
+    public void onEvent(Signal sig, mapper.signal.Event e, float[] value, Time t) {
+    setPulseWidth(value);
+}};</pre>
 
 <p>Then our program will look like this:</p>
 
@@ -325,10 +279,10 @@ import mapper.signal.*;
 # Some synth stuff
 startAudioInBackground();
 
-UpdateListener freqHandler = new Listener() {
+mapper.signal.Listener freqHandler = new mapper.signal.Listener() {
     public void onEvent(Signal sig, mapper.signal.Event event, float value, Time t) {
-        setPulseWidth(value);
-    }};
+    setPulseWidth(value);
+}};
 
 final Device dev = new Device(&quot;mySynth&quot;);
 Signal pw = dev.addSignal(Direction.INCOMING, &quot;pulseWidth&quot;, 1, Type.FLOAT,
@@ -340,8 +294,7 @@ while (1) {
 
 synth.stop()</pre>
 
-<p>Alternately, we can declare the <code>UpdateListener</code> as part of the
-<code>addInputSignal()</code> function:</p>
+<p>Alternately, we can declare the <code>Listener</code> as part of the <code>addSignal()</code> function:</p>
 
 <pre>Signal pulseWidth = dev.addSignal(Direction.INCOMING, &quot;pulseWidth&quot;, 1, &#39;f&#39;, &quot;Hz&quot;,
                                   0.0, 1.0, null, new Listener() {
@@ -350,22 +303,19 @@ synth.stop()</pre>
     }
 });</pre>
 
-<h2 id="toc_10">Working with timetags</h2>
+<h2 id="toc_11">Working with timetags</h2>
 
-<p><em>libmapper</em> uses the <code>TimeTag</code> class to store
-<a href="http://en.wikipedia.org/wiki/Network_Time_Protocol#NTP_timestamps">NTP timestamps</a>
-associated with signal updates.  For example, the handler function called when a
-signal update is received contains a <code>timetag</code> argument.  This argument
-indicates the time at which the source signal was <em>sampled</em> (in the case of
-sensor signals) or <em>generated</em> (in the case of sequenced or
-algorithimically-generated signals).</p>
+<p><em>libmapper</em> uses the <code>Time</code> class to store
+<a href="http://en.wikipedia.org/wiki/Network_Time_Protocol#NTP_timestamps">NTP timestamps</a> associated with signal updates.
+For example, the handler function called when a signal update is received contains a <code>time</code> argument.
+This argument indicates the time at which the source signal was <em>sampled</em> (in the case of sensor signals) or <em>generated</em> (in the case of sequenced or algorithimically-generated signals).</p>
 
 <p><em>libmapper</em> also provides helper functions for getting the current time:</p>
 
-<pre>TimeTag tt = new TimeTag();
-tt.now();</pre>
+<pre>Time time = new Time();
+time.now();</pre>
 
-<h2 id="toc_11">Working with signal instances</h2>
+<h2 id="toc_12">Working with signal instances</h2>
 
 <p><em>libmapper</em> also provides support for signals with multiple <em>instances</em>, for
 example:</p>
@@ -381,16 +331,14 @@ example:</p>
 <p>The important qualities of signal instances in <em>libmapper</em> are:</p>
 
 <ul>
-<li><strong>instances are interchangeable</strong>: if there are semantics attached to a
-specific instance it should be represented with separate signals instead.</li>
-<li><strong>instances can be ephemeral</strong>: signal instances can be dynamically created
-and destroyed. <em>libmapper</em> will ensure that linked devices share a common
-understanding of the relatonships between instances when they are mapped.</li>
+<li><strong>instances are interchangeable</strong>: if there are semantics attached to a specific instance it should be represented with separate signals instead.</li>
+<li><strong>instances can be ephemeral</strong>: signal instances can be dynamically created and destroyed.
+<em>libmapper</em> will ensure that linked devices share a common understanding of the relatonships between instances when they are mapped.</li>
 <li><strong>one mapping connection serves to map all of its instances.</strong></li>
 </ul>
 
-<p>All signals possess one instance by default. If you would like to reserve more
-instances you can use:</p>
+<p>All signals possess one instance by default.
+If you would like to reserve more instances you can use:</p>
 
 <pre>&lt;sig&gt;.reserveInstances(int num);</pre>
 
@@ -399,7 +347,7 @@ instances you can use:</p>
 <pre>Signal.Instance inst = &lt;sig&gt;.instance();
 inst.setValue(&lt;value&gt;);</pre>
 
-<h3 id="toc_12">Associating signal instances with Java objects</h3>
+<h3 id="toc_13">Associating signal instances with Java objects</h3>
 
 <p>Signal instances can be associated with an arbitrary object, for example:</p>
 
@@ -410,11 +358,10 @@ Signal.Instance inst = &lt;sig&gt;.instance(my_obj);</pre>
 
 <pre>Object o = inst.userReference();</pre>
 
-<h3 id="toc_13">Receiving instances</h3>
+<h3 id="toc_14">Receiving instances</h3>
 
-<p>To receive updates to multiple instances of an input signal you will need to
-declare a <code>Listener</code> for the signal in question. Here is the
-listener prototype:</p>
+<p>To receive updates to multiple instances of an input signal you will need to declare a <code>Listener</code> for the signal in question.
+Here is a listener prototype with the Instance object pre-fetched:</p>
 
 <pre>new Listener(Signal.Instance inst, float value, Time t);</pre>
 
@@ -422,43 +369,35 @@ listener prototype:</p>
 
 <pre>&lt;sig&gt;.setListener(new mapper.signal.Listener() {
     public void onUpdate(Signal.Instance inst, float v, Time t) {
-        System.out.println(&quot;in onInstanceUpdate() for &quot;
-                           +inst.signal().name()+&quot; instance &quot;
-                           +inst.id()+&quot;: &quot;+inst.userReference()+&quot;, val= &quot;
-                           +Arrays.toString(v));
+        System.out.println(&quot;in onUpdate() for &quot;
+                           + inst.signal().name() + &quot; instance &quot;
+                           + inst.id() + &quot;: &quot; + inst.userReference()
+                           + &quot;, val= &quot; + Arrays.toString(v));
     }
 });</pre>
 
 <p>Remember that you will need to reserve instances for your input signal using
 <code>&lt;sig&gt;.reserveInstances()</code> if you want to receive instance updates.</p>
 
-<h3 id="toc_14">Instance Stealing</h3>
+<h3 id="toc_15">Instance Stealing</h3>
 
-<p>For handling cases in which the sender signal has more instances than the
-receiver signal, the <em>instance allocation mode</em> can be set for an input signal
-to set an action to take in case all allocated instances are in use and a
-previously unseen instance id is received. Use the function:</p>
+<p>For handling cases in which the sender signal has more instances than the receiver signal, the <em>instance allocation mode</em> can be set for an input signal to set an action to take in case all allocated instances are in use and a previously unseen instance id is received.
+Use the function:</p>
 
 <pre>&lt;sig&gt;.setInstanceStealingMode(mode);</pre>
 
 <p>The argument <code>mode</code> can have one of the following values:</p>
 
 <ul>
-<li><code>StealingMode.NONE</code> Default value, in which no stealing of instances will
-occur;</li>
-<li><code>StealingMode.OLDEST</code> Release the oldest active instance and reallocate its
-resources to the new instance;</li>
-<li><code>StealingMode.NEWEST</code> Release the newest active instance and reallocate its
-resources to the new instance;</li>
+<li><code>StealingMode.NONE</code> Default value, in which no stealing of instances will occur;</li>
+<li><code>StealingMode.OLDEST</code> Release the oldest active instance and reallocate its resources to the new instance;</li>
+<li><code>StealingMode.NEWEST</code> Release the newest active instance and reallocate its resources to the new instance;</li>
 </ul>
 
-<p>If you want to use another method for determining which active instance to
-release (e.g. the sound with the lowest volume), you can create an
-<code>InstanceEventListener</code> for the signal and write the method yourself:</p>
+<p>If you want to use another method for determining which active instance to release (e.g. the sound with the lowest volume), you can create a <code>Listener</code> for the signal and write the method yourself:</p>
 
 <pre>signal.Listener myHandler = new signal.Listener() {
-    public void onEvent(Signal.Instance inst, mapper.signal.Event event,
-                        Time t) {
+    public void onEvent(Signal.Instance inst, mapper.signal.Event event, Time t) {
         System.out.println(&quot;onEvent() for &quot;
                            + inst.signal().name() + &quot; instance &quot;
                            + inst.id() + &quot;: &quot; + event.value());
@@ -468,46 +407,43 @@ release (e.g. the sound with the lowest volume), you can create an
     }
 }</pre>
 
-<p>For this function to be called when instance stealing is necessary, we
-need to register it for <code>mapper.signal.Event.OVERFLOW</code> events:</p>
+<p>For this function to be called when instance stealing is necessary, we need to register it for <code>mapper.signal.Event.OVERFLOW</code> events:</p>
 
 <pre>&lt;sig&gt;.setListener(myHandler, mapper.signal.Event.OVERFLOW);</pre>
 
-<h2 id="toc_15">Publishing metadata</h2>
+<h2 id="toc_16">Publishing metadata</h2>
 
-<p>Things like device names, signal units, and ranges, are examples of metadata –
-information about the data you are exposing on the network.</p>
+<p>Things like device names, signal units, and ranges, are examples of metadata – information about the data you are exposing on the network.</p>
 
-<p><em>libmapper</em> also provides the ability to specify arbitrary extra metadata in the
-form of name-value pairs.  These are not interpreted by <em>libmapper</em> in any way,
-but can be retrieved over the network.  This can be used for instance to label a
-device with its location, or to perhaps give a signal some property like
-&quot;reliability&quot;, or some category like &quot;light&quot;, &quot;motor&quot;, &quot;shaker&quot;, etc.</p>
+<p><em>libmapper</em> also provides the ability to specify arbitrary extra metadata in the form of name-value pairs.
+These are not interpreted by <em>libmapper</em> in any way, but can be retrieved over the network.
+This can be used for instance to label a device with its location, or to perhaps give a signal some property like &quot;reliability&quot;, or some category like &quot;light&quot;, &quot;motor&quot;, &quot;shaker&quot;, etc.</p>
 
-<p>Some GUI could then use this information to display information about the
-network in an intelligent manner.</p>
+<p>Some GUI could then use this information to display information about the network in an intelligent manner.</p>
 
-<p>Any time there may be extra knowledge about a signal or device, it is a good
-idea to represent it by adding such properties, which can be of any
-OSC-compatible type.  (So, numbers and strings, etc.)</p>
+<p>Any time there may be extra knowledge about a signal or device, it is a good idea to represent it by adding such properties, which can be of any OSC-compatible type.  (So, numbers and strings, etc.)</p>
 
-<p>The property interface is through the functions,</p>
+<p>The property interface is through the functions below.
+The <code>key</code> argument can be an <code>Integer</code> index, a <code>String</code>, or a <code>mapper.Property</code>.</p>
 
-<pre>&lt;object&gt;.setProperty(String key, Value value);</pre>
+<pre>// assuming an object named myObject...
+myObject.properties().put(Object key, Object value, boolean publish=true);
+myObject.properties().get(Object key);
+myObject.properties().getEntry(Object key);
+myObject.properties().remove(Object key)</pre>
 
-<p>where the value can any OSC-compatible type. This function can be called for
-devices or signals.</p>
+<p>where the value can any OSC-compatible type.
+These functions can be called for any libmapper Object: Devices, Signals, Maps, and Graphs.</p>
 
-<p>For example, to store a <code>float vector</code> indicating the 2D position of a device
-<code>dev</code>, you can call it like this:</p>
+<p>For example, to store a public (available to the network) <code>float vector</code> indicating the 2D position of a device <code>dev</code>, you can call it like this:</p>
 
-<pre>dev.setProperty(&quot;position&quot;, new Value(new float[] {12.5f, 40.f}));</pre>
+<pre>dev.properties().put(&quot;position&quot;, new Value(new float[] {12.5f, 40.f}));</pre>
 
-<p>To specify a string property of a signal <code>sig</code>:</p>
+<p>To specify a local (non-public) string property of a signal <code>sig</code>:</p>
 
-<pre>sig.setProperty(&quot;sensingMethod&quot;, new Value(&quot;resistive&quot;));</pre>
+<pre>sig.properties().put(&quot;sensingMethod&quot;, new Value(&quot;resistive&quot;), false);</pre>
 
-<h3 id="toc_16">Reserved keys</h3>
+<h3 id="toc_17">Reserved keys</h3>
 
 <p>You can use any property name not already reserved by <em>libmapper</em>.</p>
 
